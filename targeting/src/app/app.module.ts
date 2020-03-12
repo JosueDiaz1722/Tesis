@@ -8,15 +8,29 @@ import { AboutComponent } from './about/about.component';
 import { NavbarComponent } from './navbar/navbar.component';
 
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatButtonModule} from '@angular/material/button';
+
 import { MatIconModule } from "@angular/material/icon";
+
+import { FormsModule } from '@angular/forms';
+
+import { MatTableModule} from '@angular/material/table';
+import { MatDialogModule} from '@angular/material/dialog';
+
+import { MatFormFieldModule} from '@angular/material/form-field';
+import { MatInputModule} from '@angular/material/input';
+
+import { MatButtonModule } from '@angular/material/button';
+import { ActorComponent } from './actor/actor.component';
+import { DialogBoxComponent } from './dialog-box/dialog-box.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     AboutComponent,
-    NavbarComponent
+    NavbarComponent,
+    ActorComponent,
+    DialogBoxComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +38,17 @@ import { MatIconModule } from "@angular/material/icon";
     BrowserAnimationsModule,
     MatToolbarModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    FormsModule,
+    MatTableModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatInputModule
+  ],
+  entryComponents: [
+    DialogBoxComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

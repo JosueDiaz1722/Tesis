@@ -126,5 +126,8 @@
       }
     }
   },
-  "defaultProject": "targeting"
+  "defaultProject": "targeting",
+  "cli": {
+    "analytics": false
+  }
 }
