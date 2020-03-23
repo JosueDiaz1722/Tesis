@@ -1,1 +1,95 @@
-<p>about works!</p>
+<ejs-treegrid [dataSource]="data" 
+[treeColumnIndex]= "1"
+idMapping ="taskId" parentIdMapping= "parentId"
+[allowPaging]="true" 
+[pageSettings]="pageSettings" [allowSorting]="true" 
+[editSettings]="editSettings"[allowFiltering]="true"
+[toolbar]="toolbar">
+    <e-columns>
+        <e-column
+        field="taskId"
+        headerText="TaskID"
+        textAlign="Left"
+        width= "90"
+        isPrimaryKey = "true"
+        ></e-column>
+        <e-column
+        field="taskName"
+        headerText="Task Name"
+        textAlign="Left"
+        width= "160"
+        ></e-column>
+        <e-column
+        field="startDate"
+        headerText="Start Name"
+        textAlign="Right"
+        width= "100"
+        format="yMd"
+        editType = "datepickeredit"
+        ></e-column>
+        <e-column
+        field="endDate"
+        headerText="End Name"
+        textAlign="Right"
+        width= "100"
+        format="yMd"
+        editType = "datepickeredit"
+        ></e-column>
+        <e-column
+        field="duration"
+        headerText="Duration"
+        type= "number"
+        textAlign="Left"
+        width= "60"
+        editType = "numericedit"
+        [edit]="numericParams"
+        ></e-column>
+        <e-column
+        field="progress"
+        headerText="Progress"
+        textAlign="Left"
+        width= "60"
+        ></e-column>
+        <e-column
+        field="priority"
+        headerText="Priority"
+        textAlign="Left"
+        width= "90"
+        ></e-column>
+    </e-columns>
+    <ng-template #editSettingsTemplate let-date>
+        <div ngform>
+            <div class="form-group">
+                <div class="e-float-input e-control-wrapper">
+                    <input type="number" name="taskId" />
+                    <label class="e-float-text e-label-top" for="taskId">
+                        Task Id
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="e-float-input e-control-wrapper">
+                    <input type="text" name="taskName" />
+                    <label class="e-float-text e-label-top" for="taskName">
+                        Task Name
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <ejs-numerictextbox      
+                    name="progress"
+                    placeholder= "Progress"
+                    floatLabelType = "Always">
+                </ejs-numerictextbox>
+            </div>
+            <div class="form-group">
+                <ejs-datepicker      
+                    name="startDate"
+                    placeholder= "Start Date"
+                    floatLabelType = "Always">
+                </ejs-datepicker>
+            </div>
+            
+        </div>
+    </ng-template>
+</ejs-treegrid>

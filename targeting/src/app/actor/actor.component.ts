@@ -5,15 +5,15 @@ import {DialogBoxComponent} from '../dialog-box/dialog-box.component'
  
 
 export interface UsersData {
-  name: string;
   id: number;
+  nombre: string;
+  prioridad: number;
+  comentario: string;
 }
  
 const ELEMENT_DATA: UsersData[] = [
-  {id: 1560608769632, name: 'Artificial Intelligence'},
-  {id: 1560608796014, name: 'Machine Learning'},
-  {id: 1560608787815, name: 'Robotic Process Automation'},
-  {id: 1560608805101, name: 'Blockchain'}
+  {id: 12, prioridad: 1, nombre: 'Actor 1', comentario: 'Comentario 1'},
+  {id: 11, prioridad: 3, nombre: 'Actor 2', comentario: 'Comentario 2'}
 ];
 
 @Component({
@@ -23,7 +23,7 @@ const ELEMENT_DATA: UsersData[] = [
 })
 export class ActorComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'name', 'action'];
+  displayedColumns: string[] = ['id','nombre', 'prioridad', 'comentario', 'action'];
   dataSource = ELEMENT_DATA;
  
   @ViewChild(MatTable,{static:true}) table: MatTable<any>;
@@ -52,7 +52,9 @@ export class ActorComponent implements OnInit {
     var d = new Date();
     this.dataSource.push({
       id:d.getTime(),
-      name:row_obj.name
+      nombre: row_obj.nombre,
+      prioridad: row_obj.prioridad,
+      comentario: row_obj.comentario
     });
     this.table.renderRows();
     
@@ -60,7 +62,9 @@ export class ActorComponent implements OnInit {
   updateRowData(row_obj){
     this.dataSource = this.dataSource.filter((value,key)=>{
       if(value.id == row_obj.id){
-        value.name = row_obj.name;
+        value.nombre = row_obj.nombre;
+        value.comentario = row_obj.comentario;
+        value.prioridad = row_obj.prioridad
       }
       return true;
     });

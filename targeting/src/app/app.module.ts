@@ -25,6 +25,8 @@ import { DialogBoxComponent } from './dialog-box/dialog-box.component';
 import { ThemeComponent } from './theme/theme.component';
 import {DemoMaterialModule} from '../material-module';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { TreeGridModule, PageService, SortService, FilterService, EditService, ToolbarService } from "@syncfusion/ej2-angular-treegrid";
+
 
 @NgModule({
   declarations: [
@@ -38,6 +40,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     ThemeComponent
   ],
   imports: [
+    TreeGridModule,
     BrowserModule,
     MatExpansionModule,
     DemoMaterialModule,
@@ -61,7 +64,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
   entryComponents: [
     DialogBoxComponent
   ],
-  providers: [],
+  providers: [PageService, SortService, FilterService, EditService, ToolbarService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
