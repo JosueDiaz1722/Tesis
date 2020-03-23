@@ -26,7 +26,9 @@ import { ThemeComponent } from './theme/theme.component';
 import {DemoMaterialModule} from '../material-module';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { TreeGridModule, PageService, SortService, FilterService, EditService, ToolbarService } from "@syncfusion/ej2-angular-treegrid";
-
+import { NumericTextBoxAllModule } from "@syncfusion/ej2-angular-inputs";
+import { CheckBoxAllModule } from "@syncfusion/ej2-angular-buttons";
+import { DatePickerAllModule } from "@syncfusion/ej2-angular-calendars";
 
 @NgModule({
   declarations: [
@@ -40,6 +42,9 @@ import { TreeGridModule, PageService, SortService, FilterService, EditService, T
     ThemeComponent
   ],
   imports: [
+    DatePickerAllModule,
+    CheckBoxAllModule,
+    NumericTextBoxAllModule,
     TreeGridModule,
     BrowserModule,
     MatExpansionModule,

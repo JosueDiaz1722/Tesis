@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { sampleData } from "./datasource";
 import { PageSettingsModel,EditSettingsModel } from "@syncfusion/ej2-angular-treegrid";
+import { SaveEventArgs } from "@syncfusion/ej2-grids";
 
 
 @Component({
@@ -14,6 +15,7 @@ export class AboutComponent implements OnInit {
   public pageSettings: PageSettingsModel;
   public editSettings: EditSettingsModel;
   public toolbar: string[];
+  public taskData: ITaskModel;
   public numericParams: Object;
   constructor() { }
 
@@ -28,8 +30,24 @@ export class AboutComponent implements OnInit {
     };
     this.toolbar = ['Add','Edit','Delete','Update','Cancel'];
     this.numericParams = {params: {format: 'n'}};
-   
+    
   }
   
+  actionBegin(args:SaveEventArgs): void
+  {
+    if(args.requestType == "beginEdit"||args.requestType=="add")
+    {
+      this.taskData = Object.assign({},args.rowData);
+    }
+  }
 
+}
+export interface ITaskModel{
+    taskId?: Number;
+    taskName?: String;
+    startDate?: Date;
+    endDate?: Date;
+    duration?: Number;
+    progress?: Number;
+    priority?: String;
 }
