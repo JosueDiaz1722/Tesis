@@ -8,18 +8,18 @@ idMapping ="taskId" parentIdMapping= "parentId"
     <e-columns>
         <e-column
         field="taskId"
-        headerText="TaskID"
+        headerText="TemaID"
         textAlign="Left"
         width= "90"
         isPrimaryKey = "true"
         ></e-column>
         <e-column
         field="taskName"
-        headerText="Task Name"
+        headerText="Tema Name"
         textAlign="Left"
         width= "160"
         ></e-column>
-        <e-column
+       <!-- <e-column
         field="startDate"
         headerText="Start Date"
         textAlign="Right"
@@ -34,25 +34,25 @@ idMapping ="taskId" parentIdMapping= "parentId"
         width= "100"
         format="yMd"
         editType = "datepickeredit"
-        ></e-column>
+        ></e-column> -->
         <e-column
         field="duration"
-        headerText="Duration"
+        headerText="Prioridad"
         type= "number"
         textAlign="Left"
         width= "60"
         editType = "numericedit"
         [edit]="numericParams"
         ></e-column>
-        <e-column
+        <!--<e-column
         field="progress"
         headerText="Progress"
         textAlign="Left"
         width= "60"
-        ></e-column>
+        ></e-column>-->
         <e-column
         field="priority"
-        headerText="Priority"
+        headerText="Comentario"
         textAlign="Left"
         width= "90"
         ></e-column>

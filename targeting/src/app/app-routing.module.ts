@@ -4,6 +4,9 @@ import { HomeComponent } from "./home/home.component";
 import { AboutComponent } from "./about/about.component";
 import { ActorComponent } from './actor/actor.component';
 import { ThemeComponent } from './theme/theme.component';
+import {ActoresComponent} from './actores/actores.component';
+import {LinkListComponent} from './link-list/link-list.component';
+import {CreateLinkComponent} from './create-link/create-link.component';
 
 
 const routes: Routes = [
@@ -19,7 +22,20 @@ const routes: Routes = [
   },
   {
     path: 'theme', component: ThemeComponent
-  }
+  },
+  {
+    path: 'actores', component: ActoresComponent
+  },
+  {
+    path: 'list',
+    component: LinkListComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'create',
+    component: CreateLinkComponent,
+    pathMatch: 'full'
+  },
 
 ];
 

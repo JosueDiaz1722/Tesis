@@ -1,0 +1,28 @@
+type Actor {
+id: Int! @id(strategy: SEQUENCE) @sequence(name: "Actor_SEQUENCE" initialValue:1 allocationSize:100)
+createdAt: DateTime! @createdAt
+updatedAt: DateTime! @updatedAt
+name: String!
+prioridad: Int
+coments: String
+parent: Actor
+}
+
+type Tema {
+id: Int! @id(strategy: SEQUENCE) @sequence(name: "Tema_SEQUENCE" initialValue:1 allocationSize:100)
+createdAt: DateTime! @createdAt
+updatedAt: DateTime! @updatedAt
+name: String!
+prioridad: Int
+coments: String
+parent: Tema
+}
+
+type Link @model {
+  id: ID! @id     # required system field (read-only)
+  createdAt: DateTime! @createdAt  # optional system field (read-only)
+  updatedAt: DateTime!  @updatedAt  # optional system field (read-only)
+
+  description: String!
+  url: String!
+}

@@ -29,6 +29,13 @@ import { TreeGridModule, PageService, SortService, FilterService, EditService, T
 import { NumericTextBoxAllModule } from "@syncfusion/ej2-angular-inputs";
 import { CheckBoxAllModule } from "@syncfusion/ej2-angular-buttons";
 import { DatePickerAllModule } from "@syncfusion/ej2-angular-calendars";
+import { ActoresComponent } from './actores/actores.component';
+import { GraphQLModule } from "./apollo.config";
+import { LinkItemComponent } from './link-item/link-item.component';
+import { LinkListComponent } from './link-list/link-list.component';
+import { CreateLinkComponent } from './create-link/create-link.component';
+
+
 
 @NgModule({
   declarations: [
@@ -39,7 +46,15 @@ import { DatePickerAllModule } from "@syncfusion/ej2-angular-calendars";
     ActorComponent,
     DialogBoxComponent,
 
-    ThemeComponent
+    ThemeComponent,
+
+    ActoresComponent,
+
+    LinkItemComponent,
+
+    LinkListComponent,
+
+    CreateLinkComponent
   ],
   imports: [
     DatePickerAllModule,
@@ -64,7 +79,9 @@ import { DatePickerAllModule } from "@syncfusion/ej2-angular-calendars";
     MatInputModule,
     BrowserModule,
     FormsModule,                               
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    GraphQLModule
+    
   ],
   entryComponents: [
     DialogBoxComponent

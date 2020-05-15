@@ -1,0 +1,74 @@
+<button mat-button (click)="openDialog('AddNew',{},null)" mat-flat-button color="primary">Add Row</button>
+<ejs-treegrid #treegrid [dataSource]="data" 
+[treeColumnIndex]= "1"
+idMapping ="taskId" parentIdMapping= "parentId"
+[allowPaging]="true" 
+[pageSettings]="pageSettings" [allowSorting]="true" 
+[allowFiltering]="false"
+[toolbar]="toolbar" 
+[editSettings]="editSettings"
+
+>
+    <e-columns>
+        <e-column
+        field="taskId"
+        headerText="ActorID"
+        textAlign="Left"
+        type= "number"
+        width= "90"
+        isPrimaryKey = "true"
+        editType = "numericedit"
+        [edit]="numericParams"
+        ></e-column>
+        <e-column
+        field="taskName"
+        headerText="Actor Name"
+        textAlign="Left"
+        width= "160"
+        ></e-column>
+         
+       <!-- <e-column
+        field="startDate"
+        headerText="Start Date"
+        textAlign="Right"
+        width= "100"
+        format="yMd"
+        editType = "datepickeredit"
+        ></e-column>
+        <e-column
+        field="endDate"
+        headerText="End Date"
+        textAlign="Right"
+        width= "100"
+        format="yMd"
+        editType = "datepickeredit"
+        ></e-column> -->
+        <e-column
+        field="duration"
+        headerText="Prioridad"
+        type= "number"
+        textAlign="Left"
+        width= "60"
+        editType = "numericedit"
+        [edit]="numericParams"
+        ></e-column>
+        <!--<e-column
+        field="progress"
+        headerText="Progress"
+        textAlign="Left"
+        width= "60"
+        ></e-column>-->
+        <e-column
+        field="priority"
+        headerText="Comentario"
+        textAlign="Left"
+        width= "90"
+        ></e-column>
+        <e-column width="150"> 
+            <ng-template #template let-data> 
+                <button (click)="insert(data)" *ngIf="data.level == 0 || data.level == 1  || data.level == 2">INSERT CHILD</button> 
+                <button mat-flat-button color='primary' (click)="openDialog('Add',data,data)">Add</button>
+            </ng-template> 
+        </e-column>
+    </e-columns>
+</ejs-treegrid>

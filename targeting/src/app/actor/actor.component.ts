@@ -25,6 +25,7 @@ export class ActorComponent implements OnInit {
 
   displayedColumns: string[] = ['id','nombre', 'prioridad', 'comentario', 'action'];
   dataSource = ELEMENT_DATA;
+  
  
   @ViewChild(MatTable,{static:true}) table: MatTable<any>;
  
