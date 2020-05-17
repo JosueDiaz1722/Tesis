@@ -3,9 +3,6 @@
     <h1 mat-dialog-title>Row Action :: <strong>{{action}}</strong></h1>
     <div mat-dialog-content>
       <mat-form-field style="width:100%" *ngIf="action != 'Delete'; else elseTemplate">
-        <input   placeholder="{{action}} id" matInput [(ngModel)]="local_data.id">
-      </mat-form-field>
-      <mat-form-field style="width:100%" *ngIf="action != 'Delete'; else elseTemplate">
         <input   placeholder="{{action}} Nombre" matInput [(ngModel)]="local_data.nombre">
       </mat-form-field>
       <mat-form-field style="width:100%" *ngIf="action != 'Delete';">

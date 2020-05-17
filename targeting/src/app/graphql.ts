@@ -62,3 +62,22 @@ export interface AllActoresQueryResponse {
   actores: Actor[];
   loading: boolean;
 }
+
+export const CREATE_ACTOR_MUTATION = gql`
+  # 2
+  mutation createActorMutation($name:String!, $prioridad: Int!, $coments: String!, $id: Int!){
+    createActor(data:{
+      name: $name,
+      prioridad: $prioridad,
+      coments: $coments,
+      parent: {connect: {id: $id}}
+    }){
+      name
+      prioridad
+      coments
+      parent{
+        id
+      }
+    }
+  }
+`;

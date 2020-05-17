@@ -221,25 +221,9 @@ export type TemaOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export interface ActorCreateInput {
-  name: String;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<ActorCreateOneInput>;
-}
-
 export type ActorWhereUniqueInput = AtLeastOne<{
   id: Maybe<Int>;
 }>;
-
-export interface ActorUpdateOneInput {
-  create?: Maybe<ActorCreateInput>;
-  update?: Maybe<ActorUpdateDataInput>;
-  upsert?: Maybe<ActorUpsertNestedInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
-  connect?: Maybe<ActorWhereUniqueInput>;
-}
 
 export interface ActorWhereInput {
   id?: Maybe<Int>;
@@ -308,26 +292,77 @@ export interface ActorWhereInput {
   NOT?: Maybe<ActorWhereInput[] | ActorWhereInput>;
 }
 
+export type LinkWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface LinkWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  description?: Maybe<String>;
+  description_not?: Maybe<String>;
+  description_in?: Maybe<String[] | String>;
+  description_not_in?: Maybe<String[] | String>;
+  description_lt?: Maybe<String>;
+  description_lte?: Maybe<String>;
+  description_gt?: Maybe<String>;
+  description_gte?: Maybe<String>;
+  description_contains?: Maybe<String>;
+  description_not_contains?: Maybe<String>;
+  description_starts_with?: Maybe<String>;
+  description_not_starts_with?: Maybe<String>;
+  description_ends_with?: Maybe<String>;
+  description_not_ends_with?: Maybe<String>;
+  url?: Maybe<String>;
+  url_not?: Maybe<String>;
+  url_in?: Maybe<String[] | String>;
+  url_not_in?: Maybe<String[] | String>;
+  url_lt?: Maybe<String>;
+  url_lte?: Maybe<String>;
+  url_gt?: Maybe<String>;
+  url_gte?: Maybe<String>;
+  url_contains?: Maybe<String>;
+  url_not_contains?: Maybe<String>;
+  url_starts_with?: Maybe<String>;
+  url_not_starts_with?: Maybe<String>;
+  url_ends_with?: Maybe<String>;
+  url_not_ends_with?: Maybe<String>;
+  AND?: Maybe<LinkWhereInput[] | LinkWhereInput>;
+  OR?: Maybe<LinkWhereInput[] | LinkWhereInput>;
+  NOT?: Maybe<LinkWhereInput[] | LinkWhereInput>;
+}
+
 export type TemaWhereUniqueInput = AtLeastOne<{
   id: Maybe<Int>;
 }>;
-
-export interface ActorUpsertNestedInput {
-  update: ActorUpdateDataInput;
-  create: ActorCreateInput;
-}
-
-export interface TemaCreateOneInput {
-  create?: Maybe<TemaCreateInput>;
-  connect?: Maybe<TemaWhereUniqueInput>;
-}
-
-export interface ActorUpdateDataInput {
-  name?: Maybe<String>;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<ActorUpdateOneInput>;
-}
 
 export interface TemaWhereInput {
   id?: Maybe<Int>;
@@ -396,15 +431,66 @@ export interface TemaWhereInput {
   NOT?: Maybe<TemaWhereInput[] | TemaWhereInput>;
 }
 
-export interface LinkSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<LinkWhereInput>;
-  AND?: Maybe<LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput>;
-  OR?: Maybe<LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput>;
-  NOT?: Maybe<LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput>;
+export interface ActorCreateInput {
+  name: String;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<ActorCreateOneInput>;
+}
+
+export interface ActorCreateOneInput {
+  create?: Maybe<ActorCreateInput>;
+  connect?: Maybe<ActorWhereUniqueInput>;
+}
+
+export interface ActorUpdateInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<ActorUpdateOneInput>;
+}
+
+export interface ActorUpdateOneInput {
+  create?: Maybe<ActorCreateInput>;
+  update?: Maybe<ActorUpdateDataInput>;
+  upsert?: Maybe<ActorUpsertNestedInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<ActorWhereUniqueInput>;
+}
+
+export interface ActorUpdateDataInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<ActorUpdateOneInput>;
+}
+
+export interface ActorUpsertNestedInput {
+  update: ActorUpdateDataInput;
+  create: ActorCreateInput;
+}
+
+export interface ActorUpdateManyMutationInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+}
+
+export interface LinkCreateInput {
+  id?: Maybe<ID_Input>;
+  description: String;
+  url: String;
+}
+
+export interface LinkUpdateInput {
+  description?: Maybe<String>;
+  url?: Maybe<String>;
+}
+
+export interface LinkUpdateManyMutationInput {
+  description?: Maybe<String>;
+  url?: Maybe<String>;
 }
 
 export interface TemaCreateInput {
@@ -412,6 +498,45 @@ export interface TemaCreateInput {
   prioridad?: Maybe<Int>;
   coments?: Maybe<String>;
   parent?: Maybe<TemaCreateOneInput>;
+}
+
+export interface TemaCreateOneInput {
+  create?: Maybe<TemaCreateInput>;
+  connect?: Maybe<TemaWhereUniqueInput>;
+}
+
+export interface TemaUpdateInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<TemaUpdateOneInput>;
+}
+
+export interface TemaUpdateOneInput {
+  create?: Maybe<TemaCreateInput>;
+  update?: Maybe<TemaUpdateDataInput>;
+  upsert?: Maybe<TemaUpsertNestedInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<TemaWhereUniqueInput>;
+}
+
+export interface TemaUpdateDataInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<TemaUpdateOneInput>;
+}
+
+export interface TemaUpsertNestedInput {
+  update: TemaUpdateDataInput;
+  create: TemaCreateInput;
+}
+
+export interface TemaUpdateManyMutationInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
 }
 
 export interface ActorSubscriptionWhereInput {
@@ -425,126 +550,15 @@ export interface ActorSubscriptionWhereInput {
   NOT?: Maybe<ActorSubscriptionWhereInput[] | ActorSubscriptionWhereInput>;
 }
 
-export interface LinkUpdateManyMutationInput {
-  description?: Maybe<String>;
-  url?: Maybe<String>;
-}
-
-export interface LinkWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  updatedAt?: Maybe<DateTimeInput>;
-  updatedAt_not?: Maybe<DateTimeInput>;
-  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_lt?: Maybe<DateTimeInput>;
-  updatedAt_lte?: Maybe<DateTimeInput>;
-  updatedAt_gt?: Maybe<DateTimeInput>;
-  updatedAt_gte?: Maybe<DateTimeInput>;
-  description?: Maybe<String>;
-  description_not?: Maybe<String>;
-  description_in?: Maybe<String[] | String>;
-  description_not_in?: Maybe<String[] | String>;
-  description_lt?: Maybe<String>;
-  description_lte?: Maybe<String>;
-  description_gt?: Maybe<String>;
-  description_gte?: Maybe<String>;
-  description_contains?: Maybe<String>;
-  description_not_contains?: Maybe<String>;
-  description_starts_with?: Maybe<String>;
-  description_not_starts_with?: Maybe<String>;
-  description_ends_with?: Maybe<String>;
-  description_not_ends_with?: Maybe<String>;
-  url?: Maybe<String>;
-  url_not?: Maybe<String>;
-  url_in?: Maybe<String[] | String>;
-  url_not_in?: Maybe<String[] | String>;
-  url_lt?: Maybe<String>;
-  url_lte?: Maybe<String>;
-  url_gt?: Maybe<String>;
-  url_gte?: Maybe<String>;
-  url_contains?: Maybe<String>;
-  url_not_contains?: Maybe<String>;
-  url_starts_with?: Maybe<String>;
-  url_not_starts_with?: Maybe<String>;
-  url_ends_with?: Maybe<String>;
-  url_not_ends_with?: Maybe<String>;
-  AND?: Maybe<LinkWhereInput[] | LinkWhereInput>;
-  OR?: Maybe<LinkWhereInput[] | LinkWhereInput>;
-  NOT?: Maybe<LinkWhereInput[] | LinkWhereInput>;
-}
-
-export interface LinkUpdateInput {
-  description?: Maybe<String>;
-  url?: Maybe<String>;
-}
-
-export interface TemaUpdateDataInput {
-  name?: Maybe<String>;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<TemaUpdateOneInput>;
-}
-
-export interface LinkCreateInput {
-  id?: Maybe<ID_Input>;
-  description: String;
-  url: String;
-}
-
-export interface TemaUpdateInput {
-  name?: Maybe<String>;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<TemaUpdateOneInput>;
-}
-
-export type LinkWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export interface ActorUpdateInput {
-  name?: Maybe<String>;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<ActorUpdateOneInput>;
-}
-
-export interface ActorCreateOneInput {
-  create?: Maybe<ActorCreateInput>;
-  connect?: Maybe<ActorWhereUniqueInput>;
-}
-
-export interface ActorUpdateManyMutationInput {
-  name?: Maybe<String>;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-}
-
-export interface TemaUpdateManyMutationInput {
-  name?: Maybe<String>;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
+export interface LinkSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<LinkWhereInput>;
+  AND?: Maybe<LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput>;
+  OR?: Maybe<LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput>;
+  NOT?: Maybe<LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput>;
 }
 
 export interface TemaSubscriptionWhereInput {
@@ -558,375 +572,8 @@ export interface TemaSubscriptionWhereInput {
   NOT?: Maybe<TemaSubscriptionWhereInput[] | TemaSubscriptionWhereInput>;
 }
 
-export interface TemaUpdateOneInput {
-  create?: Maybe<TemaCreateInput>;
-  update?: Maybe<TemaUpdateDataInput>;
-  upsert?: Maybe<TemaUpsertNestedInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
-  connect?: Maybe<TemaWhereUniqueInput>;
-}
-
-export interface TemaUpsertNestedInput {
-  update: TemaUpdateDataInput;
-  create: TemaCreateInput;
-}
-
 export interface NodeNode {
   id: ID_Output;
-}
-
-export interface TemaPreviousValues {
-  id: Int;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  name: String;
-  prioridad?: Int;
-  coments?: String;
-}
-
-export interface TemaPreviousValuesPromise
-  extends Promise<TemaPreviousValues>,
-    Fragmentable {
-  id: () => Promise<Int>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-  prioridad: () => Promise<Int>;
-  coments: () => Promise<String>;
-}
-
-export interface TemaPreviousValuesSubscription
-  extends Promise<AsyncIterator<TemaPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<Int>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  name: () => Promise<AsyncIterator<String>>;
-  prioridad: () => Promise<AsyncIterator<Int>>;
-  coments: () => Promise<AsyncIterator<String>>;
-}
-
-export interface LinkConnection {
-  pageInfo: PageInfo;
-  edges: LinkEdge[];
-}
-
-export interface LinkConnectionPromise
-  extends Promise<LinkConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<LinkEdge>>() => T;
-  aggregate: <T = AggregateLinkPromise>() => T;
-}
-
-export interface LinkConnectionSubscription
-  extends Promise<AsyncIterator<LinkConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<LinkEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateLinkSubscription>() => T;
-}
-
-export interface PageInfo {
-  hasNextPage: Boolean;
-  hasPreviousPage: Boolean;
-  startCursor?: String;
-  endCursor?: String;
-}
-
-export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
-  hasNextPage: () => Promise<Boolean>;
-  hasPreviousPage: () => Promise<Boolean>;
-  startCursor: () => Promise<String>;
-  endCursor: () => Promise<String>;
-}
-
-export interface PageInfoSubscription
-  extends Promise<AsyncIterator<PageInfo>>,
-    Fragmentable {
-  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
-  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
-  startCursor: () => Promise<AsyncIterator<String>>;
-  endCursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ActorConnection {
-  pageInfo: PageInfo;
-  edges: ActorEdge[];
-}
-
-export interface ActorConnectionPromise
-  extends Promise<ActorConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<ActorEdge>>() => T;
-  aggregate: <T = AggregateActorPromise>() => T;
-}
-
-export interface ActorConnectionSubscription
-  extends Promise<AsyncIterator<ActorConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<ActorEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateActorSubscription>() => T;
-}
-
-export interface LinkSubscriptionPayload {
-  mutation: MutationType;
-  node: Link;
-  updatedFields: String[];
-  previousValues: LinkPreviousValues;
-}
-
-export interface LinkSubscriptionPayloadPromise
-  extends Promise<LinkSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = LinkPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = LinkPreviousValuesPromise>() => T;
-}
-
-export interface LinkSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<LinkSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = LinkSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = LinkPreviousValuesSubscription>() => T;
-}
-
-export interface BatchPayload {
-  count: Long;
-}
-
-export interface BatchPayloadPromise
-  extends Promise<BatchPayload>,
-    Fragmentable {
-  count: () => Promise<Long>;
-}
-
-export interface BatchPayloadSubscription
-  extends Promise<AsyncIterator<BatchPayload>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Long>>;
-}
-
-export interface AggregateTema {
-  count: Int;
-}
-
-export interface AggregateTemaPromise
-  extends Promise<AggregateTema>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateTemaSubscription
-  extends Promise<AsyncIterator<AggregateTema>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface Link {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  description: String;
-  url: String;
-}
-
-export interface LinkPromise extends Promise<Link>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  description: () => Promise<String>;
-  url: () => Promise<String>;
-}
-
-export interface LinkSubscription
-  extends Promise<AsyncIterator<Link>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  description: () => Promise<AsyncIterator<String>>;
-  url: () => Promise<AsyncIterator<String>>;
-}
-
-export interface LinkNullablePromise
-  extends Promise<Link | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  description: () => Promise<String>;
-  url: () => Promise<String>;
-}
-
-export interface TemaConnection {
-  pageInfo: PageInfo;
-  edges: TemaEdge[];
-}
-
-export interface TemaConnectionPromise
-  extends Promise<TemaConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<TemaEdge>>() => T;
-  aggregate: <T = AggregateTemaPromise>() => T;
-}
-
-export interface TemaConnectionSubscription
-  extends Promise<AsyncIterator<TemaConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<TemaEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateTemaSubscription>() => T;
-}
-
-export interface LinkPreviousValues {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  description: String;
-  url: String;
-}
-
-export interface LinkPreviousValuesPromise
-  extends Promise<LinkPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  description: () => Promise<String>;
-  url: () => Promise<String>;
-}
-
-export interface LinkPreviousValuesSubscription
-  extends Promise<AsyncIterator<LinkPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  description: () => Promise<AsyncIterator<String>>;
-  url: () => Promise<AsyncIterator<String>>;
-}
-
-export interface Tema {
-  id: Int;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  name: String;
-  prioridad?: Int;
-  coments?: String;
-}
-
-export interface TemaPromise extends Promise<Tema>, Fragmentable {
-  id: () => Promise<Int>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-  prioridad: () => Promise<Int>;
-  coments: () => Promise<String>;
-  parent: <T = TemaPromise>() => T;
-}
-
-export interface TemaSubscription
-  extends Promise<AsyncIterator<Tema>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<Int>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  name: () => Promise<AsyncIterator<String>>;
-  prioridad: () => Promise<AsyncIterator<Int>>;
-  coments: () => Promise<AsyncIterator<String>>;
-  parent: <T = TemaSubscription>() => T;
-}
-
-export interface TemaNullablePromise
-  extends Promise<Tema | null>,
-    Fragmentable {
-  id: () => Promise<Int>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-  prioridad: () => Promise<Int>;
-  coments: () => Promise<String>;
-  parent: <T = TemaPromise>() => T;
-}
-
-export interface AggregateActor {
-  count: Int;
-}
-
-export interface AggregateActorPromise
-  extends Promise<AggregateActor>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateActorSubscription
-  extends Promise<AsyncIterator<AggregateActor>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface ActorPreviousValues {
-  id: Int;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  name: String;
-  prioridad?: Int;
-  coments?: String;
-}
-
-export interface ActorPreviousValuesPromise
-  extends Promise<ActorPreviousValues>,
-    Fragmentable {
-  id: () => Promise<Int>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-  prioridad: () => Promise<Int>;
-  coments: () => Promise<String>;
-}
-
-export interface ActorPreviousValuesSubscription
-  extends Promise<AsyncIterator<ActorPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<Int>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  name: () => Promise<AsyncIterator<String>>;
-  prioridad: () => Promise<AsyncIterator<Int>>;
-  coments: () => Promise<AsyncIterator<String>>;
-}
-
-export interface ActorSubscriptionPayload {
-  mutation: MutationType;
-  node: Actor;
-  updatedFields: String[];
-  previousValues: ActorPreviousValues;
-}
-
-export interface ActorSubscriptionPayloadPromise
-  extends Promise<ActorSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = ActorPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = ActorPreviousValuesPromise>() => T;
-}
-
-export interface ActorSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<ActorSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = ActorSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = ActorPreviousValuesSubscription>() => T;
 }
 
 export interface Actor {
@@ -972,20 +619,48 @@ export interface ActorNullablePromise
   parent: <T = ActorPromise>() => T;
 }
 
-export interface AggregateLink {
-  count: Int;
+export interface ActorConnection {
+  pageInfo: PageInfo;
+  edges: ActorEdge[];
 }
 
-export interface AggregateLinkPromise
-  extends Promise<AggregateLink>,
+export interface ActorConnectionPromise
+  extends Promise<ActorConnection>,
     Fragmentable {
-  count: () => Promise<Int>;
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ActorEdge>>() => T;
+  aggregate: <T = AggregateActorPromise>() => T;
 }
 
-export interface AggregateLinkSubscription
-  extends Promise<AsyncIterator<AggregateLink>>,
+export interface ActorConnectionSubscription
+  extends Promise<AsyncIterator<ActorConnection>>,
     Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ActorEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateActorSubscription>() => T;
+}
+
+export interface PageInfo {
+  hasNextPage: Boolean;
+  hasPreviousPage: Boolean;
+  startCursor?: String;
+  endCursor?: String;
+}
+
+export interface PageInfoPromise extends Promise<PageInfo>, Fragmentable {
+  hasNextPage: () => Promise<Boolean>;
+  hasPreviousPage: () => Promise<Boolean>;
+  startCursor: () => Promise<String>;
+  endCursor: () => Promise<String>;
+}
+
+export interface PageInfoSubscription
+  extends Promise<AsyncIterator<PageInfo>>,
+    Fragmentable {
+  hasNextPage: () => Promise<AsyncIterator<Boolean>>;
+  hasPreviousPage: () => Promise<AsyncIterator<Boolean>>;
+  startCursor: () => Promise<AsyncIterator<String>>;
+  endCursor: () => Promise<AsyncIterator<String>>;
 }
 
 export interface ActorEdge {
@@ -1005,6 +680,176 @@ export interface ActorEdgeSubscription
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
+export interface AggregateActor {
+  count: Int;
+}
+
+export interface AggregateActorPromise
+  extends Promise<AggregateActor>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateActorSubscription
+  extends Promise<AsyncIterator<AggregateActor>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface Link {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  description: String;
+  url: String;
+}
+
+export interface LinkPromise extends Promise<Link>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  description: () => Promise<String>;
+  url: () => Promise<String>;
+}
+
+export interface LinkSubscription
+  extends Promise<AsyncIterator<Link>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  description: () => Promise<AsyncIterator<String>>;
+  url: () => Promise<AsyncIterator<String>>;
+}
+
+export interface LinkNullablePromise
+  extends Promise<Link | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  description: () => Promise<String>;
+  url: () => Promise<String>;
+}
+
+export interface LinkConnection {
+  pageInfo: PageInfo;
+  edges: LinkEdge[];
+}
+
+export interface LinkConnectionPromise
+  extends Promise<LinkConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<LinkEdge>>() => T;
+  aggregate: <T = AggregateLinkPromise>() => T;
+}
+
+export interface LinkConnectionSubscription
+  extends Promise<AsyncIterator<LinkConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<LinkEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateLinkSubscription>() => T;
+}
+
+export interface LinkEdge {
+  node: Link;
+  cursor: String;
+}
+
+export interface LinkEdgePromise extends Promise<LinkEdge>, Fragmentable {
+  node: <T = LinkPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface LinkEdgeSubscription
+  extends Promise<AsyncIterator<LinkEdge>>,
+    Fragmentable {
+  node: <T = LinkSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateLink {
+  count: Int;
+}
+
+export interface AggregateLinkPromise
+  extends Promise<AggregateLink>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateLinkSubscription
+  extends Promise<AsyncIterator<AggregateLink>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface Tema {
+  id: Int;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  name: String;
+  prioridad?: Int;
+  coments?: String;
+}
+
+export interface TemaPromise extends Promise<Tema>, Fragmentable {
+  id: () => Promise<Int>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  prioridad: () => Promise<Int>;
+  coments: () => Promise<String>;
+  parent: <T = TemaPromise>() => T;
+}
+
+export interface TemaSubscription
+  extends Promise<AsyncIterator<Tema>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<Int>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+  prioridad: () => Promise<AsyncIterator<Int>>;
+  coments: () => Promise<AsyncIterator<String>>;
+  parent: <T = TemaSubscription>() => T;
+}
+
+export interface TemaNullablePromise
+  extends Promise<Tema | null>,
+    Fragmentable {
+  id: () => Promise<Int>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  prioridad: () => Promise<Int>;
+  coments: () => Promise<String>;
+  parent: <T = TemaPromise>() => T;
+}
+
+export interface TemaConnection {
+  pageInfo: PageInfo;
+  edges: TemaEdge[];
+}
+
+export interface TemaConnectionPromise
+  extends Promise<TemaConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<TemaEdge>>() => T;
+  aggregate: <T = AggregateTemaPromise>() => T;
+}
+
+export interface TemaConnectionSubscription
+  extends Promise<AsyncIterator<TemaConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<TemaEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateTemaSubscription>() => T;
+}
+
 export interface TemaEdge {
   node: Tema;
   cursor: String;
@@ -1020,6 +865,147 @@ export interface TemaEdgeSubscription
     Fragmentable {
   node: <T = TemaSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateTema {
+  count: Int;
+}
+
+export interface AggregateTemaPromise
+  extends Promise<AggregateTema>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateTemaSubscription
+  extends Promise<AsyncIterator<AggregateTema>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface BatchPayload {
+  count: Long;
+}
+
+export interface BatchPayloadPromise
+  extends Promise<BatchPayload>,
+    Fragmentable {
+  count: () => Promise<Long>;
+}
+
+export interface BatchPayloadSubscription
+  extends Promise<AsyncIterator<BatchPayload>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Long>>;
+}
+
+export interface ActorSubscriptionPayload {
+  mutation: MutationType;
+  node: Actor;
+  updatedFields: String[];
+  previousValues: ActorPreviousValues;
+}
+
+export interface ActorSubscriptionPayloadPromise
+  extends Promise<ActorSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = ActorPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ActorPreviousValuesPromise>() => T;
+}
+
+export interface ActorSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ActorSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ActorSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ActorPreviousValuesSubscription>() => T;
+}
+
+export interface ActorPreviousValues {
+  id: Int;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  name: String;
+  prioridad?: Int;
+  coments?: String;
+}
+
+export interface ActorPreviousValuesPromise
+  extends Promise<ActorPreviousValues>,
+    Fragmentable {
+  id: () => Promise<Int>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  prioridad: () => Promise<Int>;
+  coments: () => Promise<String>;
+}
+
+export interface ActorPreviousValuesSubscription
+  extends Promise<AsyncIterator<ActorPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<Int>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+  prioridad: () => Promise<AsyncIterator<Int>>;
+  coments: () => Promise<AsyncIterator<String>>;
+}
+
+export interface LinkSubscriptionPayload {
+  mutation: MutationType;
+  node: Link;
+  updatedFields: String[];
+  previousValues: LinkPreviousValues;
+}
+
+export interface LinkSubscriptionPayloadPromise
+  extends Promise<LinkSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = LinkPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = LinkPreviousValuesPromise>() => T;
+}
+
+export interface LinkSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<LinkSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = LinkSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = LinkPreviousValuesSubscription>() => T;
+}
+
+export interface LinkPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  description: String;
+  url: String;
+}
+
+export interface LinkPreviousValuesPromise
+  extends Promise<LinkPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  description: () => Promise<String>;
+  url: () => Promise<String>;
+}
+
+export interface LinkPreviousValuesSubscription
+  extends Promise<AsyncIterator<LinkPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  description: () => Promise<AsyncIterator<String>>;
+  url: () => Promise<AsyncIterator<String>>;
 }
 
 export interface TemaSubscriptionPayload {
@@ -1047,39 +1033,41 @@ export interface TemaSubscriptionPayloadSubscription
   previousValues: <T = TemaPreviousValuesSubscription>() => T;
 }
 
-export interface LinkEdge {
-  node: Link;
-  cursor: String;
+export interface TemaPreviousValues {
+  id: Int;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  name: String;
+  prioridad?: Int;
+  coments?: String;
 }
 
-export interface LinkEdgePromise extends Promise<LinkEdge>, Fragmentable {
-  node: <T = LinkPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface LinkEdgeSubscription
-  extends Promise<AsyncIterator<LinkEdge>>,
+export interface TemaPreviousValuesPromise
+  extends Promise<TemaPreviousValues>,
     Fragmentable {
-  node: <T = LinkSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
+  id: () => Promise<Int>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  prioridad: () => Promise<Int>;
+  coments: () => Promise<String>;
 }
 
-/*
-The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
-*/
-export type String = string;
-
-/*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
+export interface TemaPreviousValuesSubscription
+  extends Promise<AsyncIterator<TemaPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<Int>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+  prioridad: () => Promise<AsyncIterator<Int>>;
+  coments: () => Promise<AsyncIterator<String>>;
+}
 
 /*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
 */
 export type Int = number;
-
-export type Long = string;
 
 /*
 DateTime scalar input type, allowing Date
@@ -1092,10 +1080,22 @@ DateTime scalar output type, which is always a string
 export type DateTimeOutput = string;
 
 /*
+The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.
+*/
+export type String = string;
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
+
+/*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
 */
 export type ID_Input = string | number;
 export type ID_Output = string;
+
+export type Long = string;
 
 /**
  * Model Metadata

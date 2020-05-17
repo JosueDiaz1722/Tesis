@@ -5,6 +5,14 @@ import { SaveEventArgs, CommandModel } from "@syncfusion/ej2-grids";
 import {DialogBoxComponent} from '../dialog-box/dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
 import {  MatTable } from '@angular/material/table';
+import {Apollo} from 'apollo-angular';
+import {Actor} from '../types';
+import {Router} from '@angular/router';
+
+// 1
+import {ALL_LINKS_QUERY, AllLinkQueryResponse,CREATE_ACTOR_MUTATION, ALL_ACTORES_QUERY} from '../graphql';
+import { DataSource } from '@angular/cdk/table';
+
 
 @Component({
   selector: 'app-actores',
@@ -13,6 +21,8 @@ import {  MatTable } from '@angular/material/table';
 })
 export class ActoresComponent implements OnInit {
 
+  allLinks: Actor[] = [];
+  loading: boolean = true;
   public data: Object[];
   public pageSettings: PageSettingsModel;
   public editSettings: EditSettingsModel;
@@ -21,20 +31,25 @@ export class ActoresComponent implements OnInit {
   public numericParams: Object;
   @ViewChild(TreeGridComponent, { static: false }) treegrid: TreeGridComponent;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private apollo: Apollo,private router: Router) { }
 
   ngOnInit(): void {
-    this.data = sampleData;
-    this.pageSettings = {pageSize: 12};
-    this.editSettings =  {
-      allowEditing: true,
-      allowAdding: true,
-      allowDeleting: true,
-      newRowPosition: 'Top',
-      mode:'Dialog'
-    };
-    this.toolbar = ['Add','Edit','Delete','Update','Cancel'];
-    this.numericParams = {params: {format: 'n'}};
+    this.apollo.watchQuery({
+      query: ALL_ACTORES_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.allLinks = response.data['actors'];
+      this.loading = response.loading;
+     }); 
+     this.pageSettings = {pageSize: 12};
+      this.editSettings =  {
+        allowEditing: true,
+        allowAdding: true,
+        allowDeleting: true,
+        newRowPosition: 'Top',
+        mode:'Dialog'
+      };
+      this.toolbar = ['Add','Edit','Delete','Update','Cancel'];
+      this.numericParams = {params: {format: 'n'}}; 
   }
 
   insert(data: any) : void { 
@@ -64,24 +79,29 @@ export class ActoresComponent implements OnInit {
       } 
     });
   }
+
+  dataSource(){ 
+    this.apollo.watchQuery({
+      fetchPolicy: 'cache-and-network', 
+      query: ALL_ACTORES_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.allLinks = response.data['actors'];
+      this.treegrid.dataBind();
+     }); 
+  }
  
   addRowData(row_obj,data){
-    
-    console.log(data);
-    var childRow = {
-      taskId: row_obj.id,
-        taskName: row_obj.nombre,
-        startDate: new Date("02/03/1994"),
-        endDate: new Date("02/07/2012"),
-        progress: 100,
-        duration: row_obj.prioridad,
-        priority: row_obj.comentario,
-        approved: false,
-        isInExpandState: true,
-        parentId: data.taskId
-    };
-    this.treegrid.addRecord(childRow, data.index);
-
+    this.apollo.mutate({
+      mutation: CREATE_ACTOR_MUTATION,
+      variables: {
+       name: row_obj.nombre,
+       prioridad: parseInt(row_obj.prioridad),
+       coments: row_obj.comentario,
+       id: data.id
+      }
+    }).subscribe((response) => {
+        this.dataSource();
+    });
   }
 
   addNewData(row_obj){
