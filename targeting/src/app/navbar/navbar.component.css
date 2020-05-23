@@ -1,3 +1,8 @@
 .spacer {
   flex: 1 1 auto;
 }
+
+.mat-bar {
+  background-color:rgb(57, 88, 156);
+  color: rgb(255, 255, 255);
+}

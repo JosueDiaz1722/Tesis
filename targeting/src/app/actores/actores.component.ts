@@ -10,7 +10,7 @@ import {Actor} from '../types';
 import {Router} from '@angular/router';
 
 // 1
-import {ALL_LINKS_QUERY, AllLinkQueryResponse,CREATE_ACTOR_MUTATION, ALL_ACTORES_QUERY} from '../graphql';
+import {DELETE_ACTOR_MUTATION,UPDATE_ACTOR_MUTATION,CREATE_ACTOR_MUTATION, ALL_ACTORES_QUERY, CREATE_NEW_ACTOR_MUTATION} from '../graphql';
 import { DataSource } from '@angular/cdk/table';
 
 
@@ -70,9 +70,9 @@ export class ActoresComponent implements OnInit {
         this.treegrid.editSettings.newRowPosition ="Child"
         this.addRowData(result.data,data);
       }else if(result.event == 'Update'){
-        
+        this.updateRowData(result.data);
       }else if(result.event == 'Delete'){
-        
+        this.deleteRowData(result.data);
       }else if(result.event == 'AddNew'){
         this.treegrid.editSettings.newRowPosition ="Bottom"
         this.addNewData(result.data);
@@ -94,9 +94,9 @@ export class ActoresComponent implements OnInit {
     this.apollo.mutate({
       mutation: CREATE_ACTOR_MUTATION,
       variables: {
-       name: row_obj.nombre,
+       name: row_obj.name,
        prioridad: parseInt(row_obj.prioridad),
-       coments: row_obj.comentario,
+       coments: row_obj.coments,
        id: data.id
       }
     }).subscribe((response) => {
@@ -105,6 +105,17 @@ export class ActoresComponent implements OnInit {
   }
 
   addNewData(row_obj){
+    this.apollo.mutate({
+      mutation: CREATE_NEW_ACTOR_MUTATION,
+      variables: {
+       name: row_obj.name,
+       prioridad: parseInt(row_obj.prioridad),
+       coments: row_obj.coments,
+      }
+    }).subscribe((response) => {
+        this.dataSource();
+    });
+
     
     var childRow = {
       taskId: row_obj.id,
@@ -117,7 +128,33 @@ export class ActoresComponent implements OnInit {
         approved: false,
         isInExpandState: true,
     };
-    this.treegrid.addRecord(childRow, 0);
+  }
+
+  updateRowData(row_obj){
+    this.apollo.mutate({
+      mutation: UPDATE_ACTOR_MUTATION,
+      variables: {
+       name: row_obj.name,
+       prioridad: parseInt(row_obj.prioridad),
+       coments: row_obj.coments,
+       id: parseInt(row_obj.id)
+      }
+    }).subscribe((response) => {
+        console.log(response)
+        this.dataSource();
+    });
+  }
+  
+  deleteRowData(row_obj){
+    this.apollo.mutate({
+      mutation: DELETE_ACTOR_MUTATION,
+      variables: {
+       id: parseInt(row_obj.id)
+      }
+    }).subscribe((response) => {
+        console.log(response)
+        this.dataSource();
+    });
   }
   
 }

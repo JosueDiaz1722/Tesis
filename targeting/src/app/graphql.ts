@@ -1,4 +1,4 @@
-import {Link, Actor} from './types';
+import {Link, Actor, Tema} from './types';
 // 1
 import gql from 'graphql-tag'
 
@@ -65,7 +65,7 @@ export interface AllActoresQueryResponse {
 
 export const CREATE_ACTOR_MUTATION = gql`
   # 2
-  mutation createActorMutation($name:String!, $prioridad: Int!, $coments: String!, $id: Int!){
+  mutation createActorMutation($name:String!, $prioridad: Int!, $coments: String, $id: Int!){
     createActor(data:{
       name: $name,
       prioridad: $prioridad,
@@ -78,6 +78,133 @@ export const CREATE_ACTOR_MUTATION = gql`
       parent{
         id
       }
+    }
+  }
+`;
+
+export const CREATE_NEW_ACTOR_MUTATION = gql`
+  # 2
+  mutation createNewActorMutation($name:String!, $prioridad: Int!, $coments: String){
+    createActor(data:{
+      name: $name,
+      prioridad: $prioridad,
+      coments: $coments
+    }){
+      name
+      prioridad
+      coments
+    }
+  }
+`;
+
+export const UPDATE_ACTOR_MUTATION = gql`
+  # 2
+  mutation updateActorMutation($name:String!, $prioridad: Int!, $coments: String, $id: Int!){
+    updateActor(data:{
+      name: $name,
+      prioridad: $prioridad,
+      coments: $coments},
+      where: {id:$id}
+    ){
+      name
+      prioridad
+      coments
+    }
+  }
+`;
+
+export const DELETE_ACTOR_MUTATION = gql`
+  # 2
+  mutation deleteActorMutation($id: Int!){
+    deleteActor(
+      where: {id:$id}
+    ){
+      name
+      prioridad
+      coments
+    }
+  }
+`;
+
+export const ALL_TEMAS_QUERY = gql`
+  query TemassQuery {
+    temas{
+      id
+      name
+      prioridad
+      coments
+      parent{
+        id
+      }
+    }
+  }
+`;
+
+// 3
+export interface AllActoresQueryResponse {
+  temas: Tema[];
+  loading: boolean;
+}
+
+export const CREATE_TEMA_MUTATION = gql`
+  # 2
+  mutation createTemaMutation($name:String!, $prioridad: Int!, $coments: String, $id: Int!){
+    createTema(data:{
+      name: $name,
+      prioridad: $prioridad,
+      coments: $coments,
+      parent: {connect: {id: $id}}
+    }){
+      name
+      prioridad
+      coments
+      parent{
+        id
+      }
+    }
+  }
+`;
+
+export const CREATE_NEW_TEMA_MUTATION = gql`
+  # 2
+  mutation createNewTemaMutation($name:String!, $prioridad: Int!, $coments: String){
+    createTema(data:{
+      name: $name,
+      prioridad: $prioridad,
+      coments: $coments
+    }){
+      name
+      prioridad
+      coments
+    }
+  }
+`;
+
+export const UPDATE_TEMA_MUTATION = gql`
+  # 2
+  mutation updateTemaMutation($name:String!, $prioridad: Int!, $coments: String, $id: Int!){
+    updateTema(data:{
+      name: $name,
+      prioridad: $prioridad,
+      coments: $coments},
+      where: {id:$id}
+    ){
+      name
+      prioridad
+      coments
+    }
+  }
+`;
+
+export const DELETE_TEMA_MUTATION = gql`
+  # 2
+  mutation deleteTemaMutation($id: Int!){
+    deleteTema(
+      where: {id:$id}
+    ){
+      name
+      prioridad
+      coments
     }
   }
 `;

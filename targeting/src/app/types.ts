@@ -12,3 +12,11 @@ export class Link {
     coments: string;
     parent: [Actor];
   }
+
+  export class Tema {
+    id: string;
+    name: string;
+    prioridad: number;
+    coments: string;
+    parent: [Tema];
+  }

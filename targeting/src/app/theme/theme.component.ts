@@ -1,5 +1,14 @@
-import {Component} from '@angular/core';
+import {Component,OnInit,ViewChild} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {Apollo} from 'apollo-angular';
+import {Actor, Tema} from '../types';
+import {Router} from '@angular/router';
+import {DialogBoxComponent} from '../dialog-box/dialog-box.component';
+import { MatDialog } from '@angular/material/dialog';
+import { PageSettingsModel,EditSettingsModel,TreeGridComponent } from "@syncfusion/ej2-angular-treegrid";
+
+// 1
+import {DELETE_TEMA_MUTATION,UPDATE_TEMA_MUTATION,CREATE_TEMA_MUTATION, ALL_TEMAS_QUERY, CREATE_NEW_TEMA_MUTATION} from '../graphql';
 
 /**
  * @title Table with expandable rows
@@ -17,125 +26,138 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
   ],
 })
 export class ThemeComponent {
-  dataSource = ELEMENT_DATA;
-  columnsToDisplay = ['name', 'weight', 'symbol', 'position'];
-  expandedElement: PeriodicElement[] = [];
+  allLinks: Tema[] = [];
+  loading: boolean = true;
+  public data: Object[];
+  public pageSettings: PageSettingsModel;
+  public editSettings: EditSettingsModel;
+  public toolbar: string[];
+  public numericParams: Object;
+  @ViewChild(TreeGridComponent, { static: false }) treegrid: TreeGridComponent;
 
-  constructor() {}
+  constructor(public dialog: MatDialog, private apollo: Apollo,private router: Router) { }
 
-  checkExpanded(element): boolean {
-    let flag = false;
-    this.expandedElement.forEach(e => {
-      if(e === element) {
-        flag = true;
-        
-      }
+  ngOnInit(): void {
+    this.apollo.watchQuery({
+      query: ALL_TEMAS_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.allLinks = response.data['temas'];
+      this.loading = response.loading;
+     }); 
+     this.pageSettings = {pageSize: 12};
+      this.editSettings =  {
+        allowEditing: true,
+        allowAdding: true,
+        allowDeleting: true,
+        newRowPosition: 'Top',
+        mode:'Dialog'
+      };
+      this.toolbar = ['Add','Edit','Delete','Update','Cancel'];
+      this.numericParams = {params: {format: 'n'}}; 
+  }
+
+  insert(data: any) : void { 
+    var value =  { taskID: 33333, taskName: 'Plan timeline'}; 
+    this.treegrid.addRecord(value, data.index);
+  // call addRecord method with data and index of parent record as parameters 
+  } 
+  
+  openDialog(action,obj, data: any) {
+    obj.action = action;
+    const dialogRef = this.dialog.open(DialogBoxComponent, {
+      width: '25%',
+      data:obj
     });
-    return flag;
+ 
+    dialogRef.afterClosed().subscribe(result => {
+      if(result.event == 'Add'){
+        this.treegrid.editSettings.newRowPosition ="Child"
+        this.addRowData(result.data,data);
+      }else if(result.event == 'Update'){
+        this.updateRowData(result.data);
+      }else if(result.event == 'Delete'){
+        this.deleteRowData(result.data);
+      }else if(result.event == 'AddNew'){
+        this.treegrid.editSettings.newRowPosition ="Bottom"
+        this.addNewData(result.data);
+      } 
+    });
   }
 
-  pushPopElement(element) {
-    const index = this.expandedElement.indexOf(element);
-    console.log(index);
-    if(index === -1) {
-        this.expandedElement.push(element);
-    } else {
-      this.expandedElement.splice(index,1);
-    }
+  dataSource(){ 
+    this.apollo.watchQuery({
+      fetchPolicy: 'cache-and-network', 
+      query: ALL_TEMAS_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.allLinks = response.data['temas'];
+      this.treegrid.dataBind();
+     }); 
   }
+ 
+  addRowData(row_obj,data){
+    this.apollo.mutate({
+      mutation: CREATE_TEMA_MUTATION,
+      variables: {
+       name: row_obj.name,
+       prioridad: parseInt(row_obj.prioridad),
+       coments: row_obj.coments,
+       id: data.id
+      }
+    }).subscribe((response) => {
+        this.dataSource();
+    });
+  }
+
+  addNewData(row_obj){
+    this.apollo.mutate({
+      mutation: CREATE_NEW_TEMA_MUTATION,
+      variables: {
+       name: row_obj.name,
+       prioridad: parseInt(row_obj.prioridad),
+       coments: row_obj.coments,
+      }
+    }).subscribe((response) => {
+        this.dataSource();
+    });
+
+    
+    var childRow = {
+      taskId: row_obj.id,
+        taskName: row_obj.nombre,
+        startDate: new Date("02/03/1994"),
+        endDate: new Date("02/07/2012"),
+        progress: 100,
+        duration: row_obj.prioridad,
+        priority: row_obj.comentario,
+        approved: false,
+        isInExpandState: true,
+    };
+  }
+
+  updateRowData(row_obj){
+    this.apollo.mutate({
+      mutation: UPDATE_TEMA_MUTATION,
+      variables: {
+       name: row_obj.name,
+       prioridad: parseInt(row_obj.prioridad),
+       coments: row_obj.coments,
+       id: parseInt(row_obj.id)
+      }
+    }).subscribe((response) => {
+        console.log(response)
+        this.dataSource();
+    });
+  }
+  
+  deleteRowData(row_obj){
+    this.apollo.mutate({
+      mutation: DELETE_TEMA_MUTATION,
+      variables: {
+       id: parseInt(row_obj.id)
+      }
+    }).subscribe((response) => {
+        this.dataSource();
+    });
+  }
+  
 }
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-  description: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {
-    position: 1,
-    name: 'Hydrogen',
-    weight: 1.0079,
-    symbol: 'H',
-    description: `Hydrogen is a chemical element with symbol H and atomic number 1. With a standard
-        atomic weight of 1.008, hydrogen is the lightest element on the periodic table.`
-  }, {
-    position: 2,
-    name: 'Helium',
-    weight: 4.0026,
-    symbol: 'He',
-    description: `Helium is a chemical element with symbol He and atomic number 2. It is a
-        colorless, odorless, tasteless, non-toxic, inert, monatomic gas, the first in the noble gas
-        group in the periodic table. Its boiling point is the lowest among all the elements.`
-  }, {
-    position: 3,
-    name: 'Lithium',
-    weight: 6.941,
-    symbol: 'Li',
-    description: `Lithium is a chemical element with symbol Li and atomic number 3. It is a soft,
-        silvery-white alkali metal. Under standard conditions, it is the lightest metal and the
-        lightest solid element.`
-  }, {
-    position: 4,
-    name: 'Beryllium',
-    weight: 9.0122,
-    symbol: 'Be',
-    description: `Beryllium is a chemical element with symbol Be and atomic number 4. It is a
-        relatively rare element in the universe, usually occurring as a product of the spallation of
-        larger atomic nuclei that have collided with cosmic rays.`
-  }, {
-    position: 5,
-    name: 'Boron',
-    weight: 10.811,
-    symbol: 'B',
-    description: `Boron is a chemical element with symbol B and atomic number 5. Produced entirely
-        by cosmic ray spallation and supernovae and not by stellar nucleosynthesis, it is a
-        low-abundance element in the Solar system and in the Earth's crust.`
-  }, {
-    position: 6,
-    name: 'Carbon',
-    weight: 12.0107,
-    symbol: 'C',
-    description: `Carbon is a chemical element with symbol C and atomic number 6. It is nonmetallic
-        and tetravalent—making four electrons available to form covalent chemical bonds. It belongs
-        to group 14 of the periodic table.`
-  }, {
-    position: 7,
-    name: 'Nitrogen',
-    weight: 14.0067,
-    symbol: 'N',
-    description: `Nitrogen is a chemical element with symbol N and atomic number 7. It was first
-        discovered and isolated by Scottish physician Daniel Rutherford in 1772.`
-  }, {
-    position: 8,
-    name: 'Oxygen',
-    weight: 15.9994,
-    symbol: 'O',
-    description: `Oxygen is a chemical element with symbol O and atomic number 8. It is a member of
-         the chalcogen group on the periodic table, a highly reactive nonmetal, and an oxidizing
-         agent that readily forms oxides with most elements as well as with other compounds.`
-  }, {
-    position: 9,
-    name: 'Fluorine',
-    weight: 18.9984,
-    symbol: 'F',
-    description: `Fluorine is a chemical element with symbol F and atomic number 9. It is the
-        lightest halogen and exists as a highly toxic pale yellow diatomic gas at standard
-        conditions.`
-  }, {
-    position: 10,
-    name: 'Neon',
-    weight: 20.1797,
-    symbol: 'Ne',
-    description: `Neon is a chemical element with symbol Ne and atomic number 10. It is a noble gas.
-        Neon is a colorless, odorless, inert monatomic gas under standard conditions, with about
-        two-thirds the density of air.`
-  },
-];
-
-
-/**  Copyright 2018 Google Inc. All Rights Reserved.
-    Use of this source code is governed by an MIT-style license that
-    can be found in the LICENSE file at http://angular.io/license */

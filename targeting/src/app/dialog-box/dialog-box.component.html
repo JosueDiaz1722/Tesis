@@ -3,13 +3,13 @@
     <h1 mat-dialog-title>Row Action :: <strong>{{action}}</strong></h1>
     <div mat-dialog-content>
       <mat-form-field style="width:100%" *ngIf="action != 'Delete'; else elseTemplate">
-        <input   placeholder="{{action}} Nombre" matInput [(ngModel)]="local_data.nombre">
+        <input   placeholder="{{action}} Nombre" matInput [(ngModel)]="local_data.name">
       </mat-form-field>
       <mat-form-field style="width:100%" *ngIf="action != 'Delete';">
         <input   placeholder="{{action}} Prioridad" matInput [(ngModel)]="local_data.prioridad">
       </mat-form-field>
       <mat-form-field style="width:100%" *ngIf="action != 'Delete';">
-        <input   placeholder="{{action}} Comentario" matInput [(ngModel)]="local_data.comentario">
+        <input   placeholder="{{action}} Comentario" matInput [(ngModel)]="local_data.coments">
       </mat-form-field>
       <ng-template style="width:100%" #elseTemplate>
         Sure to delete <b>{{local_data.nombre}}</b>?
