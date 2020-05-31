@@ -208,3 +208,65 @@ export const DELETE_TEMA_MUTATION = gql`
     }
   }
 `;
+
+export const HIJO_TEMA_QUERY = gql`
+  # 2
+  query TemasHijosQuery  {
+    temas(where: { NOT: [{ parent: null }] }) {
+    id
+    name
+    prioridad
+    parent{
+      id
+    }
+  }
+  }
+`;
+
+export const PARENT_TEMA_QUERY = gql`
+  # 2
+  query TemasParentQuery  {
+    temas(
+      where: {parent:null}
+    ){
+    	id
+      name
+      prioridad
+      coments
+      parent{
+        id
+      }
+    }
+  }
+`;
+
+export const HIJO_ACTOR_QUERY = gql`
+  # 2
+  query ActorHijosQuery  {
+    actors(where: { NOT: [{ parent: null }] }) {
+    id
+    name
+    prioridad
+    parent{
+      id
+    }
+  }
+  }
+`;
+
+export const PARENT_ACTOR_QUERY = gql`
+  # 2
+  query ActoresParentQuery  {
+    actors(
+      where: {parent:null}
+    ){
+    	id
+      name
+      prioridad
+      coments
+      parent{
+        id
+      }
+    }
+  }
+`;

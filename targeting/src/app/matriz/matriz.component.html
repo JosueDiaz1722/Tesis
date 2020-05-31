@@ -1,0 +1,155 @@
+<!--<ejs-pivotview #pivotview id='PivotView' height='350' [dataSourceSettings]=dataSourceSettings></ejs-pivotview>-->
+<h1>Table</h1>
+<hr>
+<!--<table >
+    <tbody>
+        <tr>
+            <td></td>
+            <td>
+              <table class=" table-bordered">
+                <tbody>
+                  <tr>
+                    <td class="classColor" attr.colspan="{{params.length * modes.length}}">Actores</td>
+                  </tr>
+                  <tr>
+                    <td  class="modeColor" attr.colspan="{{params.length}}" *ngFor = "let column of modes">
+                        {{column}}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="paramColor" *ngFor = "let column of combinations;let i = index">{{params[getModule(i)]}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <table class=" table-bordered">
+                <tbody>
+                  <tr>
+                    <td class="classColor">Temas</td>
+                    <td>
+                      <table class="table-bordered">
+                        <tbody>
+                          <tr class="modeColor" *ngFor = "let m of modes">
+                            <td>{{m}}</td>
+                            <td>
+                              <table class="table-bordered">
+                                <tbody>
+                                  <tr class="paramColor" *ngFor = "let p of params">
+                                    <td>{{p}}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+            <td>
+              <table class="table-bordered">
+                <tbody>
+                  <tr class="test1" *ngFor="let movie of combinations; let i = index">
+                    <td class="test1" *ngFor=" let col of combinations; let j = index">
+                        
+                        ({{i}},{{j}})</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          </tr>
+    </tbody>
+</table>-->
+
+<table>
+  <tbody>
+    <tr>
+      <th></th>
+      <th *ngFor = "let column of ParentTemas || [];let i = index">
+        {{column.name}}
+        <div *ngIf="column">
+          <div  *ngFor = "let hijo of HijosTemas || [];">
+            <div *ngIf="column.id==hijo.parent.id">
+              {{hijo.name}}
+              <div  *ngFor = "let subhijo of HijosTemas || [];">
+                <div *ngIf="hijo.id==subhijo.parent.id">
+                  {{subhijo.name}}
+                  <div  *ngFor = "let subhijo1 of HijosTemas || [];">
+                    <div *ngIf="subhijo.id==subhijo1.parent.id">
+                      {{subhijo1.name}}
+                    </div>  
+                  </div>    
+                </div>  
+              </div>    
+            </div>  
+          </div> 
+        </div>
+      </th>
+    </tr>
+    <tr *ngFor= "let actor of ParentActor|| []">
+      <th>
+        <span class='empty_fill'>{{actor.name}}
+          <span  *ngIf="actor">
+            <span  *ngFor = "let hijo of HijosActor || [];">
+              <span *ngIf="actor.id==hijo.parent.id">
+                <ul>
+                  {{hijo.name}}
+                <ul>
+                  <span  *ngFor = "let subhijo of HijosActor || [];">
+                    <span *ngIf="hijo.id==subhijo.parent.id">
+                      {{subhijo.name}}
+                      <ul>
+                        <span  *ngFor = "let subhijo1 of HijosActor || [];">
+                          <span *ngIf="subhijo.id==subhijo1.parent.id">
+                            <li>
+                              {{subhijo1.name}}
+                            </li>
+                          </span>  
+                        </span>
+                      </ul> 
+                    </span>  
+                  </span>
+                </ul>
+                </ul> 
+              </span>  
+            </span> 
+          </span>
+        </span>
+      </th>
+      <th *ngFor = "let tema of ParentTemas"> test</th>
+    </tr>
+  </tbody>
+</table>
+
+<h1>Test</h1>
+<table class="custom-table">
+  <tr>
+    <th></th>
+    <th>First column</th>
+    <th>Second column</th>
+    <th>Third column</th>
+  </tr>
+  <tr>
+    <td>First row</td>
+    <td>1</td>
+    <td>2</td>
+    <td>3</td>
+  </tr>
+  <tr>
+    <td>Second row</td>
+    <td>2</td>
+    <td>4</td>
+    <td>6</td>
+  </tr>
+  <tr>
+    <td>Third row</td>
+    <td>3</td>
+    <td>6</td>
+    <td>9</td>
+  </tr>
+</table>

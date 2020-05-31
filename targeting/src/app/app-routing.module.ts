@@ -7,9 +7,13 @@ import { ThemeComponent } from './theme/theme.component';
 import {ActoresComponent} from './actores/actores.component';
 import {LinkListComponent} from './link-list/link-list.component';
 import {CreateLinkComponent} from './create-link/create-link.component';
+import { MatrizComponent } from "./matriz/matriz.component";
 
 
 const routes: Routes = [
+  {
+    path: 'matriz', component: MatrizComponent
+  },
   {
     path: '', component: HomeComponent
   },

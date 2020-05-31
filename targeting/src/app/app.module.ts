@@ -34,6 +34,10 @@ import { GraphQLModule } from "./apollo.config";
 import { LinkItemComponent } from './link-item/link-item.component';
 import { LinkListComponent } from './link-list/link-list.component';
 import { CreateLinkComponent } from './create-link/create-link.component';
+import { PivotViewModule } from '@syncfusion/ej2-angular-pivotview';
+import { MatrizComponent } from './matriz/matriz.component';
+import { HeatMapModule} from '@syncfusion/ej2-angular-heatmap';
+
 
 
 
@@ -54,7 +58,9 @@ import { CreateLinkComponent } from './create-link/create-link.component';
 
     LinkListComponent,
 
-    CreateLinkComponent
+    CreateLinkComponent,
+
+    MatrizComponent
   ],
   imports: [
     DatePickerAllModule,
@@ -80,8 +86,9 @@ import { CreateLinkComponent } from './create-link/create-link.component';
     BrowserModule,
     FormsModule,                               
     ReactiveFormsModule,
-    GraphQLModule
-    
+    GraphQLModule,
+    PivotViewModule,
+    HeatMapModule
   ],
   entryComponents: [
     DialogBoxComponent
