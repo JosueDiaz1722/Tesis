@@ -20,3 +20,13 @@ export class Link {
     coments: string;
     parent: [Tema];
   }
+
+  export class Matriz{
+    id: string;
+    TemaParent: [Tema];
+    ActorParent: [Actor];
+    prioridad: number;
+    tiempo: number;
+    coment: string;
+
+  }

@@ -1,9 +1,8 @@
-import { Component, OnInit, ViewChild,Directive, Output, EventEmitter, Input, SimpleChange } from '@angular/core';
+import { Component, OnInit, ViewChild,Directive, Output, EventEmitter, Input } from '@angular/core';
 import { IDataOptions, IDataSet } from '@syncfusion/ej2-angular-pivotview';
-import {HIJO_TEMA_QUERY,PARENT_TEMA_QUERY, HIJO_ACTOR_QUERY,PARENT_ACTOR_QUERY} from '../graphql';
-import {Actor, Tema} from '../types';
+import {HIJO_TEMA_QUERY,PARENT_TEMA_QUERY, HIJO_ACTOR_QUERY,PARENT_ACTOR_QUERY, ALL_MATRIZ_QUERY} from '../graphql';
+import {Actor, Tema, Matriz} from '../types';
 import {Apollo} from 'apollo-angular';
-
 
 @Component({
   selector: 'app-matriz',
@@ -18,6 +17,7 @@ export class MatrizComponent implements OnInit {
   HijosTemas: Tema[] = [];
   ParentActor: Actor[] = [];
   HijosActor: Actor[] =[];
+  DatosMatriz: Matriz[]=[];
   loading: boolean = true;
   public pivotData: IDataSet[];
   public dataSourceSettings: IDataOptions;
@@ -27,7 +27,18 @@ export class MatrizComponent implements OnInit {
   ngOnInit(): void {
     this.datasource();
     this.childData();
+    this.matriz();
     this.combinations = this.getCombinationsArray();
+  }
+
+  matriz(){
+    this.apollo.watchQuery({
+      query: ALL_MATRIZ_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.DatosMatriz = response.data['matrizes'];
+      this.loading = response.loading;
+      console.log(this.DatosMatriz);
+    });
   }
 
   datasource(){
@@ -78,4 +89,7 @@ export class MatrizComponent implements OnInit {
     });
   }
 
+  refresh(){
+    this.ngOnInit;
+  }
 }

@@ -1,4 +1,4 @@
-import {Link, Actor, Tema} from './types';
+import {Link, Actor, Tema, Matriz} from './types';
 // 1
 import gql from 'graphql-tag'
 
@@ -270,3 +270,26 @@ export const PARENT_ACTOR_QUERY = gql`
     }
   }
 `;
+
+export const ALL_MATRIZ_QUERY = gql`
+  query MatrizQuery {
+    matrizes{
+      id
+      tiempo
+      prioridad
+      coment
+      TemaParent{
+        id
+      }
+      ActorParent{
+        id
+      }
+    }
+  }
+`;
+
+// 3
+export interface AllMatrizQueryResponse {
+  links: Matriz[];
+  loading: boolean;
+}

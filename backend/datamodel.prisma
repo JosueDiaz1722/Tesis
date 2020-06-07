@@ -26,3 +26,14 @@ type Link @model {
   description: String!
   url: String!
 }
+
+type Matriz {
+  id: ID! @id
+  TemaParent: Tema  
+  ActorParent: Actor
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  prioridad: Int
+  tiempo: Int
+  coment: String
+}

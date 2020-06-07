@@ -191,6 +191,10 @@ type AggregateLink {
   count: Int!
 }
 
+type AggregateMatriz {
+  count: Int!
+}
+
 type AggregateTema {
   count: Int!
 }
@@ -345,6 +349,165 @@ input LinkWhereUniqueInput {
 
 scalar Long
 
+type Matriz {
+  id: ID!
+  TemaParent: Tema
+  ActorParent: Actor
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  prioridad: Int
+  tiempo: Int
+  coment: String
+}
+
+type MatrizConnection {
+  pageInfo: PageInfo!
+  edges: [MatrizEdge]!
+  aggregate: AggregateMatriz!
+}
+
+input MatrizCreateInput {
+  id: ID
+  TemaParent: TemaCreateOneInput
+  ActorParent: ActorCreateOneInput
+  prioridad: Int
+  tiempo: Int
+  coment: String
+}
+
+type MatrizEdge {
+  node: Matriz!
+  cursor: String!
+}
+
+enum MatrizOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  prioridad_ASC
+  prioridad_DESC
+  tiempo_ASC
+  tiempo_DESC
+  coment_ASC
+  coment_DESC
+}
+
+type MatrizPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  prioridad: Int
+  tiempo: Int
+  coment: String
+}
+
+type MatrizSubscriptionPayload {
+  mutation: MutationType!
+  node: Matriz
+  updatedFields: [String!]
+  previousValues: MatrizPreviousValues
+}
+
+input MatrizSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: MatrizWhereInput
+  AND: [MatrizSubscriptionWhereInput!]
+  OR: [MatrizSubscriptionWhereInput!]
+  NOT: [MatrizSubscriptionWhereInput!]
+}
+
+input MatrizUpdateInput {
+  TemaParent: TemaUpdateOneInput
+  ActorParent: ActorUpdateOneInput
+  prioridad: Int
+  tiempo: Int
+  coment: String
+}
+
+input MatrizUpdateManyMutationInput {
+  prioridad: Int
+  tiempo: Int
+  coment: String
+}
+
+input MatrizWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  TemaParent: TemaWhereInput
+  ActorParent: ActorWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  prioridad: Int
+  prioridad_not: Int
+  prioridad_in: [Int!]
+  prioridad_not_in: [Int!]
+  prioridad_lt: Int
+  prioridad_lte: Int
+  prioridad_gt: Int
+  prioridad_gte: Int
+  tiempo: Int
+  tiempo_not: Int
+  tiempo_in: [Int!]
+  tiempo_not_in: [Int!]
+  tiempo_lt: Int
+  tiempo_lte: Int
+  tiempo_gt: Int
+  tiempo_gte: Int
+  coment: String
+  coment_not: String
+  coment_in: [String!]
+  coment_not_in: [String!]
+  coment_lt: String
+  coment_lte: String
+  coment_gt: String
+  coment_gte: String
+  coment_contains: String
+  coment_not_contains: String
+  coment_starts_with: String
+  coment_not_starts_with: String
+  coment_ends_with: String
+  coment_not_ends_with: String
+  AND: [MatrizWhereInput!]
+  OR: [MatrizWhereInput!]
+  NOT: [MatrizWhereInput!]
+}
+
+input MatrizWhereUniqueInput {
+  id: ID
+}
+
 type Mutation {
   createActor(data: ActorCreateInput!): Actor!
   updateActor(data: ActorUpdateInput!, where: ActorWhereUniqueInput!): Actor
@@ -358,6 +521,12 @@ type Mutation {
   upsertLink(where: LinkWhereUniqueInput!, create: LinkCreateInput!, update: LinkUpdateInput!): Link!
   deleteLink(where: LinkWhereUniqueInput!): Link
   deleteManyLinks(where: LinkWhereInput): BatchPayload!
+  createMatriz(data: MatrizCreateInput!): Matriz!
+  updateMatriz(data: MatrizUpdateInput!, where: MatrizWhereUniqueInput!): Matriz
+  updateManyMatrizes(data: MatrizUpdateManyMutationInput!, where: MatrizWhereInput): BatchPayload!
+  upsertMatriz(where: MatrizWhereUniqueInput!, create: MatrizCreateInput!, update: MatrizUpdateInput!): Matriz!
+  deleteMatriz(where: MatrizWhereUniqueInput!): Matriz
+  deleteManyMatrizes(where: MatrizWhereInput): BatchPayload!
   createTema(data: TemaCreateInput!): Tema!
   updateTema(data: TemaUpdateInput!, where: TemaWhereUniqueInput!): Tema
   updateManyTemas(data: TemaUpdateManyMutationInput!, where: TemaWhereInput): BatchPayload!
@@ -390,6 +559,9 @@ type Query {
   link(where: LinkWhereUniqueInput!): Link
   links(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Link]!
   linksConnection(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LinkConnection!
+  matriz(where: MatrizWhereUniqueInput!): Matriz
+  matrizes(where: MatrizWhereInput, orderBy: MatrizOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Matriz]!
+  matrizesConnection(where: MatrizWhereInput, orderBy: MatrizOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MatrizConnection!
   tema(where: TemaWhereUniqueInput!): Tema
   temas(where: TemaWhereInput, orderBy: TemaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tema]!
   temasConnection(where: TemaWhereInput, orderBy: TemaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TemaConnection!
@@ -399,6 +571,7 @@ type Query {
 type Subscription {
   actor(where: ActorSubscriptionWhereInput): ActorSubscriptionPayload
   link(where: LinkSubscriptionWhereInput): LinkSubscriptionPayload
+  matriz(where: MatrizSubscriptionWhereInput): MatrizSubscriptionPayload
   tema(where: TemaSubscriptionWhereInput): TemaSubscriptionPayload
 }
 

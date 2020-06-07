@@ -37,6 +37,8 @@ import { CreateLinkComponent } from './create-link/create-link.component';
 import { PivotViewModule } from '@syncfusion/ej2-angular-pivotview';
 import { MatrizComponent } from './matriz/matriz.component';
 import { HeatMapModule} from '@syncfusion/ej2-angular-heatmap';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+
 
 
 
@@ -88,7 +90,8 @@ import { HeatMapModule} from '@syncfusion/ej2-angular-heatmap';
     ReactiveFormsModule,
     GraphQLModule,
     PivotViewModule,
-    HeatMapModule
+    HeatMapModule,
+    MatButtonToggleModule
   ],
   entryComponents: [
     DialogBoxComponent

@@ -18,6 +18,7 @@ export type Maybe<T> = T | undefined | null;
 export interface Exists {
   actor: (where?: ActorWhereInput) => Promise<boolean>;
   link: (where?: LinkWhereInput) => Promise<boolean>;
+  matriz: (where?: MatrizWhereInput) => Promise<boolean>;
   tema: (where?: TemaWhereInput) => Promise<boolean>;
 }
 
@@ -78,6 +79,25 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => LinkConnectionPromise;
+  matriz: (where: MatrizWhereUniqueInput) => MatrizNullablePromise;
+  matrizes: (args?: {
+    where?: MatrizWhereInput;
+    orderBy?: MatrizOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Matriz>;
+  matrizesConnection: (args?: {
+    where?: MatrizWhereInput;
+    orderBy?: MatrizOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => MatrizConnectionPromise;
   tema: (where: TemaWhereUniqueInput) => TemaNullablePromise;
   temas: (args?: {
     where?: TemaWhereInput;
@@ -135,6 +155,22 @@ export interface Prisma {
   }) => LinkPromise;
   deleteLink: (where: LinkWhereUniqueInput) => LinkPromise;
   deleteManyLinks: (where?: LinkWhereInput) => BatchPayloadPromise;
+  createMatriz: (data: MatrizCreateInput) => MatrizPromise;
+  updateMatriz: (args: {
+    data: MatrizUpdateInput;
+    where: MatrizWhereUniqueInput;
+  }) => MatrizPromise;
+  updateManyMatrizes: (args: {
+    data: MatrizUpdateManyMutationInput;
+    where?: MatrizWhereInput;
+  }) => BatchPayloadPromise;
+  upsertMatriz: (args: {
+    where: MatrizWhereUniqueInput;
+    create: MatrizCreateInput;
+    update: MatrizUpdateInput;
+  }) => MatrizPromise;
+  deleteMatriz: (where: MatrizWhereUniqueInput) => MatrizPromise;
+  deleteManyMatrizes: (where?: MatrizWhereInput) => BatchPayloadPromise;
   createTema: (data: TemaCreateInput) => TemaPromise;
   updateTema: (args: {
     data: TemaUpdateInput;
@@ -166,6 +202,9 @@ export interface Subscription {
   link: (
     where?: LinkSubscriptionWhereInput
   ) => LinkSubscriptionPayloadSubscription;
+  matriz: (
+    where?: MatrizSubscriptionWhereInput
+  ) => MatrizSubscriptionPayloadSubscription;
   tema: (
     where?: TemaSubscriptionWhereInput
   ) => TemaSubscriptionPayloadSubscription;
@@ -204,6 +243,20 @@ export type LinkOrderByInput =
   | "description_DESC"
   | "url_ASC"
   | "url_DESC";
+
+export type MatrizOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "prioridad_ASC"
+  | "prioridad_DESC"
+  | "tiempo_ASC"
+  | "tiempo_DESC"
+  | "coment_ASC"
+  | "coment_DESC";
 
 export type TemaOrderByInput =
   | "id_ASC"
@@ -360,9 +413,77 @@ export interface LinkWhereInput {
   NOT?: Maybe<LinkWhereInput[] | LinkWhereInput>;
 }
 
-export type TemaWhereUniqueInput = AtLeastOne<{
-  id: Maybe<Int>;
+export type MatrizWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
 }>;
+
+export interface MatrizWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  TemaParent?: Maybe<TemaWhereInput>;
+  ActorParent?: Maybe<ActorWhereInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  prioridad?: Maybe<Int>;
+  prioridad_not?: Maybe<Int>;
+  prioridad_in?: Maybe<Int[] | Int>;
+  prioridad_not_in?: Maybe<Int[] | Int>;
+  prioridad_lt?: Maybe<Int>;
+  prioridad_lte?: Maybe<Int>;
+  prioridad_gt?: Maybe<Int>;
+  prioridad_gte?: Maybe<Int>;
+  tiempo?: Maybe<Int>;
+  tiempo_not?: Maybe<Int>;
+  tiempo_in?: Maybe<Int[] | Int>;
+  tiempo_not_in?: Maybe<Int[] | Int>;
+  tiempo_lt?: Maybe<Int>;
+  tiempo_lte?: Maybe<Int>;
+  tiempo_gt?: Maybe<Int>;
+  tiempo_gte?: Maybe<Int>;
+  coment?: Maybe<String>;
+  coment_not?: Maybe<String>;
+  coment_in?: Maybe<String[] | String>;
+  coment_not_in?: Maybe<String[] | String>;
+  coment_lt?: Maybe<String>;
+  coment_lte?: Maybe<String>;
+  coment_gt?: Maybe<String>;
+  coment_gte?: Maybe<String>;
+  coment_contains?: Maybe<String>;
+  coment_not_contains?: Maybe<String>;
+  coment_starts_with?: Maybe<String>;
+  coment_not_starts_with?: Maybe<String>;
+  coment_ends_with?: Maybe<String>;
+  coment_not_ends_with?: Maybe<String>;
+  AND?: Maybe<MatrizWhereInput[] | MatrizWhereInput>;
+  OR?: Maybe<MatrizWhereInput[] | MatrizWhereInput>;
+  NOT?: Maybe<MatrizWhereInput[] | MatrizWhereInput>;
+}
 
 export interface TemaWhereInput {
   id?: Maybe<Int>;
@@ -431,6 +552,10 @@ export interface TemaWhereInput {
   NOT?: Maybe<TemaWhereInput[] | TemaWhereInput>;
 }
 
+export type TemaWhereUniqueInput = AtLeastOne<{
+  id: Maybe<Int>;
+}>;
+
 export interface ActorCreateInput {
   name: String;
   prioridad?: Maybe<Int>;
@@ -493,11 +618,13 @@ export interface LinkUpdateManyMutationInput {
   url?: Maybe<String>;
 }
 
-export interface TemaCreateInput {
-  name: String;
+export interface MatrizCreateInput {
+  id?: Maybe<ID_Input>;
+  TemaParent?: Maybe<TemaCreateOneInput>;
+  ActorParent?: Maybe<ActorCreateOneInput>;
   prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<TemaCreateOneInput>;
+  tiempo?: Maybe<Int>;
+  coment?: Maybe<String>;
 }
 
 export interface TemaCreateOneInput {
@@ -505,11 +632,19 @@ export interface TemaCreateOneInput {
   connect?: Maybe<TemaWhereUniqueInput>;
 }
 
-export interface TemaUpdateInput {
-  name?: Maybe<String>;
+export interface TemaCreateInput {
+  name: String;
   prioridad?: Maybe<Int>;
   coments?: Maybe<String>;
-  parent?: Maybe<TemaUpdateOneInput>;
+  parent?: Maybe<TemaCreateOneInput>;
+}
+
+export interface MatrizUpdateInput {
+  TemaParent?: Maybe<TemaUpdateOneInput>;
+  ActorParent?: Maybe<ActorUpdateOneInput>;
+  prioridad?: Maybe<Int>;
+  tiempo?: Maybe<Int>;
+  coment?: Maybe<String>;
 }
 
 export interface TemaUpdateOneInput {
@@ -531,6 +666,19 @@ export interface TemaUpdateDataInput {
 export interface TemaUpsertNestedInput {
   update: TemaUpdateDataInput;
   create: TemaCreateInput;
+}
+
+export interface MatrizUpdateManyMutationInput {
+  prioridad?: Maybe<Int>;
+  tiempo?: Maybe<Int>;
+  coment?: Maybe<String>;
+}
+
+export interface TemaUpdateInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<TemaUpdateOneInput>;
 }
 
 export interface TemaUpdateManyMutationInput {
@@ -559,6 +707,17 @@ export interface LinkSubscriptionWhereInput {
   AND?: Maybe<LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput>;
   OR?: Maybe<LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput>;
   NOT?: Maybe<LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput>;
+}
+
+export interface MatrizSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<MatrizWhereInput>;
+  AND?: Maybe<MatrizSubscriptionWhereInput[] | MatrizSubscriptionWhereInput>;
+  OR?: Maybe<MatrizSubscriptionWhereInput[] | MatrizSubscriptionWhereInput>;
+  NOT?: Maybe<MatrizSubscriptionWhereInput[] | MatrizSubscriptionWhereInput>;
 }
 
 export interface TemaSubscriptionWhereInput {
@@ -786,6 +945,52 @@ export interface AggregateLinkSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface Matriz {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  prioridad?: Int;
+  tiempo?: Int;
+  coment?: String;
+}
+
+export interface MatrizPromise extends Promise<Matriz>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  TemaParent: <T = TemaPromise>() => T;
+  ActorParent: <T = ActorPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  prioridad: () => Promise<Int>;
+  tiempo: () => Promise<Int>;
+  coment: () => Promise<String>;
+}
+
+export interface MatrizSubscription
+  extends Promise<AsyncIterator<Matriz>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  TemaParent: <T = TemaSubscription>() => T;
+  ActorParent: <T = ActorSubscription>() => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  prioridad: () => Promise<AsyncIterator<Int>>;
+  tiempo: () => Promise<AsyncIterator<Int>>;
+  coment: () => Promise<AsyncIterator<String>>;
+}
+
+export interface MatrizNullablePromise
+  extends Promise<Matriz | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  TemaParent: <T = TemaPromise>() => T;
+  ActorParent: <T = ActorPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  prioridad: () => Promise<Int>;
+  tiempo: () => Promise<Int>;
+  coment: () => Promise<String>;
+}
+
 export interface Tema {
   id: Int;
   createdAt: DateTimeOutput;
@@ -827,6 +1032,60 @@ export interface TemaNullablePromise
   prioridad: () => Promise<Int>;
   coments: () => Promise<String>;
   parent: <T = TemaPromise>() => T;
+}
+
+export interface MatrizConnection {
+  pageInfo: PageInfo;
+  edges: MatrizEdge[];
+}
+
+export interface MatrizConnectionPromise
+  extends Promise<MatrizConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<MatrizEdge>>() => T;
+  aggregate: <T = AggregateMatrizPromise>() => T;
+}
+
+export interface MatrizConnectionSubscription
+  extends Promise<AsyncIterator<MatrizConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<MatrizEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateMatrizSubscription>() => T;
+}
+
+export interface MatrizEdge {
+  node: Matriz;
+  cursor: String;
+}
+
+export interface MatrizEdgePromise extends Promise<MatrizEdge>, Fragmentable {
+  node: <T = MatrizPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface MatrizEdgeSubscription
+  extends Promise<AsyncIterator<MatrizEdge>>,
+    Fragmentable {
+  node: <T = MatrizSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateMatriz {
+  count: Int;
+}
+
+export interface AggregateMatrizPromise
+  extends Promise<AggregateMatriz>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateMatrizSubscription
+  extends Promise<AsyncIterator<AggregateMatriz>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
 }
 
 export interface TemaConnection {
@@ -1008,6 +1267,62 @@ export interface LinkPreviousValuesSubscription
   url: () => Promise<AsyncIterator<String>>;
 }
 
+export interface MatrizSubscriptionPayload {
+  mutation: MutationType;
+  node: Matriz;
+  updatedFields: String[];
+  previousValues: MatrizPreviousValues;
+}
+
+export interface MatrizSubscriptionPayloadPromise
+  extends Promise<MatrizSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = MatrizPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = MatrizPreviousValuesPromise>() => T;
+}
+
+export interface MatrizSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<MatrizSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = MatrizSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = MatrizPreviousValuesSubscription>() => T;
+}
+
+export interface MatrizPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  prioridad?: Int;
+  tiempo?: Int;
+  coment?: String;
+}
+
+export interface MatrizPreviousValuesPromise
+  extends Promise<MatrizPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  prioridad: () => Promise<Int>;
+  tiempo: () => Promise<Int>;
+  coment: () => Promise<String>;
+}
+
+export interface MatrizPreviousValuesSubscription
+  extends Promise<AsyncIterator<MatrizPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  prioridad: () => Promise<AsyncIterator<Int>>;
+  tiempo: () => Promise<AsyncIterator<Int>>;
+  coment: () => Promise<AsyncIterator<String>>;
+}
+
 export interface TemaSubscriptionPayload {
   mutation: MutationType;
   node: Tema;
@@ -1112,6 +1427,10 @@ export const models: Model[] = [
   },
   {
     name: "Link",
+    embedded: false
+  },
+  {
+    name: "Matriz",
     embedded: false
   }
 ];

@@ -52,3 +52,17 @@ span.empty_fill {
   height:100%;
 }
 
+.center {
+  text-align: center;
+}
+
+.green-icon {
+  color: green;
+}
+.yellow-icon {
+  color: yellow;
+}
+.red-icon {
+  color: red;
+}
+
