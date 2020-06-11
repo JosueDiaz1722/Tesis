@@ -1,108 +1,129 @@
 <!--<ejs-pivotview #pivotview id='PivotView' height='350' [dataSourceSettings]=dataSourceSettings></ejs-pivotview>-->
 <h1>Table</h1>
 <hr>
-
-<table>
-  <tbody>
-    <tr>
-      <th>
-        <div class="center">
-          Actores/Temas
-        </div>
-      </th>
-      <th *ngFor = "let column of ParentTemas || [];let i = index">
-        {{column.name}}
-        <div *ngIf="column">
-          <div  *ngFor = "let hijo of HijosTemas || [];">
-            <div *ngIf="column.id==hijo.parent.id">
-              {{hijo.name}}
-              <div  *ngFor = "let subhijo of HijosTemas || [];">
-                <div *ngIf="hijo.id==subhijo.parent.id">
-                  {{subhijo.name}}
-                  <div  *ngFor = "let subhijo1 of HijosTemas || [];">
-                    <div *ngIf="subhijo.id==subhijo1.parent.id">
-                      {{subhijo1.name}}
-                    </div>  
-                  </div>    
-                </div>  
-              </div>    
-            </div>  
-          </div> 
-        </div>
-      </th>
-    </tr>
-    <tr *ngFor= "let actor of ParentActor|| []">
-      <th>
-        <span class='empty_fill'>{{actor.name}}
-          <span  *ngIf="actor">
-            <span  *ngFor = "let hijo of HijosActor || [];">
-              <span *ngIf="actor.id==hijo.parent.id">
-                <ul>
-                  {{hijo.name}}
-                <ul>
-                  <span  *ngFor = "let subhijo of HijosActor || [];">
-                    <span *ngIf="hijo.id==subhijo.parent.id">
-                      {{subhijo.name}}
-                      <ul>
-                        <span  *ngFor = "let subhijo1 of HijosActor || [];">
-                          <span *ngIf="subhijo.id==subhijo1.parent.id">
-                            <li>
-                              {{subhijo1.name}}
-                            </li>
-                          </span>  
-                        </span>
-                      </ul> 
-                    </span>  
-                  </span>
-                </ul>
-                </ul> 
-              </span>  
-            </span> 
-          </span>
-        </span>
-      </th>
-      <th *ngFor = "let tema of ParentTemas"> 
-        <div *ngFor = "let cell of DatosMatriz">
-          <div *ngIf="cell.TemaParent.id==tema.id && cell.ActorParent.id==actor.id" >
-            {{cell.id}}
+<div class="table-wrapper">
+  <table class="fl-table">
+    <thead>
+      <tr>
+        <th>
+          <div class="center">
+            Actores/Temas
           </div>
-        </div>
-        <h1>{{tema.id}}</h1>
-        <h1>{{actor.id}}</h1>
-        <div>
-          <mat-button-toggle-group #group="matButtonToggleGroup">
-            <mat-button-toggle value="Baja" aria-label="Text align left">
-              <mat-icon class="green-icon">fiber_manual_record</mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle value="Media" aria-label="Text align center">
-              <mat-icon class="yellow-icon">fiber_manual_record</mat-icon>
-            </mat-button-toggle>
-            <mat-button-toggle value="Alta" aria-label="Text align right">
-              <mat-icon class="red-icon">fiber_manual_record</mat-icon>
-            </mat-button-toggle>
-          </mat-button-toggle-group>
-          <span class="center">Prioridad: {{group.value}}</span>
-        </div>
-        <div>
-          <mat-button-toggle-group #grouptime="matButtonToggleGroup">
-            <mat-button-toggle value="Bajo" aria-label="Text align left">
-              <img src="assets/img/courtblack.gif" />
-            </mat-button-toggle>
-            <mat-button-toggle value="Medio" aria-label="Text align center">
-              <img src="assets/img/moyenblack.gif" />
-            </mat-button-toggle>
-            <mat-button-toggle value="Alto" aria-label="Text align right">
-              <img src="assets/img/longblack.gif" />    
-            </mat-button-toggle>
-          </mat-button-toggle-group>
-          <span class="center">Tiempo: {{grouptime.value}}</span>
-        </div>
-      </th>
-    </tr>
-  </tbody>
-</table>
+        </th>
+        <th *ngFor = "let column of ParentTemas || [];let i = index">
+          {{column.name}}
+          <div *ngIf="column">
+            <div  *ngFor = "let hijo of HijosTemas || [];">
+              <div *ngIf="column.id==hijo.parent.id">
+                {{hijo.name}}
+                <div  *ngFor = "let subhijo of HijosTemas || [];">
+                  <div *ngIf="hijo.id==subhijo.parent.id">
+                    {{subhijo.name}}
+                    <div  *ngFor = "let subhijo1 of HijosTemas || [];">
+                      <div *ngIf="subhijo.id==subhijo1.parent.id">
+                        {{subhijo1.name}}
+                      </div>  
+                    </div>    
+                  </div>  
+                </div>    
+              </div>  
+            </div> 
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor= "let actor of ParentActor|| []">
+        <th>
+          <span class='empty_fill'>{{actor.name}}
+            <span  *ngIf="actor">
+              <span  *ngFor = "let hijo of HijosActor || [];">
+                <span *ngIf="actor.id==hijo.parent.id">
+                  <ul>
+                    {{hijo.name}}
+                  <ul>
+                    <span  *ngFor = "let subhijo of HijosActor || [];">
+                      <span *ngIf="hijo.id==subhijo.parent.id">
+                        {{subhijo.name}}
+                        <ul>
+                          <span  *ngFor = "let subhijo1 of HijosActor || [];">
+                            <span *ngIf="subhijo.id==subhijo1.parent.id">
+                              <li>
+                                {{subhijo1.name}}
+                              </li>
+                            </span>  
+                          </span>
+                        </ul> 
+                      </span>  
+                    </span>
+                  </ul>
+                  </ul> 
+                </span>  
+              </span> 
+            </span>
+          </span>
+        </th>
+        <td *ngFor = "let tema of ParentTemas"> 
+          <div *ngFor = "let cell of DatosMatriz">
+            <div *ngIf="cell.TemaParent.id==tema.id && cell.ActorParent.id==actor.id; else empty" >
+                <mat-button-toggle-group #group="matButtonToggleGroup"  value="{{cell.prioridad}}">
+                  <mat-button-toggle value="1" (change)="onValChange($event.value)" aria-label="Text align left">
+                    <mat-icon class="green-icon">fiber_manual_record</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle value="2" (change)="onValChange($event.value)" aria-label="Text align center">
+                    <mat-icon class="yellow-icon">fiber_manual_record</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle value="3" (change)="onValChange($event.value)" aria-label="Text align right">
+                    <mat-icon class="red-icon">fiber_manual_record</mat-icon>
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+                <br>
+                <mat-button-toggle-group #grouptime="matButtonToggleGroup" value="{{cell.prioridad}}">
+                  <mat-button-toggle value="1" (change)="onTimeChange($event.value)" aria-label="Text align left">
+                    <img src="assets/img/courtblack.gif" />
+                  </mat-button-toggle>
+                  <mat-button-toggle value="2" (change)="onTimeChange($event.value)" aria-label="Text align center">
+                    <img src="assets/img/moyenblack.gif" />
+                  </mat-button-toggle>
+                  <mat-button-toggle value="3" (change)="onTimeChange($event.value)" aria-label="Text align right">
+                    <img src="assets/img/longblack.gif" />    
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+            <ng-template #empty>
+              <mat-button-toggle-group #group="matButtonToggleGroup">
+                <mat-button-toggle value="1" (change)="onValChange($event.value)" aria-label="Text align left">
+                  <mat-icon class="green-icon">fiber_manual_record</mat-icon>
+                </mat-button-toggle>
+                <mat-button-toggle value="2" (change)="onValChange($event.value)" aria-label="Text align center">
+                  <mat-icon class="yellow-icon">fiber_manual_record</mat-icon>
+                </mat-button-toggle>
+                <mat-button-toggle value="3" (change)="onValChange($event.value)" aria-label="Text align right">
+                  <mat-icon class="red-icon">fiber_manual_record</mat-icon>
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+              <br>
+              <mat-button-toggle-group #grouptime="matButtonToggleGroup">
+                <mat-button-toggle value="1" (change)="onTimeChange($event.value)" aria-label="Text align left">
+                  <img src="assets/img/courtblack.gif" />
+                </mat-button-toggle>
+                <mat-button-toggle value="2" (change)="onTimeChange($event.value)" aria-label="Text align center">
+                  <img src="assets/img/moyenblack.gif" />
+                </mat-button-toggle>
+                <mat-button-toggle value="3" (change)="onTimeChange($event.value)" aria-label="Text align right">
+                  <img src="assets/img/longblack.gif" />    
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+            </ng-template>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-<mat-button-toggle-group #group="matButtonToggleGroup">
+
+<mat-button-toggle-group #grouptime="matButtonToggleGroup">
   <mat-button-toggle value="Bajo" aria-label="Text align left">
     <img src="assets/img/courtblack.gif" />
   </mat-button-toggle>
@@ -113,4 +134,16 @@
     <img src="assets/img/longblack.gif" />    
   </mat-button-toggle>
 </mat-button-toggle-group>
-<span class="center">Tiempo: {{group.value}}</span>
+<span class="center">Tiempo: {{grouptime.value}}</span>
+<mat-button-toggle-group #group="matButtonToggleGroup">
+  <mat-button-toggle value="Baja" aria-label="Text align left">
+    <mat-icon class="green-icon">fiber_manual_record</mat-icon>
+  </mat-button-toggle>
+  <mat-button-toggle value="Media" aria-label="Text align center">
+    <mat-icon class="yellow-icon">fiber_manual_record</mat-icon>
+  </mat-button-toggle>
+  <mat-button-toggle value="Alta" aria-label="Text align right">
+    <mat-icon class="red-icon">fiber_manual_record</mat-icon>
+  </mat-button-toggle>
+</mat-button-toggle-group>
+<span class="center">Prioridad: {{group.value}}</span>

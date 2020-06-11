@@ -92,4 +92,12 @@ export class MatrizComponent implements OnInit {
   refresh(){
     this.ngOnInit;
   }
+
+  onValChange(value){
+    console.log(value)
+  }
+
+  onTimeChange(value){
+    console.log(value)
+  }
 }
