@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild,Directive, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, ViewChild,Directive, Output, EventEmitter, Input, ChangeDetectionStrategy } from '@angular/core';
 import { IDataOptions, IDataSet } from '@syncfusion/ej2-angular-pivotview';
-import {HIJO_TEMA_QUERY,PARENT_TEMA_QUERY, HIJO_ACTOR_QUERY,PARENT_ACTOR_QUERY, ALL_MATRIZ_QUERY} from '../graphql';
+import {HIJO_TEMA_QUERY,PARENT_TEMA_QUERY, HIJO_ACTOR_QUERY,PARENT_ACTOR_QUERY, ALL_MATRIZ_QUERY, UPDATE_CELL_PRIORIDAD_MUTATION, DELETE_CELL_MUTATION, CREATE_CELL_MUTATION} from '../graphql';
 import {Actor, Tema, Matriz} from '../types';
 import {Apollo} from 'apollo-angular';
+import { NullTemplateVisitor } from '@angular/compiler';
 
 @Component({
   selector: 'app-matriz',
@@ -24,7 +25,7 @@ export class MatrizComponent implements OnInit {
 
   constructor( private apollo: Apollo) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.datasource();
     this.childData();
     this.matriz();
@@ -37,7 +38,12 @@ export class MatrizComponent implements OnInit {
     }).valueChanges.subscribe((response) => {
       this.DatosMatriz = response.data['matrizes'];
       this.loading = response.loading;
-      console.log(this.DatosMatriz);
+      if(this.DatosMatriz.length === 0){
+        console.log("Esta Vacio");
+        this.createCell();
+      }else{
+        console.log(this.DatosMatriz);
+      }
     });
   }
 
@@ -93,11 +99,82 @@ export class MatrizComponent implements OnInit {
     this.ngOnInit;
   }
 
-  onValChange(value){
+  onValChange(value,temaid,actorid,cellid){
+    var vm = this;
+    this.DatosMatriz.filter(function(item) {
+      let actor = item["ActorParent"];
+      let tema = item["TemaParent"];
+      if(actor["id"] === actorid && tema["id"]===temaid){
+        console.log("Si existe");
+        vm.updatePrioridadData(value,cellid)
+      }else{
+        console.log("Crea Nuevo");
+      }
+    });  
+  }
+
+  onTimeChange(value,actor,tema,cellid){
     console.log(value)
   }
 
-  onTimeChange(value){
-    console.log(value)
+
+  public updatePrioridadData(prioridad,cellid){
+    this.apollo.mutate({
+      mutation: UPDATE_CELL_PRIORIDAD_MUTATION,
+      variables: {
+      
+       prioridad: parseInt(prioridad),
+       id: String(cellid)
+      }
+    }).subscribe((response) => {
+        console.log(response)
+    });
+  }
+
+  public createCell(){
+    this.ParentActor.forEach(actor => {
+      this.ParentTemas.forEach(tema => {
+        this.apollo.mutate({
+          mutation: CREATE_CELL_MUTATION,
+          variables: {
+            idTema: parseInt(tema.id),
+            idActor: parseInt(actor.id),
+            prioridad: 0,
+            tiempo: 0,
+            coment: ""
+          }
+        }).subscribe((response) => {
+            console.log(response)
+        }); 
+      });
+    });
+  }  
+
+  valorfunction(temaid,actorid){
+    this.DatosMatriz.filter(function(item) {
+      let actor = item["ActorParent"];
+      let tema = item["TemaParent"];
+      if(actor["id"] === actorid && tema["id"]===temaid){
+        console.log("si existe");
+        console.log(item);
+        return item.tiempo;
+      }else{
+        return 0;
+      }
+    });
+  }
+
+  deleteAll(){
+    var vm = this;
+    this.DatosMatriz.forEach(element => {
+      vm.apollo.mutate({
+        mutation: DELETE_CELL_MUTATION,
+        variables: {
+         id: element.id
+        }
+      }).subscribe((response) => {
+        console.log(response);
+      });
+    });
   }
 }

@@ -1,15 +1,165 @@
 import { Component, OnInit } from '@angular/core';
+import { ConfirmationService } from 'primeng/api';
+import {Actor, Tema, Estado} from '../types';
+import {Apollo} from 'apollo-angular';
+import {PARENT_TEMA_QUERY,PARENT_ACTOR_QUERY, ESTADO_QUERY,CREATE_CELL_MUTATION,UPDATE_ESTADO_ACTOR_MUTATION} from '../graphql';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  providers: [
+    ConfirmationService,
+  ]
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(private confirmation: ConfirmationService, private apollo: Apollo,private router: Router) { }
 
   ngOnInit(): void {
+    this.datasource();
+  }
+  ParentTemas: Tema[] = [];
+  ParentActor: Actor[] = [];
+  confirmDropDatabaseDialogVisible = false;
+  Estado: Estado[] = [];
+
+  crearMatriz(event: Event) {
+    if (event.defaultPrevented) return;
+    event.preventDefault();
+
+    this.confirmation.confirm({
+      key: 'Crear Matriz',
+      message: 'Abrir nueva matriz o matriz actual?',
+      accept: () => { this.nuevo(); },
+      reject: () => { }
+    });
+  }
+
+  private nuevo() {
+    this.ParentActor.forEach(actor => {
+      this.ParentTemas.forEach(tema => {
+        this.apollo.mutate({
+          mutation: CREATE_CELL_MUTATION,
+          variables: {
+            idTema: parseInt(tema.id),
+            idActor: parseInt(actor.id),
+            prioridad: 0,
+            tiempo: 0,
+            coment: ""
+          }
+        }).subscribe((response) => {
+            console.log(response)
+        }); 
+      });
+    });
+    setTimeout(() => { this.router.navigate(['/matriz']); }, 2000);
+  }
+
+  old(){
+    var vm = this;
+    this.Estado.filter(function (item){
+      if(item.NumTemas === vm.ParentTemas.length && item.NumActor === vm.ParentActor.length){
+        console.log('MISMO ESTADO');
+        vm.router.navigate(['/matriz']);
+      }else if (item.NumTemas !== vm.ParentTemas.length && item.NumActor === vm.ParentActor.length){
+        console.log('Diferente Temas');
+        for(let j = 0; j<vm.ParentActor.length; j++ ){
+          for(let i= item.NumTemas; i<vm.ParentTemas.length; i++){
+            console.log(vm.ParentTemas[i].id);
+            console.log(vm.ParentActor[j].id);
+            /*vm.apollo.mutate({
+              mutation: CREATE_CELL_MUTATION,
+              variables: {
+                idTema: parseInt(vm.ParentTemas[i].id),
+                idActor: parseInt(vm.ParentActor[j].id),
+                prioridad: 0,
+                tiempo: 0,
+                coment: ""
+              }
+            }).subscribe((response) => {
+                console.log(response)
+            }); */
+          }
+        }
+       // setTimeout(() => { vm.router.navigate(['/matriz']); }, 2000);
+      }else if (item.NumTemas === vm.ParentTemas.length && item.NumActor !== vm.ParentActor.length){
+        console.log('Diferentes Actores');
+        for(let j = item.NumActor; j<vm.ParentActor.length; j++ ){
+          for(let i= 0; i<vm.ParentTemas.length; i++){
+            console.log(vm.ParentTemas[i].id);
+            console.log(vm.ParentActor[j].id);
+            vm.apollo.mutate({
+              mutation: CREATE_CELL_MUTATION,
+              variables: {
+                idTema: parseInt(vm.ParentTemas[i].id),
+                idActor: parseInt(vm.ParentActor[j].id),
+                prioridad: 0,
+                tiempo: 0,
+                coment: ""
+              }
+            }).subscribe((response) => {
+                
+            });
+          }
+        }
+        vm.apollo.mutate({
+          mutation: UPDATE_ESTADO_ACTOR_MUTATION,
+          variables: {
+           id: vm.Estado[0].id,
+           NumActor: vm.ParentActor.length,
+          }
+        }).subscribe((response) => {
+            console.log(response);
+        });
+        setTimeout(() => { vm.router.navigate(['/matriz']); }, 2000);
+      }else{
+        console.log('Diferente Actores y Temas');
+        for(let j = item.NumActor; j<vm.ParentActor.length; j++ ){
+          for(let i= item.NumTemas; i<vm.ParentTemas.length; i++){
+            console.log(vm.ParentTemas[i].id);
+            console.log(vm.ParentActor[j].id);
+            /*vm.apollo.mutate({
+              mutation: CREATE_CELL_MUTATION,
+              variables: {
+                idTema: parseInt(vm.ParentTemas[i].id),
+                idActor: parseInt(vm.ParentActor[j].id),
+                prioridad: 0,
+                tiempo: 0,
+                coment: ""
+              }
+            }).subscribe((response) => {
+                console.log(response)
+            });*/
+          }
+        }
+       // setTimeout(() => { vm.router.navigate(['/matriz']); }, 2000);
+      }
+    });
+  }
+
+  datasource(){
+    this.apollo.watchQuery({
+      query: PARENT_TEMA_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.ParentTemas = response.data['temas'];
+      console.log(this.ParentTemas.length)
+    });
+    
+    this.apollo.watchQuery({
+      query: PARENT_ACTOR_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.ParentActor = response.data['actors'];
+      console.log(this.ParentActor.length);
+    });
+    
+    this.apollo.watchQuery({
+      query: ESTADO_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.Estado = response.data['estadoes'];
+      console.log(this.Estado);
+    });
   }
 
 }

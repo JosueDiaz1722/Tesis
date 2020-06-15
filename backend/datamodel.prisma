@@ -37,3 +37,9 @@ type Matriz {
   tiempo: Int
   coment: String
 }
+
+type Estado {
+  id: ID! @id
+  NumActor : Int!
+  NumTemas : Int!
+}

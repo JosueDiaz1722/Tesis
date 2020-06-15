@@ -187,6 +187,10 @@ type AggregateActor {
   count: Int!
 }
 
+type AggregateEstado {
+  count: Int!
+}
+
 type AggregateLink {
   count: Int!
 }
@@ -204,6 +208,112 @@ type BatchPayload {
 }
 
 scalar DateTime
+
+type Estado {
+  id: ID!
+  NumActor: Int!
+  NumTemas: Int!
+}
+
+type EstadoConnection {
+  pageInfo: PageInfo!
+  edges: [EstadoEdge]!
+  aggregate: AggregateEstado!
+}
+
+input EstadoCreateInput {
+  id: ID
+  NumActor: Int!
+  NumTemas: Int!
+}
+
+type EstadoEdge {
+  node: Estado!
+  cursor: String!
+}
+
+enum EstadoOrderByInput {
+  id_ASC
+  id_DESC
+  NumActor_ASC
+  NumActor_DESC
+  NumTemas_ASC
+  NumTemas_DESC
+}
+
+type EstadoPreviousValues {
+  id: ID!
+  NumActor: Int!
+  NumTemas: Int!
+}
+
+type EstadoSubscriptionPayload {
+  mutation: MutationType!
+  node: Estado
+  updatedFields: [String!]
+  previousValues: EstadoPreviousValues
+}
+
+input EstadoSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: EstadoWhereInput
+  AND: [EstadoSubscriptionWhereInput!]
+  OR: [EstadoSubscriptionWhereInput!]
+  NOT: [EstadoSubscriptionWhereInput!]
+}
+
+input EstadoUpdateInput {
+  NumActor: Int
+  NumTemas: Int
+}
+
+input EstadoUpdateManyMutationInput {
+  NumActor: Int
+  NumTemas: Int
+}
+
+input EstadoWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  NumActor: Int
+  NumActor_not: Int
+  NumActor_in: [Int!]
+  NumActor_not_in: [Int!]
+  NumActor_lt: Int
+  NumActor_lte: Int
+  NumActor_gt: Int
+  NumActor_gte: Int
+  NumTemas: Int
+  NumTemas_not: Int
+  NumTemas_in: [Int!]
+  NumTemas_not_in: [Int!]
+  NumTemas_lt: Int
+  NumTemas_lte: Int
+  NumTemas_gt: Int
+  NumTemas_gte: Int
+  AND: [EstadoWhereInput!]
+  OR: [EstadoWhereInput!]
+  NOT: [EstadoWhereInput!]
+}
+
+input EstadoWhereUniqueInput {
+  id: ID
+}
 
 type Link {
   id: ID!
@@ -515,6 +625,12 @@ type Mutation {
   upsertActor(where: ActorWhereUniqueInput!, create: ActorCreateInput!, update: ActorUpdateInput!): Actor!
   deleteActor(where: ActorWhereUniqueInput!): Actor
   deleteManyActors(where: ActorWhereInput): BatchPayload!
+  createEstado(data: EstadoCreateInput!): Estado!
+  updateEstado(data: EstadoUpdateInput!, where: EstadoWhereUniqueInput!): Estado
+  updateManyEstadoes(data: EstadoUpdateManyMutationInput!, where: EstadoWhereInput): BatchPayload!
+  upsertEstado(where: EstadoWhereUniqueInput!, create: EstadoCreateInput!, update: EstadoUpdateInput!): Estado!
+  deleteEstado(where: EstadoWhereUniqueInput!): Estado
+  deleteManyEstadoes(where: EstadoWhereInput): BatchPayload!
   createLink(data: LinkCreateInput!): Link!
   updateLink(data: LinkUpdateInput!, where: LinkWhereUniqueInput!): Link
   updateManyLinks(data: LinkUpdateManyMutationInput!, where: LinkWhereInput): BatchPayload!
@@ -556,6 +672,9 @@ type Query {
   actor(where: ActorWhereUniqueInput!): Actor
   actors(where: ActorWhereInput, orderBy: ActorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Actor]!
   actorsConnection(where: ActorWhereInput, orderBy: ActorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ActorConnection!
+  estado(where: EstadoWhereUniqueInput!): Estado
+  estadoes(where: EstadoWhereInput, orderBy: EstadoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Estado]!
+  estadoesConnection(where: EstadoWhereInput, orderBy: EstadoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EstadoConnection!
   link(where: LinkWhereUniqueInput!): Link
   links(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Link]!
   linksConnection(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LinkConnection!
@@ -570,6 +689,7 @@ type Query {
 
 type Subscription {
   actor(where: ActorSubscriptionWhereInput): ActorSubscriptionPayload
+  estado(where: EstadoSubscriptionWhereInput): EstadoSubscriptionPayload
   link(where: LinkSubscriptionWhereInput): LinkSubscriptionPayload
   matriz(where: MatrizSubscriptionWhereInput): MatrizSubscriptionPayload
   tema(where: TemaSubscriptionWhereInput): TemaSubscriptionPayload

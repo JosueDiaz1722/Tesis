@@ -28,5 +28,10 @@ export class Link {
     prioridad: number;
     tiempo: number;
     coment: string;
+  }
 
+  export class Estado{
+    id: string;
+    NumActor: number;
+    NumTemas: number;
   }

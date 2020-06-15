@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageSettingsModel,EditSettingsModel,TreeGridComponent } from "@syncfusion/ej2-angular-treegrid";
 
 // 1
-import {DELETE_TEMA_MUTATION,UPDATE_TEMA_MUTATION,CREATE_TEMA_MUTATION, ALL_TEMAS_QUERY, CREATE_NEW_TEMA_MUTATION} from '../graphql';
+import {DELETE_TEMA_MUTATION,UPDATE_TEMA_MUTATION,CREATE_TEMA_MUTATION, ALL_TEMAS_QUERY, CREATE_NEW_TEMA_MUTATION,DELETE_HIJO_TEMA_MUTATION} from '../graphql';
 
 /**
  * @title Table with expandable rows
@@ -28,6 +28,7 @@ import {DELETE_TEMA_MUTATION,UPDATE_TEMA_MUTATION,CREATE_TEMA_MUTATION, ALL_TEMA
 export class ThemeComponent {
   allLinks: Tema[] = [];
   loading: boolean = true;
+  ParentTemas: Tema[] = [];
   public data: Object[];
   public pageSettings: PageSettingsModel;
   public editSettings: EditSettingsModel;
@@ -151,13 +152,21 @@ export class ThemeComponent {
   
   deleteRowData(row_obj){
     this.apollo.mutate({
-      mutation: DELETE_TEMA_MUTATION,
+      mutation: DELETE_HIJO_TEMA_MUTATION,
       variables: {
        id: parseInt(row_obj.id)
       }
     }).subscribe((response) => {
-        this.dataSource();
+      this.apollo.mutate({
+        mutation: DELETE_TEMA_MUTATION,
+        variables: {
+         id: parseInt(row_obj.id)
+        }
+      }).subscribe((response) => {
+          this.dataSource();
+      })
     });
+    ;
   }
   
 }

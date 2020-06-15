@@ -6,12 +6,13 @@ import {DialogBoxComponent} from '../dialog-box/dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
 import {  MatTable } from '@angular/material/table';
 import {Apollo} from 'apollo-angular';
-import {Actor} from '../types';
+import {Actor, Estado} from '../types';
 import {Router} from '@angular/router';
 
 // 1
-import {DELETE_ACTOR_MUTATION,UPDATE_ACTOR_MUTATION,CREATE_ACTOR_MUTATION, ALL_ACTORES_QUERY, CREATE_NEW_ACTOR_MUTATION} from '../graphql';
-import { DataSource } from '@angular/cdk/table';
+import {DELETE_ACTOR_MUTATION,UPDATE_ACTOR_MUTATION,CREATE_ACTOR_MUTATION
+  ,ALL_ACTORES_QUERY, CREATE_NEW_ACTOR_MUTATION, DELETE_HIJO_ACTOR_MUTATION
+  ,UPDATE_ESTADO_ACTOR_MUTATION, ESTADO_QUERY,PARENT_ACTOR_QUERY,DELETE_ACTOR_CELL_MUTATION} from '../graphql';
 
 
 @Component({
@@ -23,6 +24,8 @@ export class ActoresComponent implements OnInit {
 
   allLinks: Actor[] = [];
   loading: boolean = true;
+  Estado: Estado[] = [];
+  ParentActor: Actor[] =[];
   public data: Object[];
   public pageSettings: PageSettingsModel;
   public editSettings: EditSettingsModel;
@@ -40,6 +43,19 @@ export class ActoresComponent implements OnInit {
       this.allLinks = response.data['actors'];
       this.loading = response.loading;
      }); 
+     this.apollo.watchQuery({
+      query: ESTADO_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.Estado = response.data['estadoes'];
+      console.log(this.Estado[0].id);
+    });
+
+    this.apollo.watchQuery({
+      query: PARENT_ACTOR_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.ParentActor = response.data['actors'];
+      this.loading = response.loading;
+    }); 
      this.pageSettings = {pageSize: 12};
       this.editSettings =  {
         allowEditing: true,
@@ -90,6 +106,15 @@ export class ActoresComponent implements OnInit {
      }); 
   }
  
+  parents(){
+    this.apollo.watchQuery({
+      fetchPolicy: 'cache-and-network', 
+      query: PARENT_ACTOR_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.ParentActor = response.data['actors'];
+     }); 
+  }
+
   addRowData(row_obj,data){
     this.apollo.mutate({
       mutation: CREATE_ACTOR_MUTATION,
@@ -105,6 +130,8 @@ export class ActoresComponent implements OnInit {
   }
 
   addNewData(row_obj){
+    let estado = this.ParentActor.length+1;
+    console.log(estado);
     this.apollo.mutate({
       mutation: CREATE_NEW_ACTOR_MUTATION,
       variables: {
@@ -113,21 +140,19 @@ export class ActoresComponent implements OnInit {
        coments: row_obj.coments,
       }
     }).subscribe((response) => {
-        this.dataSource();
+      this.dataSource();
+      /*this.apollo.mutate({
+        mutation: UPDATE_ESTADO_ACTOR_MUTATION,
+        variables: {
+         id: this.Estado[0].id,
+         NumActor: estado,
+        }
+      }).subscribe((response) => {
+          console.log(response);
+          this.dataSource();
+          this.parents();
+      });*/
     });
-
-    
-    var childRow = {
-      taskId: row_obj.id,
-        taskName: row_obj.nombre,
-        startDate: new Date("02/03/1994"),
-        endDate: new Date("02/07/2012"),
-        progress: 100,
-        duration: row_obj.prioridad,
-        priority: row_obj.comentario,
-        approved: false,
-        isInExpandState: true,
-    };
   }
 
   updateRowData(row_obj){
@@ -146,14 +171,45 @@ export class ActoresComponent implements OnInit {
   }
   
   deleteRowData(row_obj){
+    let estado = this.ParentActor.length-1;
+    console.log(estado);
     this.apollo.mutate({
-      mutation: DELETE_ACTOR_MUTATION,
+      mutation: DELETE_HIJO_ACTOR_MUTATION,
       variables: {
        id: parseInt(row_obj.id)
       }
     }).subscribe((response) => {
-        console.log(response)
-        this.dataSource();
+      this.apollo.mutate({
+        mutation: DELETE_ACTOR_CELL_MUTATION,
+        variables: {
+         id: parseInt(row_obj.id),
+        }
+      }).subscribe((response) => {
+        this.apollo.mutate({
+          mutation: DELETE_ACTOR_MUTATION,
+          variables: {
+           id: parseInt(row_obj.id)
+          }
+        }).subscribe((response) => {
+          if(row_obj.parent == null){
+            console.log("entro al if");
+            this.apollo.mutate({
+            mutation: UPDATE_ESTADO_ACTOR_MUTATION,
+            variables: {
+             id: this.Estado[0].id,
+             NumActor: estado,
+            }
+          }).subscribe((response) => {
+              console.log(response);
+              this.dataSource();
+              this.parents();
+          });
+          }else{
+            this.dataSource();
+          }
+          
+        });
+      });     
     });
   }
   

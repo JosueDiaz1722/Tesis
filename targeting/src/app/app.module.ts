@@ -38,6 +38,9 @@ import { PivotViewModule } from '@syncfusion/ej2-angular-pivotview';
 import { MatrizComponent } from './matriz/matriz.component';
 import { HeatMapModule} from '@syncfusion/ej2-angular-heatmap';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import {TableModule} from 'primeng/table';
+import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import {ConfirmationService} from 'primeng/api';
 
 
 
@@ -91,12 +94,14 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     GraphQLModule,
     PivotViewModule,
     HeatMapModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    TableModule,
+    ConfirmDialogModule,
   ],
   entryComponents: [
     DialogBoxComponent
   ],
-  providers: [PageService, SortService, FilterService, EditService, ToolbarService],
+  providers: [PageService, SortService, FilterService, EditService, ToolbarService, ConfirmationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

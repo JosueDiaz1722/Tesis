@@ -33,7 +33,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor= "let actor of ParentActor|| []">
+      <tr *ngFor= "let actor of ParentActor|| [];let i = index">
         <th>
           <span class='empty_fill'>{{actor.name}}
             <span  *ngIf="actor">
@@ -63,65 +63,23 @@
             </span>
           </span>
         </th>
-        <td *ngFor = "let tema of ParentTemas"> 
+        <td *ngFor = "let tema of ParentTemas; let j = index">
+          {{tema.id}} {{actor.id}}
           <div *ngFor = "let cell of DatosMatriz">
-            <div *ngIf="cell.TemaParent.id==tema.id && cell.ActorParent.id==actor.id; else empty" >
-                <mat-button-toggle-group #group="matButtonToggleGroup"  value="{{cell.prioridad}}">
-                  <mat-button-toggle value="1" (change)="onValChange($event.value)" aria-label="Text align left">
-                    <mat-icon class="green-icon">fiber_manual_record</mat-icon>
-                  </mat-button-toggle>
-                  <mat-button-toggle value="2" (change)="onValChange($event.value)" aria-label="Text align center">
-                    <mat-icon class="yellow-icon">fiber_manual_record</mat-icon>
-                  </mat-button-toggle>
-                  <mat-button-toggle value="3" (change)="onValChange($event.value)" aria-label="Text align right">
-                    <mat-icon class="red-icon">fiber_manual_record</mat-icon>
-                  </mat-button-toggle>
-                </mat-button-toggle-group>
-                <br>
-                <mat-button-toggle-group #grouptime="matButtonToggleGroup" value="{{cell.prioridad}}">
-                  <mat-button-toggle value="1" (change)="onTimeChange($event.value)" aria-label="Text align left">
-                    <img src="assets/img/courtblack.gif" />
-                  </mat-button-toggle>
-                  <mat-button-toggle value="2" (change)="onTimeChange($event.value)" aria-label="Text align center">
-                    <img src="assets/img/moyenblack.gif" />
-                  </mat-button-toggle>
-                  <mat-button-toggle value="3" (change)="onTimeChange($event.value)" aria-label="Text align right">
-                    <img src="assets/img/longblack.gif" />    
-                  </mat-button-toggle>
-                </mat-button-toggle-group>
+            <div *ngIf="cell.TemaParent.id==tema.id && cell.ActorParent.id==actor.id;">
+              <h1>si existe</h1>
             </div>
-            <ng-template #empty>
-              <mat-button-toggle-group #group="matButtonToggleGroup">
-                <mat-button-toggle value="1" (change)="onValChange($event.value)" aria-label="Text align left">
-                  <mat-icon class="green-icon">fiber_manual_record</mat-icon>
-                </mat-button-toggle>
-                <mat-button-toggle value="2" (change)="onValChange($event.value)" aria-label="Text align center">
-                  <mat-icon class="yellow-icon">fiber_manual_record</mat-icon>
-                </mat-button-toggle>
-                <mat-button-toggle value="3" (change)="onValChange($event.value)" aria-label="Text align right">
-                  <mat-icon class="red-icon">fiber_manual_record</mat-icon>
-                </mat-button-toggle>
-              </mat-button-toggle-group>
-              <br>
-              <mat-button-toggle-group #grouptime="matButtonToggleGroup">
-                <mat-button-toggle value="1" (change)="onTimeChange($event.value)" aria-label="Text align left">
-                  <img src="assets/img/courtblack.gif" />
-                </mat-button-toggle>
-                <mat-button-toggle value="2" (change)="onTimeChange($event.value)" aria-label="Text align center">
-                  <img src="assets/img/moyenblack.gif" />
-                </mat-button-toggle>
-                <mat-button-toggle value="3" (change)="onTimeChange($event.value)" aria-label="Text align right">
-                  <img src="assets/img/longblack.gif" />    
-                </mat-button-toggle>
-              </mat-button-toggle-group>
-            </ng-template>
           </div>
+          
         </td>
       </tr>
     </tbody>
   </table>
 </div>
 
+<button mat-icon-button color="success" (click)="deleteAll()">
+  <mat-icon>delete</mat-icon>
+</button>
 
 <mat-button-toggle-group #grouptime="matButtonToggleGroup">
   <mat-button-toggle value="Bajo" aria-label="Text align left">
@@ -147,3 +105,31 @@
   </mat-button-toggle>
 </mat-button-toggle-group>
 <span class="center">Prioridad: {{group.value}}</span>
+<!--
+<div *ngFor = "let cell of DatosMatriz">
+  <div *ngIf="cell.TemaParent.id==tema.id && cell.ActorParent.id==actor.id;">
+      <mat-button-toggle-group #group="matButtonToggleGroup"  value="{{cell.prioridad}}">
+        <mat-button-toggle value="1" (change)="onValChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
+          <mat-icon class="green-icon">fiber_manual_record</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="2" (change)="onValChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align center">
+          <mat-icon class="yellow-icon">fiber_manual_record</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="3" (change)="onValChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align right">
+          <mat-icon class="red-icon">fiber_manual_record</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+      <br>
+      <mat-button-toggle-group #grouptime="matButtonToggleGroup" value="{{cell.prioridad}}">
+        <mat-button-toggle value="1" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
+          <img src="assets/img/courtblack.gif" />
+        </mat-button-toggle>
+        <mat-button-toggle value="2" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align center">
+          <img src="assets/img/moyenblack.gif" />
+        </mat-button-toggle>
+        <mat-button-toggle value="3" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align right">
+          <img src="assets/img/longblack.gif" />    
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+  </div>
+</div>-->

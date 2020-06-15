@@ -1,4 +1,4 @@
-import {Link, Actor, Tema, Matriz} from './types';
+import {Link, Actor, Tema, Matriz,Estado} from './types';
 // 1
 import gql from 'graphql-tag'
 
@@ -126,6 +126,16 @@ export const DELETE_ACTOR_MUTATION = gql`
   }
 `;
 
+export const DELETE_HIJO_ACTOR_MUTATION = gql`
+  # 2
+  mutation deleteHijoActorMutation($id: Int!){
+    deleteManyActors(
+      where: { parent: {id: $id} }
+    ){
+      count
+    }
+  }
+`;
 export const ALL_TEMAS_QUERY = gql`
   query TemassQuery {
     temas{
@@ -205,6 +215,19 @@ export const DELETE_TEMA_MUTATION = gql`
       name
       prioridad
       coments
+    }
+  }
+`;
+
+export const DELETE_HIJO_TEMA_MUTATION = gql`
+  # 2
+  mutation deleteHijoTemaMutation($id: Int!){
+    deleteManyTemas(
+      where: {
+        parent: {id: $id}
+      }
+    ){
+      count
     }
   }
 `;
@@ -291,5 +314,115 @@ export const ALL_MATRIZ_QUERY = gql`
 // 3
 export interface AllMatrizQueryResponse {
   links: Matriz[];
+  loading: boolean;
+}
+
+export const UPDATE_CELL_PRIORIDAD_MUTATION = gql`
+  # 2
+  mutation updateCellPrioridadMutation($prioridad: Int!, $id: ID){
+    updateMatriz(data:{
+      prioridad: $prioridad},
+      where: {id:$id}
+    ){
+      TemaParent{
+        id
+      }
+      ActorParent{
+        id
+      }
+      prioridad
+      tiempo
+      coment
+    }
+  }
+`;
+
+export const CREATE_CELL_MUTATION = gql`
+  # 2
+  mutation matrix($idTema: Int!,$idActor: Int!, $prioridad:Int, $tiempo:Int, $coment:String){
+    createMatriz(data:{
+      TemaParent: {connect:{id:$idTema}},
+      ActorParent: {connect:{id:$idActor}},
+      prioridad: $prioridad,
+      tiempo: $tiempo,
+      coment: $coment
+    }){
+      id
+      TemaParent{
+        id
+      }
+      ActorParent{
+        id
+      }
+      prioridad
+      tiempo
+      coment
+    }
+  }
+`;
+
+export const DELETE_CELL_MUTATION = gql`
+  # 2
+  mutation deleteCellMutation($id: ID){
+    deleteMatriz(
+      where: {id:$id}
+    ){
+      id
+    }
+  }
+`;
+
+export const DELETE_ACTOR_CELL_MUTATION = gql`
+  # 2
+  mutation deleteActorMatrizParent($id:Int){
+    deleteManyMatrizes(
+      where: {ActorParent: {id: $id}}
+    ){
+      count
+    }
+  }
+`;
+
+export const ESTADO_QUERY = gql`
+ query EstadoQuery {
+    estadoes {
+      id
+      NumTemas
+      NumActor
+    }
+  }
+`;
+
+export const UPDATE_ESTADO_TEMA_MUTATION = gql`
+  # 2
+  mutation updateEstadoTemaMutation($id: ID, $NumTemas: Int){
+    updateEstado(data:{
+      NumTemas: $NumTemas},
+      where: {id:$id}
+    ){
+      id
+      NumActor
+      NumTemas
+    }
+  }
+`;
+
+export const UPDATE_ESTADO_ACTOR_MUTATION = gql`
+  # 2
+  mutation updateEstadoTemaMutation($id: ID, $NumActor: Int){
+    updateEstado(data:{
+      NumActor: $NumActor},
+      where: {id:$id}
+    ){
+      id
+      NumActor
+      NumTemas
+    }
+  }
+`;
+
+// 3
+export interface EstadoResponse {
+  estado: Estado[];
   loading: boolean;
 }

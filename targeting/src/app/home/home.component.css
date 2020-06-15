@@ -37,3 +37,24 @@ button{
   font-weight: bold;
   cursor: pointer;
 }
+
+.ui-confirmdialog.ui-dialog {
+  width: 34em;
+  background-color: white;
+}
+.ui-dialog-titlebar {
+      padding: .5em 0.667em;
+      font-family: xxx;
+      font-size: 1.3125rem;
+      font-weight: bold;
+      color: orange;
+  }
+
+.ui-dialog-content {
+      padding: 1em;
+  }
+
+  #footer {
+    display: flex;
+    justify-content: center;
+  }

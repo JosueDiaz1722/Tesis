@@ -17,6 +17,7 @@ export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
   actor: (where?: ActorWhereInput) => Promise<boolean>;
+  estado: (where?: EstadoWhereInput) => Promise<boolean>;
   link: (where?: LinkWhereInput) => Promise<boolean>;
   matriz: (where?: MatrizWhereInput) => Promise<boolean>;
   tema: (where?: TemaWhereInput) => Promise<boolean>;
@@ -60,6 +61,25 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => ActorConnectionPromise;
+  estado: (where: EstadoWhereUniqueInput) => EstadoNullablePromise;
+  estadoes: (args?: {
+    where?: EstadoWhereInput;
+    orderBy?: EstadoOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Estado>;
+  estadoesConnection: (args?: {
+    where?: EstadoWhereInput;
+    orderBy?: EstadoOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => EstadoConnectionPromise;
   link: (where: LinkWhereUniqueInput) => LinkNullablePromise;
   links: (args?: {
     where?: LinkWhereInput;
@@ -139,6 +159,22 @@ export interface Prisma {
   }) => ActorPromise;
   deleteActor: (where: ActorWhereUniqueInput) => ActorPromise;
   deleteManyActors: (where?: ActorWhereInput) => BatchPayloadPromise;
+  createEstado: (data: EstadoCreateInput) => EstadoPromise;
+  updateEstado: (args: {
+    data: EstadoUpdateInput;
+    where: EstadoWhereUniqueInput;
+  }) => EstadoPromise;
+  updateManyEstadoes: (args: {
+    data: EstadoUpdateManyMutationInput;
+    where?: EstadoWhereInput;
+  }) => BatchPayloadPromise;
+  upsertEstado: (args: {
+    where: EstadoWhereUniqueInput;
+    create: EstadoCreateInput;
+    update: EstadoUpdateInput;
+  }) => EstadoPromise;
+  deleteEstado: (where: EstadoWhereUniqueInput) => EstadoPromise;
+  deleteManyEstadoes: (where?: EstadoWhereInput) => BatchPayloadPromise;
   createLink: (data: LinkCreateInput) => LinkPromise;
   updateLink: (args: {
     data: LinkUpdateInput;
@@ -199,6 +235,9 @@ export interface Subscription {
   actor: (
     where?: ActorSubscriptionWhereInput
   ) => ActorSubscriptionPayloadSubscription;
+  estado: (
+    where?: EstadoSubscriptionWhereInput
+  ) => EstadoSubscriptionPayloadSubscription;
   link: (
     where?: LinkSubscriptionWhereInput
   ) => LinkSubscriptionPayloadSubscription;
@@ -231,6 +270,14 @@ export type ActorOrderByInput =
   | "prioridad_DESC"
   | "coments_ASC"
   | "coments_DESC";
+
+export type EstadoOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "NumActor_ASC"
+  | "NumActor_DESC"
+  | "NumTemas_ASC"
+  | "NumTemas_DESC";
 
 export type LinkOrderByInput =
   | "id_ASC"
@@ -343,6 +390,46 @@ export interface ActorWhereInput {
   AND?: Maybe<ActorWhereInput[] | ActorWhereInput>;
   OR?: Maybe<ActorWhereInput[] | ActorWhereInput>;
   NOT?: Maybe<ActorWhereInput[] | ActorWhereInput>;
+}
+
+export type EstadoWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface EstadoWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  NumActor?: Maybe<Int>;
+  NumActor_not?: Maybe<Int>;
+  NumActor_in?: Maybe<Int[] | Int>;
+  NumActor_not_in?: Maybe<Int[] | Int>;
+  NumActor_lt?: Maybe<Int>;
+  NumActor_lte?: Maybe<Int>;
+  NumActor_gt?: Maybe<Int>;
+  NumActor_gte?: Maybe<Int>;
+  NumTemas?: Maybe<Int>;
+  NumTemas_not?: Maybe<Int>;
+  NumTemas_in?: Maybe<Int[] | Int>;
+  NumTemas_not_in?: Maybe<Int[] | Int>;
+  NumTemas_lt?: Maybe<Int>;
+  NumTemas_lte?: Maybe<Int>;
+  NumTemas_gt?: Maybe<Int>;
+  NumTemas_gte?: Maybe<Int>;
+  AND?: Maybe<EstadoWhereInput[] | EstadoWhereInput>;
+  OR?: Maybe<EstadoWhereInput[] | EstadoWhereInput>;
+  NOT?: Maybe<EstadoWhereInput[] | EstadoWhereInput>;
 }
 
 export type LinkWhereUniqueInput = AtLeastOne<{
@@ -602,6 +689,22 @@ export interface ActorUpdateManyMutationInput {
   coments?: Maybe<String>;
 }
 
+export interface EstadoCreateInput {
+  id?: Maybe<ID_Input>;
+  NumActor: Int;
+  NumTemas: Int;
+}
+
+export interface EstadoUpdateInput {
+  NumActor?: Maybe<Int>;
+  NumTemas?: Maybe<Int>;
+}
+
+export interface EstadoUpdateManyMutationInput {
+  NumActor?: Maybe<Int>;
+  NumTemas?: Maybe<Int>;
+}
+
 export interface LinkCreateInput {
   id?: Maybe<ID_Input>;
   description: String;
@@ -696,6 +799,17 @@ export interface ActorSubscriptionWhereInput {
   AND?: Maybe<ActorSubscriptionWhereInput[] | ActorSubscriptionWhereInput>;
   OR?: Maybe<ActorSubscriptionWhereInput[] | ActorSubscriptionWhereInput>;
   NOT?: Maybe<ActorSubscriptionWhereInput[] | ActorSubscriptionWhereInput>;
+}
+
+export interface EstadoSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<EstadoWhereInput>;
+  AND?: Maybe<EstadoSubscriptionWhereInput[] | EstadoSubscriptionWhereInput>;
+  OR?: Maybe<EstadoSubscriptionWhereInput[] | EstadoSubscriptionWhereInput>;
+  NOT?: Maybe<EstadoSubscriptionWhereInput[] | EstadoSubscriptionWhereInput>;
 }
 
 export interface LinkSubscriptionWhereInput {
@@ -851,6 +965,88 @@ export interface AggregateActorPromise
 
 export interface AggregateActorSubscription
   extends Promise<AsyncIterator<AggregateActor>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface Estado {
+  id: ID_Output;
+  NumActor: Int;
+  NumTemas: Int;
+}
+
+export interface EstadoPromise extends Promise<Estado>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  NumActor: () => Promise<Int>;
+  NumTemas: () => Promise<Int>;
+}
+
+export interface EstadoSubscription
+  extends Promise<AsyncIterator<Estado>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  NumActor: () => Promise<AsyncIterator<Int>>;
+  NumTemas: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface EstadoNullablePromise
+  extends Promise<Estado | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  NumActor: () => Promise<Int>;
+  NumTemas: () => Promise<Int>;
+}
+
+export interface EstadoConnection {
+  pageInfo: PageInfo;
+  edges: EstadoEdge[];
+}
+
+export interface EstadoConnectionPromise
+  extends Promise<EstadoConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<EstadoEdge>>() => T;
+  aggregate: <T = AggregateEstadoPromise>() => T;
+}
+
+export interface EstadoConnectionSubscription
+  extends Promise<AsyncIterator<EstadoConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<EstadoEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateEstadoSubscription>() => T;
+}
+
+export interface EstadoEdge {
+  node: Estado;
+  cursor: String;
+}
+
+export interface EstadoEdgePromise extends Promise<EstadoEdge>, Fragmentable {
+  node: <T = EstadoPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface EstadoEdgeSubscription
+  extends Promise<AsyncIterator<EstadoEdge>>,
+    Fragmentable {
+  node: <T = EstadoSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateEstado {
+  count: Int;
+}
+
+export interface AggregateEstadoPromise
+  extends Promise<AggregateEstado>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateEstadoSubscription
+  extends Promise<AsyncIterator<AggregateEstado>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -1214,6 +1410,53 @@ export interface ActorPreviousValuesSubscription
   coments: () => Promise<AsyncIterator<String>>;
 }
 
+export interface EstadoSubscriptionPayload {
+  mutation: MutationType;
+  node: Estado;
+  updatedFields: String[];
+  previousValues: EstadoPreviousValues;
+}
+
+export interface EstadoSubscriptionPayloadPromise
+  extends Promise<EstadoSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = EstadoPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = EstadoPreviousValuesPromise>() => T;
+}
+
+export interface EstadoSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<EstadoSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = EstadoSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = EstadoPreviousValuesSubscription>() => T;
+}
+
+export interface EstadoPreviousValues {
+  id: ID_Output;
+  NumActor: Int;
+  NumTemas: Int;
+}
+
+export interface EstadoPreviousValuesPromise
+  extends Promise<EstadoPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  NumActor: () => Promise<Int>;
+  NumTemas: () => Promise<Int>;
+}
+
+export interface EstadoPreviousValuesSubscription
+  extends Promise<AsyncIterator<EstadoPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  NumActor: () => Promise<AsyncIterator<Int>>;
+  NumTemas: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface LinkSubscriptionPayload {
   mutation: MutationType;
   node: Link;
@@ -1431,6 +1674,10 @@ export const models: Model[] = [
   },
   {
     name: "Matriz",
+    embedded: false
+  },
+  {
+    name: "Estado",
     embedded: false
   }
 ];
