@@ -1,14 +1,17 @@
 import {Component,OnInit,ViewChild} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Apollo} from 'apollo-angular';
-import {Actor, Tema} from '../types';
+import {Estado, Tema} from '../types';
 import {Router} from '@angular/router';
 import {DialogBoxComponent} from '../dialog-box/dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
 import { PageSettingsModel,EditSettingsModel,TreeGridComponent } from "@syncfusion/ej2-angular-treegrid";
 
 // 1
-import {DELETE_TEMA_MUTATION,UPDATE_TEMA_MUTATION,CREATE_TEMA_MUTATION, ALL_TEMAS_QUERY, CREATE_NEW_TEMA_MUTATION,DELETE_HIJO_TEMA_MUTATION} from '../graphql';
+import {DELETE_TEMA_MUTATION,UPDATE_TEMA_MUTATION,CREATE_TEMA_MUTATION, 
+  ALL_TEMAS_QUERY, CREATE_NEW_TEMA_MUTATION,DELETE_HIJO_TEMA_MUTATION,
+  ESTADO_QUERY, DELETE_TEMA_CELL_MUTATION, UPDATE_ESTADO_TEMA_MUTATION,
+  PARENT_TEMA_QUERY} from '../graphql';
 
 /**
  * @title Table with expandable rows
@@ -29,6 +32,7 @@ export class ThemeComponent {
   allLinks: Tema[] = [];
   loading: boolean = true;
   ParentTemas: Tema[] = [];
+  Estado: Estado[] = [];
   public data: Object[];
   public pageSettings: PageSettingsModel;
   public editSettings: EditSettingsModel;
@@ -44,7 +48,20 @@ export class ThemeComponent {
     }).valueChanges.subscribe((response) => {
       this.allLinks = response.data['temas'];
       this.loading = response.loading;
-     }); 
+     });
+     this.apollo.watchQuery({
+      query: ESTADO_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.Estado = response.data['estadoes'];
+      console.log(this.Estado[0].id);
+    });
+    this.apollo.watchQuery({
+      query: PARENT_TEMA_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.ParentTemas = response.data['temas'];
+      this.loading = response.loading;
+    }); 
+
      this.pageSettings = {pageSize: 12};
       this.editSettings =  {
         allowEditing: true,
@@ -95,6 +112,14 @@ export class ThemeComponent {
      }); 
   }
  
+  parents(){
+    this.apollo.watchQuery({
+      fetchPolicy: 'cache-and-network', 
+      query: PARENT_TEMA_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.ParentTemas = response.data['temas'];
+     }); 
+  }
   addRowData(row_obj,data){
     this.apollo.mutate({
       mutation: CREATE_TEMA_MUTATION,
@@ -151,6 +176,7 @@ export class ThemeComponent {
   }
   
   deleteRowData(row_obj){
+    let estado = this.ParentTemas.length-1;
     this.apollo.mutate({
       mutation: DELETE_HIJO_TEMA_MUTATION,
       variables: {
@@ -163,7 +189,37 @@ export class ThemeComponent {
          id: parseInt(row_obj.id)
         }
       }).subscribe((response) => {
-          this.dataSource();
+        this.apollo.mutate({
+          mutation: DELETE_TEMA_CELL_MUTATION,
+          variables: {
+           id: parseInt(row_obj.id),
+          }
+        }).subscribe((response) => {
+          this.apollo.mutate({
+            mutation: DELETE_TEMA_MUTATION,
+            variables: {
+             id: parseInt(row_obj.id)
+            }
+          }).subscribe((response) => {
+            if(row_obj.parent == null){
+              console.log("entro al if");
+              this.apollo.mutate({
+              mutation: UPDATE_ESTADO_TEMA_MUTATION,
+              variables: {
+               id: this.Estado[0].id,
+               NumActor: estado,
+              }
+            }).subscribe((response) => {
+                console.log(response);
+                this.dataSource();
+                this.parents();
+            });
+            }else{
+              this.dataSource();
+            }
+            
+          });
+        });  
       })
     });
     ;

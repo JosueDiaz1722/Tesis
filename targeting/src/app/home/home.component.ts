@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import {Actor, Tema, Estado} from '../types';
 import {Apollo} from 'apollo-angular';
-import {PARENT_TEMA_QUERY,PARENT_ACTOR_QUERY, ESTADO_QUERY,CREATE_CELL_MUTATION,UPDATE_ESTADO_ACTOR_MUTATION} from '../graphql';
+import {PARENT_TEMA_QUERY,PARENT_ACTOR_QUERY, ESTADO_QUERY,CREATE_CELL_MUTATION,
+  UPDATE_ESTADO_ACTOR_MUTATION, UPDATE_ESTADO_TEMA_MUTATION} from '../graphql';
 import {Router} from "@angular/router";
 
 @Component({
@@ -60,7 +61,11 @@ export class HomeComponent implements OnInit {
   old(){
     var vm = this;
     this.Estado.filter(function (item){
-      if(item.NumTemas === vm.ParentTemas.length && item.NumActor === vm.ParentActor.length){
+      if(item.NumTemas === 0 && item.NumActor === 0){
+        vm.nuevo();
+        //Create alert
+      }
+      else if(item.NumTemas === vm.ParentTemas.length && item.NumActor === vm.ParentActor.length){
         console.log('MISMO ESTADO');
         vm.router.navigate(['/matriz']);
       }else if (item.NumTemas !== vm.ParentTemas.length && item.NumActor === vm.ParentActor.length){
@@ -69,7 +74,7 @@ export class HomeComponent implements OnInit {
           for(let i= item.NumTemas; i<vm.ParentTemas.length; i++){
             console.log(vm.ParentTemas[i].id);
             console.log(vm.ParentActor[j].id);
-            /*vm.apollo.mutate({
+            vm.apollo.mutate({
               mutation: CREATE_CELL_MUTATION,
               variables: {
                 idTema: parseInt(vm.ParentTemas[i].id),
@@ -80,10 +85,19 @@ export class HomeComponent implements OnInit {
               }
             }).subscribe((response) => {
                 console.log(response)
-            }); */
+            }); 
           }
         }
-       // setTimeout(() => { vm.router.navigate(['/matriz']); }, 2000);
+        vm.apollo.mutate({
+          mutation: UPDATE_ESTADO_TEMA_MUTATION,
+          variables: {
+           id: vm.Estado[0].id,
+           NumActor: vm.ParentTemas.length,
+          }
+        }).subscribe((response) => {
+            console.log(response);
+        });
+       setTimeout(() => { vm.router.navigate(['/matriz']); }, 2000);
       }else if (item.NumTemas === vm.ParentTemas.length && item.NumActor !== vm.ParentActor.length){
         console.log('Diferentes Actores');
         for(let j = item.NumActor; j<vm.ParentActor.length; j++ ){
@@ -120,7 +134,7 @@ export class HomeComponent implements OnInit {
           for(let i= item.NumTemas; i<vm.ParentTemas.length; i++){
             console.log(vm.ParentTemas[i].id);
             console.log(vm.ParentActor[j].id);
-            /*vm.apollo.mutate({
+            vm.apollo.mutate({
               mutation: CREATE_CELL_MUTATION,
               variables: {
                 idTema: parseInt(vm.ParentTemas[i].id),
@@ -131,10 +145,28 @@ export class HomeComponent implements OnInit {
               }
             }).subscribe((response) => {
                 console.log(response)
-            });*/
+            });
           }
         }
-       // setTimeout(() => { vm.router.navigate(['/matriz']); }, 2000);
+        vm.apollo.mutate({
+          mutation: UPDATE_ESTADO_ACTOR_MUTATION,
+          variables: {
+           id: vm.Estado[0].id,
+           NumActor: vm.ParentActor.length,
+          }
+        }).subscribe((response) => {
+            console.log(response);
+        });
+        vm.apollo.mutate({
+          mutation: UPDATE_ESTADO_TEMA_MUTATION,
+          variables: {
+           id: vm.Estado[0].id,
+           NumActor: vm.ParentTemas.length,
+          }
+        }).subscribe((response) => {
+            console.log(response);
+        });
+        setTimeout(() => { vm.router.navigate(['/matriz']); }, 2000);
       }
     });
   }

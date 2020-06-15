@@ -383,6 +383,17 @@ export const DELETE_ACTOR_CELL_MUTATION = gql`
   }
 `;
 
+export const DELETE_TEMA_CELL_MUTATION = gql`
+  # 2
+  mutation deleteActorMatrizParent($id:Int){
+    deleteManyMatrizes(
+      where: {TemaParent: {id: $id}}
+    ){
+      count
+    }
+  }
+`;
+
 export const ESTADO_QUERY = gql`
  query EstadoQuery {
     estadoes {
@@ -420,6 +431,7 @@ export const UPDATE_ESTADO_ACTOR_MUTATION = gql`
     }
   }
 `;
+
 
 // 3
 export interface EstadoResponse {

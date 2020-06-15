@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewChild,Directive, Output, EventEmitter, Input, ChangeDetectionStrategy } from '@angular/core';
 import { IDataOptions, IDataSet } from '@syncfusion/ej2-angular-pivotview';
-import {HIJO_TEMA_QUERY,PARENT_TEMA_QUERY, HIJO_ACTOR_QUERY,PARENT_ACTOR_QUERY, ALL_MATRIZ_QUERY, UPDATE_CELL_PRIORIDAD_MUTATION, DELETE_CELL_MUTATION, CREATE_CELL_MUTATION} from '../graphql';
-import {Actor, Tema, Matriz} from '../types';
+import {HIJO_TEMA_QUERY,PARENT_TEMA_QUERY, HIJO_ACTOR_QUERY,PARENT_ACTOR_QUERY, 
+  ALL_MATRIZ_QUERY, UPDATE_CELL_PRIORIDAD_MUTATION, DELETE_CELL_MUTATION, 
+  CREATE_CELL_MUTATION,UPDATE_ESTADO_TEMA_MUTATION,UPDATE_ESTADO_ACTOR_MUTATION,
+ESTADO_QUERY} from '../graphql';
+import {Actor, Tema, Matriz,Estado} from '../types';
 import {Apollo} from 'apollo-angular';
 import { NullTemplateVisitor } from '@angular/compiler';
 
@@ -15,6 +18,7 @@ export class MatrizComponent implements OnInit {
   public modes = ['mode1', 'mode2', 'mode3'];
   combinations = [];
   ParentTemas: Tema[] = [];
+  Estado: Estado[] = [];
   HijosTemas: Tema[] = [];
   ParentActor: Actor[] = [];
   HijosActor: Actor[] =[];
@@ -61,6 +65,12 @@ export class MatrizComponent implements OnInit {
       this.ParentActor = response.data['actors'];
       this.loading = response.loading;
     }); 
+    this.apollo.watchQuery({
+      query: ESTADO_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.Estado = response.data['estadoes'];
+      console.log(this.Estado);
+    });
   }
 
   getCombinationsArray = function() {
@@ -165,6 +175,8 @@ export class MatrizComponent implements OnInit {
   }
 
   deleteAll(){
+
+    //DO WITh DELETEMANY
     var vm = this;
     this.DatosMatriz.forEach(element => {
       vm.apollo.mutate({
@@ -176,5 +188,24 @@ export class MatrizComponent implements OnInit {
         console.log(response);
       });
     });
+    vm.apollo.mutate({
+      mutation: UPDATE_ESTADO_ACTOR_MUTATION,
+      variables: {
+       id: vm.Estado[0].id,
+       NumActor: 0,
+      }
+    }).subscribe((response) => {
+        console.log(response);
+    });
+    vm.apollo.mutate({
+      mutation: UPDATE_ESTADO_TEMA_MUTATION,
+      variables: {
+       id: vm.Estado[0].id,
+       NumActor: 0,
+      }
+    }).subscribe((response) => {
+        console.log(response);
+    });
+
   }
 }
