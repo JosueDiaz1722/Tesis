@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import {Router} from "@angular/router";
+import { Observable } from 'rxjs';
+import { AuthService } from './../auth/auth.service';
+
 
 @Component({
   selector: 'app-navbar',
@@ -12,9 +15,12 @@ import {Router} from "@angular/router";
 })
 export class NavbarComponent implements OnInit{
 
-  constructor(private confirmation: ConfirmationService,private router: Router) { }
+  isLoggedIn$: Observable<boolean>;
+
+  constructor(private confirmation: ConfirmationService,private router: Router,private authService: AuthService) { }
 
   ngOnInit(): void {
+    this.isLoggedIn$ = this.authService.isLoggedIn;
   }
 
   confirmDropDatabaseDialogVisible = false;
@@ -39,5 +45,10 @@ export class NavbarComponent implements OnInit{
   private old(){
     console.log('OLD')
   }
+
+  onLogout() {
+    this.authService.logout();
+  }
+
 
 }

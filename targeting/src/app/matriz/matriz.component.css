@@ -68,13 +68,15 @@ span.empty_fill {
   color: red;
   transform: scale(0.90);
 }
-mat-button-toggle-group {
-  width:12vw; 
-  margin:1%
+
+
+.mat-button-toggle{
+   width:75%;
 }
 
-mat-button-toggle{
-   width:100%;
+.mat-button-toggle-disabled {
+  border: 1px solid #c5c0c7;
+  background-color: #e1dde5;
 }
 
 

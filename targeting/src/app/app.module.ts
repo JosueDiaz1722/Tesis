@@ -41,7 +41,14 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {TableModule} from 'primeng/table';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ConfirmationService} from 'primeng/api';
-
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
+import {ToastModule} from 'primeng/toast';
+import {MatCardModule} from '@angular/material/card';
+import { LoginComponent } from './login/login.component';
+import { AuthService } from './auth/auth.service';
+import { AuthGuard } from './auth/auth.guard';
 
 
 
@@ -65,7 +72,9 @@ import {ConfirmationService} from 'primeng/api';
 
     CreateLinkComponent,
 
-    MatrizComponent
+    MatrizComponent,
+
+    LoginComponent,
   ],
   imports: [
     DatePickerAllModule,
@@ -86,8 +95,6 @@ import {ConfirmationService} from 'primeng/api';
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
-    MatInputModule,
     BrowserModule,
     FormsModule,                               
     ReactiveFormsModule,
@@ -97,11 +104,16 @@ import {ConfirmationService} from 'primeng/api';
     MatButtonToggleModule,
     TableModule,
     ConfirmDialogModule,
+    MatCheckboxModule,
+    MessagesModule,
+    MessageModule,
+    ToastModule,
+    MatCardModule,
   ],
   entryComponents: [
     DialogBoxComponent
   ],
-  providers: [PageService, SortService, FilterService, EditService, ToolbarService, ConfirmationService],
+  providers: [PageService, SortService, FilterService, EditService, ToolbarService, ConfirmationService, AuthService, AuthGuard ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

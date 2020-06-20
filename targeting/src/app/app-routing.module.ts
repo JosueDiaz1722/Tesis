@@ -8,15 +8,18 @@ import {ActoresComponent} from './actores/actores.component';
 import {LinkListComponent} from './link-list/link-list.component';
 import {CreateLinkComponent} from './create-link/create-link.component';
 import { MatrizComponent } from "./matriz/matriz.component";
+import { LoginComponent } from "./login/login.component";
+import { AuthGuard } from './auth/auth.guard';
+
 
 
 const routes: Routes = [
   {
     path: 'matriz', component: MatrizComponent
   },
-  {
-    path: '', component: HomeComponent
-  },
+  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'login', component: LoginComponent },
+  { path: '**', redirectTo: ''},
   {
     path: 'about', component: AboutComponent
   },

@@ -3,6 +3,7 @@ import { ConfirmationService } from 'primeng/api';
 import {Actor, Tema, Estado} from '../types';
 import {Apollo} from 'apollo-angular';
 import {PARENT_TEMA_QUERY,PARENT_ACTOR_QUERY, ESTADO_QUERY,CREATE_CELL_MUTATION,
+  DELETE_ALL_MATRIZ_QUERY,
   UPDATE_ESTADO_ACTOR_MUTATION, UPDATE_ESTADO_TEMA_MUTATION} from '../graphql';
 import {Router} from "@angular/router";
 
@@ -19,7 +20,26 @@ export class HomeComponent implements OnInit {
   constructor(private confirmation: ConfirmationService, private apollo: Apollo,private router: Router) { }
 
   ngOnInit(): void {
-    this.datasource();
+    this.apollo.watchQuery({
+      query: PARENT_TEMA_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.ParentTemas = response.data['temas'];
+      console.log(this.ParentTemas.length)
+    });
+    
+    this.apollo.watchQuery({
+      query: PARENT_ACTOR_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.ParentActor = response.data['actors'];
+      console.log(this.ParentActor.length);
+    });
+    
+    this.apollo.watchQuery({
+      query: ESTADO_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.Estado = response.data['estadoes'];
+      console.log(this.Estado);
+    });
   }
   ParentTemas: Tema[] = [];
   ParentActor: Actor[] = [];
@@ -27,9 +47,10 @@ export class HomeComponent implements OnInit {
   Estado: Estado[] = [];
 
   crearMatriz(event: Event) {
+
+    this.datasource();
     if (event.defaultPrevented) return;
     event.preventDefault();
-
     this.confirmation.confirm({
       key: 'Crear Matriz',
       message: 'Abrir nueva matriz o matriz actual?',
@@ -39,22 +60,26 @@ export class HomeComponent implements OnInit {
   }
 
   private nuevo() {
-    this.ParentActor.forEach(actor => {
-      this.ParentTemas.forEach(tema => {
-        this.apollo.mutate({
-          mutation: CREATE_CELL_MUTATION,
-          variables: {
-            idTema: parseInt(tema.id),
-            idActor: parseInt(actor.id),
-            prioridad: 0,
-            tiempo: 0,
-            coment: ""
-          }
-        }).subscribe((response) => {
-            console.log(response)
-        }); 
+    this.apollo.mutate({
+      mutation: DELETE_ALL_MATRIZ_QUERY,
+    }).subscribe((response) => {
+      this.ParentActor.forEach(actor => {
+        this.ParentTemas.forEach(tema => {
+          this.apollo.mutate({
+            mutation: CREATE_CELL_MUTATION,
+            variables: {
+              idTema: parseInt(tema.id),
+              idActor: parseInt(actor.id),
+              prioridad: 0,
+              tiempo: 0,
+              coment: ""
+            }
+          }).subscribe((response) => {
+              console.log(response)
+          }); 
+        });
       });
-    });
+    }); 
     setTimeout(() => { this.router.navigate(['/matriz']); }, 2000);
   }
 
@@ -63,7 +88,6 @@ export class HomeComponent implements OnInit {
     this.Estado.filter(function (item){
       if(item.NumTemas === 0 && item.NumActor === 0){
         vm.nuevo();
-        //Create alert
       }
       else if(item.NumTemas === vm.ParentTemas.length && item.NumActor === vm.ParentActor.length){
         console.log('MISMO ESTADO');
@@ -127,7 +151,7 @@ export class HomeComponent implements OnInit {
         }).subscribe((response) => {
             console.log(response);
         });
-        setTimeout(() => { vm.router.navigate(['/matriz']); }, 2000);
+        setTimeout(() => { vm.router.navigate(['/matriz']); }, 2600);
       }else{
         console.log('Diferente Actores y Temas');
         for(let j = item.NumActor; j<vm.ParentActor.length; j++ ){
@@ -166,13 +190,15 @@ export class HomeComponent implements OnInit {
         }).subscribe((response) => {
             console.log(response);
         });
-        setTimeout(() => { vm.router.navigate(['/matriz']); }, 2000);
+        
+        setTimeout(() => { vm.router.navigate(['matriz']);}, 2000);
       }
     });
   }
 
   datasource(){
     this.apollo.watchQuery({
+      fetchPolicy: 'cache-and-network',
       query: PARENT_TEMA_QUERY
     }).valueChanges.subscribe((response) => {
       this.ParentTemas = response.data['temas'];
@@ -180,6 +206,7 @@ export class HomeComponent implements OnInit {
     });
     
     this.apollo.watchQuery({
+      fetchPolicy: 'cache-and-network',
       query: PARENT_ACTOR_QUERY
     }).valueChanges.subscribe((response) => {
       this.ParentActor = response.data['actors'];
@@ -187,6 +214,7 @@ export class HomeComponent implements OnInit {
     });
     
     this.apollo.watchQuery({
+      fetchPolicy: 'cache-and-network',
       query: ESTADO_QUERY
     }).valueChanges.subscribe((response) => {
       this.Estado = response.data['estadoes'];

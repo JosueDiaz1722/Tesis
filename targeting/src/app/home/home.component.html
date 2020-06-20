@@ -21,8 +21,7 @@
     </div>
     <div class="col">
       <button type="button" pButton label="Matriz" (click)="crearMatriz($event);"></button>
-      <!--<p-confirmDialog key="confirm-drop-database" header="Drop database" acceptLabel="Nuevo Tablero" rejectLabel="Existente" [(visible)]="confirmDropDatabaseDialogVisible"></p-confirmDialog>
-      --><p-confirmDialog  key="Crear Matriz" header="Crear Matriz" icon="fa fa-question-circle" [(visible)]="confirmDropDatabaseDialogVisible" #cd>
+      <p-confirmDialog  key="Crear Matriz" header="Crear Matriz" icon="fa fa-question-circle" [(visible)]="confirmDropDatabaseDialogVisible" #cd>
         <p-footer id="footer">
             <button mat-button color="success" (click)="cd.accept()">
               Nuevo

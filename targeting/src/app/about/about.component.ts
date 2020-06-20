@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { sampleData } from "./datasource";
 import { PageSettingsModel,EditSettingsModel } from "@syncfusion/ej2-angular-treegrid";
 import { SaveEventArgs } from "@syncfusion/ej2-grids";
-
+import {CheckboxModule} from 'primeng/checkbox';
 
 @Component({
   selector: 'app-about',
@@ -12,6 +12,7 @@ import { SaveEventArgs } from "@syncfusion/ej2-grids";
 export class AboutComponent implements OnInit {
 
   public data: Object[];
+  isDisabled= false;
   public pageSettings: PageSettingsModel;
   public editSettings: EditSettingsModel;
   public toolbar: string[];
@@ -39,6 +40,11 @@ export class AboutComponent implements OnInit {
     {
       this.taskData = Object.assign({},args.rowData);
     }
+  }
+
+  onValChange(value){
+    console.log(value);
+
   }
 
 }

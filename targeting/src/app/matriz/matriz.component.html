@@ -1,6 +1,15 @@
 <!--<ejs-pivotview #pivotview id='PivotView' height='350' [dataSourceSettings]=dataSourceSettings></ejs-pivotview>-->
 <h1>Table</h1>
 <hr>
+<div align="right">
+  <button mat-icon-button color="success"(click)="refresh()">
+      <mat-icon>refresh</mat-icon>
+  </button>
+  <p-toast position="top-center"></p-toast>
+  <button mat-icon-button color="success" (click)="saveEstado()">
+    <mat-icon>save</mat-icon>
+  </button>
+</div>
 <div class="table-wrapper">
   <table class="fl-table">
     <thead>
@@ -64,22 +73,46 @@
           </span>
         </th>
         <td *ngFor = "let tema of ParentTemas; let j = index">
-          {{tema.id}} {{actor.id}}
           <div *ngFor = "let cell of DatosMatriz">
-            <div *ngIf="cell.TemaParent.id==tema.id && cell.ActorParent.id==actor.id;">
-              <h1>si existe</h1>
+            <div *ngIf="cell.TemaParent.id==tema.id && cell.ActorParent.id==actor.id">
+                <mat-button-toggle-group #group="matButtonToggleGroup" value="{{cell.prioridad}}">
+                  <mat-button-toggle value="0" (change)="onPrioridadChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
+                    <mat-icon>close</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle value="1" (change)="onPrioridadChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
+                    <mat-icon class="green-icon">fiber_manual_record</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle value="2" (change)="onPrioridadChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align center">
+                    <mat-icon class="yellow-icon">fiber_manual_record</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle value="3" (change)="onPrioridadChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align right">
+                    <mat-icon class="red-icon">fiber_manual_record</mat-icon>
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+                <br>
+                <mat-button-toggle-group #grouptime="matButtonToggleGroup" value="{{cell.tiempo}}">
+                  <mat-button-toggle value="0" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
+                    <mat-icon>close</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle value="1" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
+                    <img src="assets/img/courtblack.gif" />
+                  </mat-button-toggle>
+                  <mat-button-toggle value="2" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align center">
+                    <img src="assets/img/moyenblack.gif" />
+                  </mat-button-toggle>
+                  <mat-button-toggle value="3" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align right">
+                    <img src="assets/img/longblack.gif" />    
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
             </div>
           </div>
-          
         </td>
       </tr>
     </tbody>
   </table>
 </div>
 
-<button mat-icon-button color="success" (click)="deleteAll()">
-  <mat-icon>delete</mat-icon>
-</button>
+
 
 <mat-button-toggle-group #grouptime="matButtonToggleGroup">
   <mat-button-toggle value="Bajo" aria-label="Text align left">
@@ -105,31 +138,3 @@
   </mat-button-toggle>
 </mat-button-toggle-group>
 <span class="center">Prioridad: {{group.value}}</span>
-<!--
-<div *ngFor = "let cell of DatosMatriz">
-  <div *ngIf="cell.TemaParent.id==tema.id && cell.ActorParent.id==actor.id;">
-      <mat-button-toggle-group #group="matButtonToggleGroup"  value="{{cell.prioridad}}">
-        <mat-button-toggle value="1" (change)="onValChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
-          <mat-icon class="green-icon">fiber_manual_record</mat-icon>
-        </mat-button-toggle>
-        <mat-button-toggle value="2" (change)="onValChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align center">
-          <mat-icon class="yellow-icon">fiber_manual_record</mat-icon>
-        </mat-button-toggle>
-        <mat-button-toggle value="3" (change)="onValChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align right">
-          <mat-icon class="red-icon">fiber_manual_record</mat-icon>
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-      <br>
-      <mat-button-toggle-group #grouptime="matButtonToggleGroup" value="{{cell.prioridad}}">
-        <mat-button-toggle value="1" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
-          <img src="assets/img/courtblack.gif" />
-        </mat-button-toggle>
-        <mat-button-toggle value="2" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align center">
-          <img src="assets/img/moyenblack.gif" />
-        </mat-button-toggle>
-        <mat-button-toggle value="3" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align right">
-          <img src="assets/img/longblack.gif" />    
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-  </div>
-</div>-->

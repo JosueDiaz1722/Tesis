@@ -43,19 +43,6 @@ export class ActoresComponent implements OnInit {
       this.allLinks = response.data['actors'];
       this.loading = response.loading;
      }); 
-     this.apollo.watchQuery({
-      query: ESTADO_QUERY
-    }).valueChanges.subscribe((response) => {
-      this.Estado = response.data['estadoes'];
-      console.log(this.Estado[0].id);
-    });
-
-    this.apollo.watchQuery({
-      query: PARENT_ACTOR_QUERY
-    }).valueChanges.subscribe((response) => {
-      this.ParentActor = response.data['actors'];
-      this.loading = response.loading;
-    }); 
      this.pageSettings = {pageSize: 12};
       this.editSettings =  {
         allowEditing: true,
@@ -66,6 +53,22 @@ export class ActoresComponent implements OnInit {
       };
       this.toolbar = ['Add','Edit','Delete','Update','Cancel'];
       this.numericParams = {params: {format: 'n'}}; 
+      setTimeout(() => { 
+        this.apollo.watchQuery({
+          query: ESTADO_QUERY
+        }).valueChanges.subscribe((response) => {
+          this.Estado = response.data['estadoes'];
+          console.log(this.Estado[0].id);
+        });
+    
+        this.apollo.watchQuery({
+          query: PARENT_ACTOR_QUERY
+        }).valueChanges.subscribe((response) => {
+          this.ParentActor = response.data['actors'];
+          this.loading = response.loading;
+        });
+      }, 1000);
+      /* */
   }
 
   insert(data: any) : void { 
@@ -98,7 +101,7 @@ export class ActoresComponent implements OnInit {
 
   dataSource(){ 
     this.apollo.watchQuery({
-      fetchPolicy: 'cache-and-network', 
+      fetchPolicy: 'network-only',
       query: ALL_ACTORES_QUERY
     }).valueChanges.subscribe((response) => {
       this.allLinks = response.data['actors'];
@@ -193,7 +196,8 @@ export class ActoresComponent implements OnInit {
         }).subscribe((response) => {
           if(row_obj.parent == null){
             console.log("entro al if");
-            this.apollo.mutate({
+            this.dataSource();
+            /*this.apollo.mutate({
             mutation: UPDATE_ESTADO_ACTOR_MUTATION,
             variables: {
              id: this.Estado[0].id,
@@ -203,7 +207,7 @@ export class ActoresComponent implements OnInit {
               console.log(response);
               this.dataSource();
               this.parents();
-          });
+          });*/
           }else{
             this.dataSource();
           }

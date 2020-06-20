@@ -3,20 +3,26 @@ import { IDataOptions, IDataSet } from '@syncfusion/ej2-angular-pivotview';
 import {HIJO_TEMA_QUERY,PARENT_TEMA_QUERY, HIJO_ACTOR_QUERY,PARENT_ACTOR_QUERY, 
   ALL_MATRIZ_QUERY, UPDATE_CELL_PRIORIDAD_MUTATION, DELETE_CELL_MUTATION, 
   CREATE_CELL_MUTATION,UPDATE_ESTADO_TEMA_MUTATION,UPDATE_ESTADO_ACTOR_MUTATION,
-ESTADO_QUERY} from '../graphql';
+ESTADO_QUERY,DELETE_ALL_MATRIZ_QUERY,UPDATE_CELL_TIEMPO_MUTATION} from '../graphql';
 import {Actor, Tema, Matriz,Estado} from '../types';
 import {Apollo} from 'apollo-angular';
-import { NullTemplateVisitor } from '@angular/compiler';
+import {MessageService, Message} from 'primeng/api';
+import {ConfirmationService} from 'primeng/api';
+
 
 @Component({
   selector: 'app-matriz',
   templateUrl: './matriz.component.html',
-  styleUrls: ['./matriz.component.css']
+  styleUrls: ['./matriz.component.css'],
+  providers: [MessageService, ConfirmationService]
 })
 export class MatrizComponent implements OnInit {
   public params = ['par1', 'par2', 'par3', 'par4', 'par5'];
   public modes = ['mode1', 'mode2', 'mode3'];
   combinations = [];
+  isDisabled= true;
+  isActivo = false;
+  msgs: Message[] = []
   ParentTemas: Tema[] = [];
   Estado: Estado[] = [];
   HijosTemas: Tema[] = [];
@@ -27,17 +33,21 @@ export class MatrizComponent implements OnInit {
   public pivotData: IDataSet[];
   public dataSourceSettings: IDataOptions;
 
-  constructor( private apollo: Apollo) { }
+  constructor( private apollo: Apollo,private messageService: MessageService,private confirmationService: ConfirmationService ) { }
 
   async ngOnInit(): Promise<void> {
     this.datasource();
     this.childData();
     this.matriz();
-    this.combinations = this.getCombinationsArray();
   }
 
+
+  saveMessage(){
+    this.messageService.add({severity: 'success', summary:'', detail:'Estado Actual Guardado'})
+  }
   matriz(){
     this.apollo.watchQuery({
+      fetchPolicy: 'network-only',
       query: ALL_MATRIZ_QUERY
     }).valueChanges.subscribe((response) => {
       this.DatosMatriz = response.data['matrizes'];
@@ -109,22 +119,24 @@ export class MatrizComponent implements OnInit {
     this.ngOnInit;
   }
 
-  onValChange(value,temaid,actorid,cellid){
-    var vm = this;
-    this.DatosMatriz.filter(function(item) {
-      let actor = item["ActorParent"];
-      let tema = item["TemaParent"];
-      if(actor["id"] === actorid && tema["id"]===temaid){
-        console.log("Si existe");
-        vm.updatePrioridadData(value,cellid)
-      }else{
-        console.log("Crea Nuevo");
-      }
-    });  
+  onPrioridadChange(value,temaid,actorid,cellid){
+    this.updatePrioridadData(value,cellid);
   }
 
   onTimeChange(value,actor,tema,cellid){
-    console.log(value)
+    this.updateTiempoData(value,cellid);
+  }
+
+  updateTiempoData(tiempo,cellid){
+    this.apollo.mutate({
+      mutation: UPDATE_CELL_TIEMPO_MUTATION,
+      variables: {
+       tiempo: parseInt(tiempo),
+       id: String(cellid)
+      }
+    }).subscribe((response) => {
+        console.log(response)
+    });
   }
 
 
@@ -132,7 +144,6 @@ export class MatrizComponent implements OnInit {
     this.apollo.mutate({
       mutation: UPDATE_CELL_PRIORIDAD_MUTATION,
       variables: {
-      
        prioridad: parseInt(prioridad),
        id: String(cellid)
       }
@@ -175,37 +186,33 @@ export class MatrizComponent implements OnInit {
   }
 
   deleteAll(){
-
-    //DO WITh DELETEMANY
-    var vm = this;
-    this.DatosMatriz.forEach(element => {
-      vm.apollo.mutate({
-        mutation: DELETE_CELL_MUTATION,
-        variables: {
-         id: element.id
-        }
-      }).subscribe((response) => {
+    this.apollo.mutate({
+      mutation: DELETE_ALL_MATRIZ_QUERY,
+    }).subscribe((response) => {
         console.log(response);
-      });
     });
-    vm.apollo.mutate({
+  }
+
+  saveEstado(){
+    this.apollo.mutate({
       mutation: UPDATE_ESTADO_ACTOR_MUTATION,
       variables: {
-       id: vm.Estado[0].id,
-       NumActor: 0,
+       id: this.Estado[0].id,
+       NumActor: this.ParentActor.length,
       }
     }).subscribe((response) => {
         console.log(response);
     });
-    vm.apollo.mutate({
+    this.apollo.mutate({
       mutation: UPDATE_ESTADO_TEMA_MUTATION,
       variables: {
-       id: vm.Estado[0].id,
-       NumActor: 0,
+       id: this.Estado[0].id,
+       NumActor: this.ParentTemas.length,
       }
     }).subscribe((response) => {
         console.log(response);
     });
-
+    this.saveMessage();
   }
+
 }

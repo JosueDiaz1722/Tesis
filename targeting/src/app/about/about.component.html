@@ -1,116 +1,28 @@
-<ejs-treegrid [dataSource]="data" 
-[treeColumnIndex]= "1"
-idMapping ="taskId" parentIdMapping= "parentId"
-[allowPaging]="true" 
-[pageSettings]="pageSettings" [allowSorting]="true" 
-[editSettings]="editSettings"[allowFiltering]="true"
-[toolbar]="toolbar" (actionBegin)="actionBegin($event)">
-    <e-columns>
-        <e-column
-        field="taskId"
-        headerText="TemaID"
-        textAlign="Left"
-        width= "90"
-        isPrimaryKey = "true"
-        ></e-column>
-        <e-column
-        field="taskName"
-        headerText="Tema Name"
-        textAlign="Left"
-        width= "160"
-        ></e-column>
-       <!-- <e-column
-        field="startDate"
-        headerText="Start Date"
-        textAlign="Right"
-        width= "100"
-        format="yMd"
-        editType = "datepickeredit"
-        ></e-column>
-        <e-column
-        field="endDate"
-        headerText="End Date"
-        textAlign="Right"
-        width= "100"
-        format="yMd"
-        editType = "datepickeredit"
-        ></e-column> -->
-        <e-column
-        field="duration"
-        headerText="Prioridad"
-        type= "number"
-        textAlign="Left"
-        width= "60"
-        editType = "numericedit"
-        [edit]="numericParams"
-        ></e-column>
-        <!--<e-column
-        field="progress"
-        headerText="Progress"
-        textAlign="Left"
-        width= "60"
-        ></e-column>-->
-        <e-column
-        field="priority"
-        headerText="Comentario"
-        textAlign="Left"
-        width= "90"
-        ></e-column>
-    </e-columns>
-    <ng-template #editSettingsTemplate let-data>
-        <div ngform>
-            <div class="form-group">
-                <div class="e-float-input e-control-wrapper">
-                    <input type="number" name="taskId" [ngModel]="taskData.taskId" 
-                    [attr.disabled]="!data.isAdd ? '': null"/>
-                    <label class="e-float-text e-label-top" for="taskId">
-                        Task Id
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="e-float-input e-control-wrapper">
-                    <input type="text" name="taskName" [ngModel]="taskData.taskName"/>
-                    <label class="e-float-text e-label-top" for="taskName">
-                        Task Name
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <ejs-datepicker      
-                    name="startDate"
-                    placeholder= "Start Date"
-                    floatLabelType = "Always"
-                    [ngModel]="taskData.startDate"
-                    >  
-                </ejs-datepicker>
-            </div>
-            <div class="form-group">
-                <ejs-datepicker      
-                    name="endDate"
-                    placeholder= "End Date"
-                    floatLabelType = "Always"
-                    [ngModel]="taskData.endDate"
-                    >   
-                </ejs-datepicker>
-            </div>
-            <div class="form-group">
-                <ejs-numerictextbox      
-                    name="duration"
-                    placeholder= "Duration"
-                    floatLabelType = "Always"
-                    [ngModel]="taskData.duration"
-                    >
-                </ejs-numerictextbox>
-            </div>
-            <div class="form-group">
-                <div class="e-float-input e-control-wrapper">
-                    <input type="text" name="priority" [ngModel]="taskData.priority"/>
-                    <label class="e-float-text e-label-top" for="priority">
-                        Priority
-                    </label>
-                </div>
-            </div>
-        </div>
-    </ng-template>
-</ejs-treegrid>
+
+<div>
+    <br>
+    <br>
+    
+    <mat-checkbox  [(ngModel)]="isDisabled" fisStyle="">Disable Button Toggle Items</mat-checkbox>
+    
+    
+    <br>
+    <br>
+    
+    isDisabled {{isDisabled}}
+    <br>
+    <br>
+    
+    
+    <mat-button-toggle-group #group="matButtonToggleGroup" [disabled]="isDisabled">
+        <mat-button-toggle [disabled]="isDisabled" (change)="onValChange($event.value)"  value="1" aria-label="Text align left">
+          <mat-icon class="green-icon">fiber_manual_record</mat-icon>
+        </mat-button-toggle> 
+        <mat-button-toggle value="2" (change)="onValChange($event.value)" aria-label="Text align center">
+          <mat-icon class="yellow-icon">fiber_manual_record</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle value="3" (change)="onValChange($event.value)" aria-label="Text align right">
+          <mat-icon class="red-icon">fiber_manual_record</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+  </div>

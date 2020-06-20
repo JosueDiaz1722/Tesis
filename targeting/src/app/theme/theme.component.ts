@@ -11,7 +11,8 @@ import { PageSettingsModel,EditSettingsModel,TreeGridComponent } from "@syncfusi
 import {DELETE_TEMA_MUTATION,UPDATE_TEMA_MUTATION,CREATE_TEMA_MUTATION, 
   ALL_TEMAS_QUERY, CREATE_NEW_TEMA_MUTATION,DELETE_HIJO_TEMA_MUTATION,
   ESTADO_QUERY, DELETE_TEMA_CELL_MUTATION, UPDATE_ESTADO_TEMA_MUTATION,
-  PARENT_TEMA_QUERY} from '../graphql';
+  PARENT_TEMA_QUERY,
+  DELETE_HIJO_ACTOR_MUTATION} from '../graphql';
 
 /**
  * @title Table with expandable rows
@@ -49,18 +50,7 @@ export class ThemeComponent {
       this.allLinks = response.data['temas'];
       this.loading = response.loading;
      });
-     this.apollo.watchQuery({
-      query: ESTADO_QUERY
-    }).valueChanges.subscribe((response) => {
-      this.Estado = response.data['estadoes'];
-      console.log(this.Estado[0].id);
-    });
-    this.apollo.watchQuery({
-      query: PARENT_TEMA_QUERY
-    }).valueChanges.subscribe((response) => {
-      this.ParentTemas = response.data['temas'];
-      this.loading = response.loading;
-    }); 
+      
 
      this.pageSettings = {pageSize: 12};
       this.editSettings =  {
@@ -72,6 +62,21 @@ export class ThemeComponent {
       };
       this.toolbar = ['Add','Edit','Delete','Update','Cancel'];
       this.numericParams = {params: {format: 'n'}}; 
+
+      setTimeout(() => { 
+        this.apollo.watchQuery({
+          query: ESTADO_QUERY
+        }).valueChanges.subscribe((response) => {
+          this.Estado = response.data['estadoes'];
+          console.log(this.Estado[0].id);
+        });
+        this.apollo.watchQuery({
+          query: PARENT_TEMA_QUERY
+        }).valueChanges.subscribe((response) => {
+          this.ParentTemas = response.data['temas'];
+          this.loading = response.loading;
+        });
+      }, 1000);
   }
 
   insert(data: any) : void { 
@@ -177,52 +182,45 @@ export class ThemeComponent {
   
   deleteRowData(row_obj){
     let estado = this.ParentTemas.length-1;
+    console.log(estado);
     this.apollo.mutate({
-      mutation: DELETE_HIJO_TEMA_MUTATION,
+      mutation: DELETE_HIJO_ACTOR_MUTATION,
       variables: {
        id: parseInt(row_obj.id)
       }
     }).subscribe((response) => {
       this.apollo.mutate({
-        mutation: DELETE_TEMA_MUTATION,
+        mutation: DELETE_TEMA_CELL_MUTATION,
         variables: {
-         id: parseInt(row_obj.id)
+         id: parseInt(row_obj.id),
         }
       }).subscribe((response) => {
         this.apollo.mutate({
-          mutation: DELETE_TEMA_CELL_MUTATION,
+          mutation: DELETE_TEMA_MUTATION,
           variables: {
-           id: parseInt(row_obj.id),
+           id: parseInt(row_obj.id)
           }
         }).subscribe((response) => {
-          this.apollo.mutate({
-            mutation: DELETE_TEMA_MUTATION,
+          if(row_obj.parent == null){
+            console.log("entro al if");
+            this.apollo.mutate({
+            mutation: UPDATE_ESTADO_TEMA_MUTATION,
             variables: {
-             id: parseInt(row_obj.id)
+             id: this.Estado[0].id,
+             NumActor: estado,
             }
           }).subscribe((response) => {
-            if(row_obj.parent == null){
-              console.log("entro al if");
-              this.apollo.mutate({
-              mutation: UPDATE_ESTADO_TEMA_MUTATION,
-              variables: {
-               id: this.Estado[0].id,
-               NumActor: estado,
-              }
-            }).subscribe((response) => {
-                console.log(response);
-                this.dataSource();
-                this.parents();
-            });
-            }else{
+              console.log(response);
               this.dataSource();
-            }
-            
+              this.parents();
           });
-        });  
-      })
+          }else{
+            this.dataSource();
+          }
+          
+        });
+      });     
     });
-    ;
   }
   
 }

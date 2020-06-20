@@ -1,4 +1,4 @@
-<mat-toolbar color="bar" class="mat-elevation-z6">
+<mat-toolbar color="bar" class="mat-elevation-z6" *ngIf="isLoggedIn$ | async as isLoggedIn">
   <span> <mat-icon>eco</mat-icon>Targeting</span>
 
   <div class="spacer"></div>
@@ -8,6 +8,5 @@
   <a mat-button (click)="dropDatabase($event);">Colaborativo</a>
   <p-confirmDialog key="confirm-drop-database" header="Drop database" acceptLabel="Nuevo Tablero" rejectLabel="Existente" [(visible)]="confirmDropDatabaseDialogVisible"></p-confirmDialog>
   <a mat-button routerLink="about">Info</a>
-  <a mat-button routerLink="list">List</a>
-  <a mat-button routerLink="create">List</a>
+  <button mat-button (click)="onLogout()" *ngIf="isLoggedIn">Logout</button>
 </mat-toolbar>

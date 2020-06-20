@@ -303,13 +303,25 @@ export const ALL_MATRIZ_QUERY = gql`
       coment
       TemaParent{
         id
+        name
       }
       ActorParent{
         id
+        name
       }
     }
   }
 `;
+
+export const DELETE_ALL_MATRIZ_QUERY = gql`
+  mutation DeleteMatrizQuery {
+    deleteManyMatrizes(where:{id_not:null}){
+      count
+    }
+  }
+`;
+
+
 
 // 3
 export interface AllMatrizQueryResponse {
@@ -322,6 +334,26 @@ export const UPDATE_CELL_PRIORIDAD_MUTATION = gql`
   mutation updateCellPrioridadMutation($prioridad: Int!, $id: ID){
     updateMatriz(data:{
       prioridad: $prioridad},
+      where: {id:$id}
+    ){
+      TemaParent{
+        id
+      }
+      ActorParent{
+        id
+      }
+      prioridad
+      tiempo
+      coment
+    }
+  }
+`;
+
+export const UPDATE_CELL_TIEMPO_MUTATION = gql`
+  # 2
+  mutation updateCellTiempoMutation($tiempo: Int!, $id: ID){
+    updateMatriz(data:{
+      tiempo: $tiempo},
       where: {id:$id}
     ){
       TemaParent{
