@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild,Directive, Output, EventEmitter, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild,Directive, Output, EventEmitter, Input, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { IDataOptions, IDataSet } from '@syncfusion/ej2-angular-pivotview';
 import {HIJO_TEMA_QUERY,PARENT_TEMA_QUERY, HIJO_ACTOR_QUERY,PARENT_ACTOR_QUERY, 
   ALL_MATRIZ_QUERY, UPDATE_CELL_PRIORIDAD_MUTATION, DELETE_CELL_MUTATION, 
@@ -8,7 +8,9 @@ import {Actor, Tema, Matriz,Estado} from '../types';
 import {Apollo} from 'apollo-angular';
 import {MessageService, Message} from 'primeng/api';
 import {ConfirmationService} from 'primeng/api';
-
+import {Observable} from 'rxjs/Rx';
+import {Router} from '@angular/router'
+import { Location } from "@angular/common";
 
 @Component({
   selector: 'app-matriz',
@@ -16,7 +18,7 @@ import {ConfirmationService} from 'primeng/api';
   styleUrls: ['./matriz.component.css'],
   providers: [MessageService, ConfirmationService]
 })
-export class MatrizComponent implements OnInit {
+export class MatrizComponent implements OnInit, OnDestroy {
   public params = ['par1', 'par2', 'par3', 'par4', 'par5'];
   public modes = ['mode1', 'mode2', 'mode3'];
   combinations = [];
@@ -29,11 +31,12 @@ export class MatrizComponent implements OnInit {
   ParentActor: Actor[] = [];
   HijosActor: Actor[] =[];
   DatosMatriz: Matriz[]=[];
+  lista: Observable<Array<Matriz>>
   loading: boolean = true;
   public pivotData: IDataSet[];
   public dataSourceSettings: IDataOptions;
 
-  constructor( private apollo: Apollo,private messageService: MessageService,private confirmationService: ConfirmationService ) { }
+  constructor(public _router: Router, public _location: Location, private apollo: Apollo,private messageService: MessageService,private confirmationService: ConfirmationService ) { }
 
   async ngOnInit(): Promise<void> {
     this.datasource();
@@ -41,6 +44,16 @@ export class MatrizComponent implements OnInit {
     this.matriz();
   }
 
+  ngOnDestroy(){
+
+  }
+
+  refresh(){
+    this._router.navigateByUrl("/refresh", {skipLocationChange: true}).then(()=>{
+      console.log(decodeURI(this._location.path()));
+      this._router.navigate([decodeURI(this._location.path())]);
+    });
+  }
 
   saveMessage(){
     this.messageService.add({severity: 'success', summary:'', detail:'Estado Actual Guardado'})
@@ -52,12 +65,13 @@ export class MatrizComponent implements OnInit {
     }).valueChanges.subscribe((response) => {
       this.DatosMatriz = response.data['matrizes'];
       this.loading = response.loading;
-      if(this.DatosMatriz.length === 0){
+      this.lista = response.data['matrizes'];
+      /*if(this.DatosMatriz.length === 0){
         console.log("Esta Vacio");
         this.createCell();
       }else{
         console.log(this.DatosMatriz);
-      }
+      }*/
     });
   }
 
@@ -115,9 +129,6 @@ export class MatrizComponent implements OnInit {
     });
   }
 
-  refresh(){
-    this.ngOnInit;
-  }
 
   onPrioridadChange(value,temaid,actorid,cellid){
     this.updatePrioridadData(value,cellid);
