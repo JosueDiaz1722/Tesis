@@ -1,11 +1,17 @@
+type User {
+  id: ID! @id
+  name: String!
+}
+
 type Actor {
-id: Int! @id(strategy: SEQUENCE) @sequence(name: "Actor_SEQUENCE" initialValue:1 allocationSize:100)
+id: Int! @id (strategy: SEQUENCE) @sequence(name: "Actor_SEQUENCE" initialValue:1 allocationSize:100)
 createdAt: DateTime! @createdAt
 updatedAt: DateTime! @updatedAt
 name: String!
 prioridad: Int
 coments: String
-parent: Actor
+parent: Boolean
+hijos: [Actor] @relation (onDelete: CASCADE)
 }
 
 type Tema {
@@ -15,17 +21,10 @@ updatedAt: DateTime! @updatedAt
 name: String!
 prioridad: Int
 coments: String
-parent: Tema
+parent: Boolean
+hijos: [Tema] @relation(name: "HijosTema" onDelete: CASCADE)
 }
 
-type Link @model {
-  id: ID! @id     # required system field (read-only)
-  createdAt: DateTime! @createdAt  # optional system field (read-only)
-  updatedAt: DateTime!  @updatedAt  # optional system field (read-only)
-
-  description: String!
-  url: String!
-}
 
 type Matriz {
   id: ID! @id

@@ -43,15 +43,36 @@ export interface CreateLinkMutationResponse {
   loading: boolean;
 }
 
+////ACTORES//////
+
 export const ALL_ACTORES_QUERY = gql`
   query ActoresQuery {
-    actors{
+    actors(where:{parent: true}){
       id
       name
       prioridad
       coments
-      parent{
+      parent
+      hijos{
         id
+        name
+        prioridad
+        coments
+        parent
+        hijos{
+          id
+          name
+          prioridad
+          coments
+          parent
+          hijos{
+            id
+            name
+            prioridad
+            coments
+            parent
+          }
+        }
       }
     }
   }
@@ -70,14 +91,12 @@ export const CREATE_ACTOR_MUTATION = gql`
       name: $name,
       prioridad: $prioridad,
       coments: $coments,
-      parent: {connect: {id: $id}}
+      parent: false
     }){
       name
       prioridad
       coments
-      parent{
-        id
-      }
+      parent
     }
   }
 `;
@@ -89,6 +108,7 @@ export const CREATE_NEW_ACTOR_MUTATION = gql`
       name: $name,
       prioridad: $prioridad,
       coments: $coments
+      parent: true
     }){
       name
       prioridad
@@ -126,51 +146,59 @@ export const DELETE_ACTOR_MUTATION = gql`
   }
 `;
 
-export const DELETE_HIJO_ACTOR_MUTATION = gql`
-  # 2
-  mutation deleteHijoActorMutation($id: Int!){
-    deleteManyActors(
-      where: { parent: {id: $id} }
-    ){
-      count
-    }
-  }
-`;
+///// TEMAS //////
+
 export const ALL_TEMAS_QUERY = gql`
   query TemassQuery {
-    temas{
+    temas (where:{parent: true}){
       id
       name
       prioridad
       coments
-      parent{
+      parent
+      hijos{
         id
+        name
+        prioridad
+        coments
+        parent
+        hijos{
+          id
+          name
+          prioridad
+          coments
+          parent
+          hijos{
+            id
+            name
+            prioridad
+            coments
+            parent
+          }
+        }
       }
     }
   }
 `;
 
 // 3
-export interface AllActoresQueryResponse {
+export interface AllTemasQueryResponse {
   temas: Tema[];
   loading: boolean;
 }
 
 export const CREATE_TEMA_MUTATION = gql`
   # 2
-  mutation createTemaMutation($name:String!, $prioridad: Int!, $coments: String, $id: Int!){
+  mutation createTemaMutation($name:String!, $prioridad: Int!, $coments: String){
     createTema(data:{
       name: $name,
       prioridad: $prioridad,
       coments: $coments,
-      parent: {connect: {id: $id}}
+      parent: false
     }){
       name
       prioridad
       coments
-      parent{
-        id
-      }
     }
   }
 `;
@@ -182,6 +210,7 @@ export const CREATE_NEW_TEMA_MUTATION = gql`
       name: $name,
       prioridad: $prioridad,
       coments: $coments
+      parent: true
     }){
       name
       prioridad
@@ -219,80 +248,9 @@ export const DELETE_TEMA_MUTATION = gql`
   }
 `;
 
-export const DELETE_HIJO_TEMA_MUTATION = gql`
-  # 2
-  mutation deleteHijoTemaMutation($id: Int!){
-    deleteManyTemas(
-      where: {
-        parent: {id: $id}
-      }
-    ){
-      count
-    }
-  }
-`;
 
-export const HIJO_TEMA_QUERY = gql`
-  # 2
-  query TemasHijosQuery  {
-    temas(where: { NOT: [{ parent: null }] }) {
-    id
-    name
-    prioridad
-    parent{
-      id
-    }
-  }
-  }
-`;
 
-export const PARENT_TEMA_QUERY = gql`
-  # 2
-  query TemasParentQuery  {
-    temas(
-      where: {parent:null}
-    ){
-    	id
-      name
-      prioridad
-      coments
-      parent{
-        id
-      }
-    }
-  }
-`;
-
-export const HIJO_ACTOR_QUERY = gql`
-  # 2
-  query ActorHijosQuery  {
-    actors(where: { NOT: [{ parent: null }] }) {
-    id
-    name
-    prioridad
-    parent{
-      id
-    }
-  }
-  }
-`;
-
-export const PARENT_ACTOR_QUERY = gql`
-  # 2
-  query ActoresParentQuery  {
-    actors(
-      where: {parent:null}
-    ){
-    	id
-      name
-      prioridad
-      coments
-      parent{
-        id
-      }
-    }
-  }
-`;
+//////Matriz////////
 
 export const ALL_MATRIZ_QUERY = gql`
   query MatrizQuery {

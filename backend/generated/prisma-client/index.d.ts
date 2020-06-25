@@ -18,9 +18,9 @@ export type Maybe<T> = T | undefined | null;
 export interface Exists {
   actor: (where?: ActorWhereInput) => Promise<boolean>;
   estado: (where?: EstadoWhereInput) => Promise<boolean>;
-  link: (where?: LinkWhereInput) => Promise<boolean>;
   matriz: (where?: MatrizWhereInput) => Promise<boolean>;
   tema: (where?: TemaWhereInput) => Promise<boolean>;
+  user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -80,25 +80,6 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => EstadoConnectionPromise;
-  link: (where: LinkWhereUniqueInput) => LinkNullablePromise;
-  links: (args?: {
-    where?: LinkWhereInput;
-    orderBy?: LinkOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => FragmentableArray<Link>;
-  linksConnection: (args?: {
-    where?: LinkWhereInput;
-    orderBy?: LinkOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => LinkConnectionPromise;
   matriz: (where: MatrizWhereUniqueInput) => MatrizNullablePromise;
   matrizes: (args?: {
     where?: MatrizWhereInput;
@@ -137,6 +118,25 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => TemaConnectionPromise;
+  user: (where: UserWhereUniqueInput) => UserNullablePromise;
+  users: (args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<User>;
+  usersConnection: (args?: {
+    where?: UserWhereInput;
+    orderBy?: UserOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => UserConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
@@ -175,22 +175,6 @@ export interface Prisma {
   }) => EstadoPromise;
   deleteEstado: (where: EstadoWhereUniqueInput) => EstadoPromise;
   deleteManyEstadoes: (where?: EstadoWhereInput) => BatchPayloadPromise;
-  createLink: (data: LinkCreateInput) => LinkPromise;
-  updateLink: (args: {
-    data: LinkUpdateInput;
-    where: LinkWhereUniqueInput;
-  }) => LinkPromise;
-  updateManyLinks: (args: {
-    data: LinkUpdateManyMutationInput;
-    where?: LinkWhereInput;
-  }) => BatchPayloadPromise;
-  upsertLink: (args: {
-    where: LinkWhereUniqueInput;
-    create: LinkCreateInput;
-    update: LinkUpdateInput;
-  }) => LinkPromise;
-  deleteLink: (where: LinkWhereUniqueInput) => LinkPromise;
-  deleteManyLinks: (where?: LinkWhereInput) => BatchPayloadPromise;
   createMatriz: (data: MatrizCreateInput) => MatrizPromise;
   updateMatriz: (args: {
     data: MatrizUpdateInput;
@@ -223,6 +207,22 @@ export interface Prisma {
   }) => TemaPromise;
   deleteTema: (where: TemaWhereUniqueInput) => TemaPromise;
   deleteManyTemas: (where?: TemaWhereInput) => BatchPayloadPromise;
+  createUser: (data: UserCreateInput) => UserPromise;
+  updateUser: (args: {
+    data: UserUpdateInput;
+    where: UserWhereUniqueInput;
+  }) => UserPromise;
+  updateManyUsers: (args: {
+    data: UserUpdateManyMutationInput;
+    where?: UserWhereInput;
+  }) => BatchPayloadPromise;
+  upsertUser: (args: {
+    where: UserWhereUniqueInput;
+    create: UserCreateInput;
+    update: UserUpdateInput;
+  }) => UserPromise;
+  deleteUser: (where: UserWhereUniqueInput) => UserPromise;
+  deleteManyUsers: (where?: UserWhereInput) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -238,15 +238,15 @@ export interface Subscription {
   estado: (
     where?: EstadoSubscriptionWhereInput
   ) => EstadoSubscriptionPayloadSubscription;
-  link: (
-    where?: LinkSubscriptionWhereInput
-  ) => LinkSubscriptionPayloadSubscription;
   matriz: (
     where?: MatrizSubscriptionWhereInput
   ) => MatrizSubscriptionPayloadSubscription;
   tema: (
     where?: TemaSubscriptionWhereInput
   ) => TemaSubscriptionPayloadSubscription;
+  user: (
+    where?: UserSubscriptionWhereInput
+  ) => UserSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -269,7 +269,9 @@ export type ActorOrderByInput =
   | "prioridad_ASC"
   | "prioridad_DESC"
   | "coments_ASC"
-  | "coments_DESC";
+  | "coments_DESC"
+  | "parent_ASC"
+  | "parent_DESC";
 
 export type EstadoOrderByInput =
   | "id_ASC"
@@ -279,17 +281,21 @@ export type EstadoOrderByInput =
   | "NumTemas_ASC"
   | "NumTemas_DESC";
 
-export type LinkOrderByInput =
+export type TemaOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC"
-  | "description_ASC"
-  | "description_DESC"
-  | "url_ASC"
-  | "url_DESC";
+  | "name_ASC"
+  | "name_DESC"
+  | "prioridad_ASC"
+  | "prioridad_DESC"
+  | "coments_ASC"
+  | "coments_DESC"
+  | "parent_ASC"
+  | "parent_DESC";
 
 export type MatrizOrderByInput =
   | "id_ASC"
@@ -305,19 +311,7 @@ export type MatrizOrderByInput =
   | "coment_ASC"
   | "coment_DESC";
 
-export type TemaOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "name_ASC"
-  | "name_DESC"
-  | "prioridad_ASC"
-  | "prioridad_DESC"
-  | "coments_ASC"
-  | "coments_DESC";
+export type UserOrderByInput = "id_ASC" | "id_DESC" | "name_ASC" | "name_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
@@ -386,7 +380,11 @@ export interface ActorWhereInput {
   coments_not_starts_with?: Maybe<String>;
   coments_ends_with?: Maybe<String>;
   coments_not_ends_with?: Maybe<String>;
-  parent?: Maybe<ActorWhereInput>;
+  parent?: Maybe<Boolean>;
+  parent_not?: Maybe<Boolean>;
+  hijos_every?: Maybe<ActorWhereInput>;
+  hijos_some?: Maybe<ActorWhereInput>;
+  hijos_none?: Maybe<ActorWhereInput>;
   AND?: Maybe<ActorWhereInput[] | ActorWhereInput>;
   OR?: Maybe<ActorWhereInput[] | ActorWhereInput>;
   NOT?: Maybe<ActorWhereInput[] | ActorWhereInput>;
@@ -432,25 +430,19 @@ export interface EstadoWhereInput {
   NOT?: Maybe<EstadoWhereInput[] | EstadoWhereInput>;
 }
 
-export type LinkWhereUniqueInput = AtLeastOne<{
+export type MatrizWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
-export interface LinkWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
+export interface TemaWhereInput {
+  id?: Maybe<Int>;
+  id_not?: Maybe<Int>;
+  id_in?: Maybe<Int[] | Int>;
+  id_not_in?: Maybe<Int[] | Int>;
+  id_lt?: Maybe<Int>;
+  id_lte?: Maybe<Int>;
+  id_gt?: Maybe<Int>;
+  id_gte?: Maybe<Int>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -467,42 +459,51 @@ export interface LinkWhereInput {
   updatedAt_lte?: Maybe<DateTimeInput>;
   updatedAt_gt?: Maybe<DateTimeInput>;
   updatedAt_gte?: Maybe<DateTimeInput>;
-  description?: Maybe<String>;
-  description_not?: Maybe<String>;
-  description_in?: Maybe<String[] | String>;
-  description_not_in?: Maybe<String[] | String>;
-  description_lt?: Maybe<String>;
-  description_lte?: Maybe<String>;
-  description_gt?: Maybe<String>;
-  description_gte?: Maybe<String>;
-  description_contains?: Maybe<String>;
-  description_not_contains?: Maybe<String>;
-  description_starts_with?: Maybe<String>;
-  description_not_starts_with?: Maybe<String>;
-  description_ends_with?: Maybe<String>;
-  description_not_ends_with?: Maybe<String>;
-  url?: Maybe<String>;
-  url_not?: Maybe<String>;
-  url_in?: Maybe<String[] | String>;
-  url_not_in?: Maybe<String[] | String>;
-  url_lt?: Maybe<String>;
-  url_lte?: Maybe<String>;
-  url_gt?: Maybe<String>;
-  url_gte?: Maybe<String>;
-  url_contains?: Maybe<String>;
-  url_not_contains?: Maybe<String>;
-  url_starts_with?: Maybe<String>;
-  url_not_starts_with?: Maybe<String>;
-  url_ends_with?: Maybe<String>;
-  url_not_ends_with?: Maybe<String>;
-  AND?: Maybe<LinkWhereInput[] | LinkWhereInput>;
-  OR?: Maybe<LinkWhereInput[] | LinkWhereInput>;
-  NOT?: Maybe<LinkWhereInput[] | LinkWhereInput>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  prioridad_not?: Maybe<Int>;
+  prioridad_in?: Maybe<Int[] | Int>;
+  prioridad_not_in?: Maybe<Int[] | Int>;
+  prioridad_lt?: Maybe<Int>;
+  prioridad_lte?: Maybe<Int>;
+  prioridad_gt?: Maybe<Int>;
+  prioridad_gte?: Maybe<Int>;
+  coments?: Maybe<String>;
+  coments_not?: Maybe<String>;
+  coments_in?: Maybe<String[] | String>;
+  coments_not_in?: Maybe<String[] | String>;
+  coments_lt?: Maybe<String>;
+  coments_lte?: Maybe<String>;
+  coments_gt?: Maybe<String>;
+  coments_gte?: Maybe<String>;
+  coments_contains?: Maybe<String>;
+  coments_not_contains?: Maybe<String>;
+  coments_starts_with?: Maybe<String>;
+  coments_not_starts_with?: Maybe<String>;
+  coments_ends_with?: Maybe<String>;
+  coments_not_ends_with?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  parent_not?: Maybe<Boolean>;
+  hijos_every?: Maybe<TemaWhereInput>;
+  hijos_some?: Maybe<TemaWhereInput>;
+  hijos_none?: Maybe<TemaWhereInput>;
+  AND?: Maybe<TemaWhereInput[] | TemaWhereInput>;
+  OR?: Maybe<TemaWhereInput[] | TemaWhereInput>;
+  NOT?: Maybe<TemaWhereInput[] | TemaWhereInput>;
 }
-
-export type MatrizWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
 
 export interface MatrizWhereInput {
   id?: Maybe<ID_Input>;
@@ -572,7 +573,109 @@ export interface MatrizWhereInput {
   NOT?: Maybe<MatrizWhereInput[] | MatrizWhereInput>;
 }
 
-export interface TemaWhereInput {
+export type TemaWhereUniqueInput = AtLeastOne<{
+  id: Maybe<Int>;
+}>;
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface UserWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  AND?: Maybe<UserWhereInput[] | UserWhereInput>;
+  OR?: Maybe<UserWhereInput[] | UserWhereInput>;
+  NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
+}
+
+export interface ActorCreateInput {
+  name: String;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  hijos?: Maybe<ActorCreateManyInput>;
+}
+
+export interface ActorCreateManyInput {
+  create?: Maybe<ActorCreateInput[] | ActorCreateInput>;
+  connect?: Maybe<ActorWhereUniqueInput[] | ActorWhereUniqueInput>;
+}
+
+export interface ActorUpdateInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  hijos?: Maybe<ActorUpdateManyInput>;
+}
+
+export interface ActorUpdateManyInput {
+  create?: Maybe<ActorCreateInput[] | ActorCreateInput>;
+  update?: Maybe<
+    | ActorUpdateWithWhereUniqueNestedInput[]
+    | ActorUpdateWithWhereUniqueNestedInput
+  >;
+  upsert?: Maybe<
+    | ActorUpsertWithWhereUniqueNestedInput[]
+    | ActorUpsertWithWhereUniqueNestedInput
+  >;
+  delete?: Maybe<ActorWhereUniqueInput[] | ActorWhereUniqueInput>;
+  connect?: Maybe<ActorWhereUniqueInput[] | ActorWhereUniqueInput>;
+  set?: Maybe<ActorWhereUniqueInput[] | ActorWhereUniqueInput>;
+  disconnect?: Maybe<ActorWhereUniqueInput[] | ActorWhereUniqueInput>;
+  deleteMany?: Maybe<ActorScalarWhereInput[] | ActorScalarWhereInput>;
+  updateMany?: Maybe<
+    ActorUpdateManyWithWhereNestedInput[] | ActorUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface ActorUpdateWithWhereUniqueNestedInput {
+  where: ActorWhereUniqueInput;
+  data: ActorUpdateDataInput;
+}
+
+export interface ActorUpdateDataInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  hijos?: Maybe<ActorUpdateManyInput>;
+}
+
+export interface ActorUpsertWithWhereUniqueNestedInput {
+  where: ActorWhereUniqueInput;
+  update: ActorUpdateDataInput;
+  create: ActorCreateInput;
+}
+
+export interface ActorScalarWhereInput {
   id?: Maybe<Int>;
   id_not?: Maybe<Int>;
   id_in?: Maybe<Int[] | Int>;
@@ -633,60 +736,30 @@ export interface TemaWhereInput {
   coments_not_starts_with?: Maybe<String>;
   coments_ends_with?: Maybe<String>;
   coments_not_ends_with?: Maybe<String>;
-  parent?: Maybe<TemaWhereInput>;
-  AND?: Maybe<TemaWhereInput[] | TemaWhereInput>;
-  OR?: Maybe<TemaWhereInput[] | TemaWhereInput>;
-  NOT?: Maybe<TemaWhereInput[] | TemaWhereInput>;
+  parent?: Maybe<Boolean>;
+  parent_not?: Maybe<Boolean>;
+  AND?: Maybe<ActorScalarWhereInput[] | ActorScalarWhereInput>;
+  OR?: Maybe<ActorScalarWhereInput[] | ActorScalarWhereInput>;
+  NOT?: Maybe<ActorScalarWhereInput[] | ActorScalarWhereInput>;
 }
 
-export type TemaWhereUniqueInput = AtLeastOne<{
-  id: Maybe<Int>;
-}>;
-
-export interface ActorCreateInput {
-  name: String;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<ActorCreateOneInput>;
+export interface ActorUpdateManyWithWhereNestedInput {
+  where: ActorScalarWhereInput;
+  data: ActorUpdateManyDataInput;
 }
 
-export interface ActorCreateOneInput {
-  create?: Maybe<ActorCreateInput>;
-  connect?: Maybe<ActorWhereUniqueInput>;
-}
-
-export interface ActorUpdateInput {
+export interface ActorUpdateManyDataInput {
   name?: Maybe<String>;
   prioridad?: Maybe<Int>;
   coments?: Maybe<String>;
-  parent?: Maybe<ActorUpdateOneInput>;
-}
-
-export interface ActorUpdateOneInput {
-  create?: Maybe<ActorCreateInput>;
-  update?: Maybe<ActorUpdateDataInput>;
-  upsert?: Maybe<ActorUpsertNestedInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
-  connect?: Maybe<ActorWhereUniqueInput>;
-}
-
-export interface ActorUpdateDataInput {
-  name?: Maybe<String>;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<ActorUpdateOneInput>;
-}
-
-export interface ActorUpsertNestedInput {
-  update: ActorUpdateDataInput;
-  create: ActorCreateInput;
+  parent?: Maybe<Boolean>;
 }
 
 export interface ActorUpdateManyMutationInput {
   name?: Maybe<String>;
   prioridad?: Maybe<Int>;
   coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
 }
 
 export interface EstadoCreateInput {
@@ -703,22 +776,6 @@ export interface EstadoUpdateInput {
 export interface EstadoUpdateManyMutationInput {
   NumActor?: Maybe<Int>;
   NumTemas?: Maybe<Int>;
-}
-
-export interface LinkCreateInput {
-  id?: Maybe<ID_Input>;
-  description: String;
-  url: String;
-}
-
-export interface LinkUpdateInput {
-  description?: Maybe<String>;
-  url?: Maybe<String>;
-}
-
-export interface LinkUpdateManyMutationInput {
-  description?: Maybe<String>;
-  url?: Maybe<String>;
 }
 
 export interface MatrizCreateInput {
@@ -739,7 +796,25 @@ export interface TemaCreateInput {
   name: String;
   prioridad?: Maybe<Int>;
   coments?: Maybe<String>;
-  parent?: Maybe<TemaCreateOneInput>;
+  parent?: Maybe<Boolean>;
+  hijos?: Maybe<TemaCreateManyWithoutHijosInput>;
+}
+
+export interface TemaCreateManyWithoutHijosInput {
+  create?: Maybe<TemaCreateWithoutHijosInput[] | TemaCreateWithoutHijosInput>;
+  connect?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+}
+
+export interface TemaCreateWithoutHijosInput {
+  name: String;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+}
+
+export interface ActorCreateOneInput {
+  create?: Maybe<ActorCreateInput>;
+  connect?: Maybe<ActorWhereUniqueInput>;
 }
 
 export interface MatrizUpdateInput {
@@ -763,12 +838,145 @@ export interface TemaUpdateDataInput {
   name?: Maybe<String>;
   prioridad?: Maybe<Int>;
   coments?: Maybe<String>;
-  parent?: Maybe<TemaUpdateOneInput>;
+  parent?: Maybe<Boolean>;
+  hijos?: Maybe<TemaUpdateManyWithoutHijosInput>;
+}
+
+export interface TemaUpdateManyWithoutHijosInput {
+  create?: Maybe<TemaCreateWithoutHijosInput[] | TemaCreateWithoutHijosInput>;
+  delete?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+  connect?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+  set?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+  disconnect?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+  update?: Maybe<
+    | TemaUpdateWithWhereUniqueWithoutHijosInput[]
+    | TemaUpdateWithWhereUniqueWithoutHijosInput
+  >;
+  upsert?: Maybe<
+    | TemaUpsertWithWhereUniqueWithoutHijosInput[]
+    | TemaUpsertWithWhereUniqueWithoutHijosInput
+  >;
+  deleteMany?: Maybe<TemaScalarWhereInput[] | TemaScalarWhereInput>;
+  updateMany?: Maybe<
+    TemaUpdateManyWithWhereNestedInput[] | TemaUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface TemaUpdateWithWhereUniqueWithoutHijosInput {
+  where: TemaWhereUniqueInput;
+  data: TemaUpdateWithoutHijosDataInput;
+}
+
+export interface TemaUpdateWithoutHijosDataInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+}
+
+export interface TemaUpsertWithWhereUniqueWithoutHijosInput {
+  where: TemaWhereUniqueInput;
+  update: TemaUpdateWithoutHijosDataInput;
+  create: TemaCreateWithoutHijosInput;
+}
+
+export interface TemaScalarWhereInput {
+  id?: Maybe<Int>;
+  id_not?: Maybe<Int>;
+  id_in?: Maybe<Int[] | Int>;
+  id_not_in?: Maybe<Int[] | Int>;
+  id_lt?: Maybe<Int>;
+  id_lte?: Maybe<Int>;
+  id_gt?: Maybe<Int>;
+  id_gte?: Maybe<Int>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  prioridad_not?: Maybe<Int>;
+  prioridad_in?: Maybe<Int[] | Int>;
+  prioridad_not_in?: Maybe<Int[] | Int>;
+  prioridad_lt?: Maybe<Int>;
+  prioridad_lte?: Maybe<Int>;
+  prioridad_gt?: Maybe<Int>;
+  prioridad_gte?: Maybe<Int>;
+  coments?: Maybe<String>;
+  coments_not?: Maybe<String>;
+  coments_in?: Maybe<String[] | String>;
+  coments_not_in?: Maybe<String[] | String>;
+  coments_lt?: Maybe<String>;
+  coments_lte?: Maybe<String>;
+  coments_gt?: Maybe<String>;
+  coments_gte?: Maybe<String>;
+  coments_contains?: Maybe<String>;
+  coments_not_contains?: Maybe<String>;
+  coments_starts_with?: Maybe<String>;
+  coments_not_starts_with?: Maybe<String>;
+  coments_ends_with?: Maybe<String>;
+  coments_not_ends_with?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  parent_not?: Maybe<Boolean>;
+  AND?: Maybe<TemaScalarWhereInput[] | TemaScalarWhereInput>;
+  OR?: Maybe<TemaScalarWhereInput[] | TemaScalarWhereInput>;
+  NOT?: Maybe<TemaScalarWhereInput[] | TemaScalarWhereInput>;
+}
+
+export interface TemaUpdateManyWithWhereNestedInput {
+  where: TemaScalarWhereInput;
+  data: TemaUpdateManyDataInput;
+}
+
+export interface TemaUpdateManyDataInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
 }
 
 export interface TemaUpsertNestedInput {
   update: TemaUpdateDataInput;
   create: TemaCreateInput;
+}
+
+export interface ActorUpdateOneInput {
+  create?: Maybe<ActorCreateInput>;
+  update?: Maybe<ActorUpdateDataInput>;
+  upsert?: Maybe<ActorUpsertNestedInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<ActorWhereUniqueInput>;
+}
+
+export interface ActorUpsertNestedInput {
+  update: ActorUpdateDataInput;
+  create: ActorCreateInput;
 }
 
 export interface MatrizUpdateManyMutationInput {
@@ -781,13 +989,28 @@ export interface TemaUpdateInput {
   name?: Maybe<String>;
   prioridad?: Maybe<Int>;
   coments?: Maybe<String>;
-  parent?: Maybe<TemaUpdateOneInput>;
+  parent?: Maybe<Boolean>;
+  hijos?: Maybe<TemaUpdateManyWithoutHijosInput>;
 }
 
 export interface TemaUpdateManyMutationInput {
   name?: Maybe<String>;
   prioridad?: Maybe<Int>;
   coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+}
+
+export interface UserCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+}
+
+export interface UserUpdateInput {
+  name?: Maybe<String>;
+}
+
+export interface UserUpdateManyMutationInput {
+  name?: Maybe<String>;
 }
 
 export interface ActorSubscriptionWhereInput {
@@ -812,17 +1035,6 @@ export interface EstadoSubscriptionWhereInput {
   NOT?: Maybe<EstadoSubscriptionWhereInput[] | EstadoSubscriptionWhereInput>;
 }
 
-export interface LinkSubscriptionWhereInput {
-  mutation_in?: Maybe<MutationType[] | MutationType>;
-  updatedFields_contains?: Maybe<String>;
-  updatedFields_contains_every?: Maybe<String[] | String>;
-  updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<LinkWhereInput>;
-  AND?: Maybe<LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput>;
-  OR?: Maybe<LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput>;
-  NOT?: Maybe<LinkSubscriptionWhereInput[] | LinkSubscriptionWhereInput>;
-}
-
 export interface MatrizSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
@@ -845,6 +1057,17 @@ export interface TemaSubscriptionWhereInput {
   NOT?: Maybe<TemaSubscriptionWhereInput[] | TemaSubscriptionWhereInput>;
 }
 
+export interface UserSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<UserWhereInput>;
+  AND?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  OR?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+  NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
+}
+
 export interface NodeNode {
   id: ID_Output;
 }
@@ -856,6 +1079,7 @@ export interface Actor {
   name: String;
   prioridad?: Int;
   coments?: String;
+  parent?: Boolean;
 }
 
 export interface ActorPromise extends Promise<Actor>, Fragmentable {
@@ -865,7 +1089,16 @@ export interface ActorPromise extends Promise<Actor>, Fragmentable {
   name: () => Promise<String>;
   prioridad: () => Promise<Int>;
   coments: () => Promise<String>;
-  parent: <T = ActorPromise>() => T;
+  parent: () => Promise<Boolean>;
+  hijos: <T = FragmentableArray<Actor>>(args?: {
+    where?: ActorWhereInput;
+    orderBy?: ActorOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface ActorSubscription
@@ -877,7 +1110,16 @@ export interface ActorSubscription
   name: () => Promise<AsyncIterator<String>>;
   prioridad: () => Promise<AsyncIterator<Int>>;
   coments: () => Promise<AsyncIterator<String>>;
-  parent: <T = ActorSubscription>() => T;
+  parent: () => Promise<AsyncIterator<Boolean>>;
+  hijos: <T = Promise<AsyncIterator<ActorSubscription>>>(args?: {
+    where?: ActorWhereInput;
+    orderBy?: ActorOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface ActorNullablePromise
@@ -889,7 +1131,16 @@ export interface ActorNullablePromise
   name: () => Promise<String>;
   prioridad: () => Promise<Int>;
   coments: () => Promise<String>;
-  parent: <T = ActorPromise>() => T;
+  parent: () => Promise<Boolean>;
+  hijos: <T = FragmentableArray<Actor>>(args?: {
+    where?: ActorWhereInput;
+    orderBy?: ActorOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface ActorConnection {
@@ -1051,96 +1302,6 @@ export interface AggregateEstadoSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
-export interface Link {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  description: String;
-  url: String;
-}
-
-export interface LinkPromise extends Promise<Link>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  description: () => Promise<String>;
-  url: () => Promise<String>;
-}
-
-export interface LinkSubscription
-  extends Promise<AsyncIterator<Link>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  description: () => Promise<AsyncIterator<String>>;
-  url: () => Promise<AsyncIterator<String>>;
-}
-
-export interface LinkNullablePromise
-  extends Promise<Link | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  description: () => Promise<String>;
-  url: () => Promise<String>;
-}
-
-export interface LinkConnection {
-  pageInfo: PageInfo;
-  edges: LinkEdge[];
-}
-
-export interface LinkConnectionPromise
-  extends Promise<LinkConnection>,
-    Fragmentable {
-  pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<LinkEdge>>() => T;
-  aggregate: <T = AggregateLinkPromise>() => T;
-}
-
-export interface LinkConnectionSubscription
-  extends Promise<AsyncIterator<LinkConnection>>,
-    Fragmentable {
-  pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<LinkEdgeSubscription>>>() => T;
-  aggregate: <T = AggregateLinkSubscription>() => T;
-}
-
-export interface LinkEdge {
-  node: Link;
-  cursor: String;
-}
-
-export interface LinkEdgePromise extends Promise<LinkEdge>, Fragmentable {
-  node: <T = LinkPromise>() => T;
-  cursor: () => Promise<String>;
-}
-
-export interface LinkEdgeSubscription
-  extends Promise<AsyncIterator<LinkEdge>>,
-    Fragmentable {
-  node: <T = LinkSubscription>() => T;
-  cursor: () => Promise<AsyncIterator<String>>;
-}
-
-export interface AggregateLink {
-  count: Int;
-}
-
-export interface AggregateLinkPromise
-  extends Promise<AggregateLink>,
-    Fragmentable {
-  count: () => Promise<Int>;
-}
-
-export interface AggregateLinkSubscription
-  extends Promise<AsyncIterator<AggregateLink>>,
-    Fragmentable {
-  count: () => Promise<AsyncIterator<Int>>;
-}
-
 export interface Matriz {
   id: ID_Output;
   createdAt: DateTimeOutput;
@@ -1194,6 +1355,7 @@ export interface Tema {
   name: String;
   prioridad?: Int;
   coments?: String;
+  parent?: Boolean;
 }
 
 export interface TemaPromise extends Promise<Tema>, Fragmentable {
@@ -1203,7 +1365,16 @@ export interface TemaPromise extends Promise<Tema>, Fragmentable {
   name: () => Promise<String>;
   prioridad: () => Promise<Int>;
   coments: () => Promise<String>;
-  parent: <T = TemaPromise>() => T;
+  parent: () => Promise<Boolean>;
+  hijos: <T = FragmentableArray<Tema>>(args?: {
+    where?: TemaWhereInput;
+    orderBy?: TemaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface TemaSubscription
@@ -1215,7 +1386,16 @@ export interface TemaSubscription
   name: () => Promise<AsyncIterator<String>>;
   prioridad: () => Promise<AsyncIterator<Int>>;
   coments: () => Promise<AsyncIterator<String>>;
-  parent: <T = TemaSubscription>() => T;
+  parent: () => Promise<AsyncIterator<Boolean>>;
+  hijos: <T = Promise<AsyncIterator<TemaSubscription>>>(args?: {
+    where?: TemaWhereInput;
+    orderBy?: TemaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface TemaNullablePromise
@@ -1227,7 +1407,16 @@ export interface TemaNullablePromise
   name: () => Promise<String>;
   prioridad: () => Promise<Int>;
   coments: () => Promise<String>;
-  parent: <T = TemaPromise>() => T;
+  parent: () => Promise<Boolean>;
+  hijos: <T = FragmentableArray<Tema>>(args?: {
+    where?: TemaWhereInput;
+    orderBy?: TemaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface MatrizConnection {
@@ -1338,6 +1527,84 @@ export interface AggregateTemaSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface User {
+  id: ID_Output;
+  name: String;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UserNullablePromise
+  extends Promise<User | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface UserConnection {
+  pageInfo: PageInfo;
+  edges: UserEdge[];
+}
+
+export interface UserConnectionPromise
+  extends Promise<UserConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<UserEdge>>() => T;
+  aggregate: <T = AggregateUserPromise>() => T;
+}
+
+export interface UserConnectionSubscription
+  extends Promise<AsyncIterator<UserConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<UserEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateUserSubscription>() => T;
+}
+
+export interface UserEdge {
+  node: User;
+  cursor: String;
+}
+
+export interface UserEdgePromise extends Promise<UserEdge>, Fragmentable {
+  node: <T = UserPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface UserEdgeSubscription
+  extends Promise<AsyncIterator<UserEdge>>,
+    Fragmentable {
+  node: <T = UserSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateUser {
+  count: Int;
+}
+
+export interface AggregateUserPromise
+  extends Promise<AggregateUser>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateUserSubscription
+  extends Promise<AsyncIterator<AggregateUser>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface BatchPayload {
   count: Long;
 }
@@ -1386,6 +1653,7 @@ export interface ActorPreviousValues {
   name: String;
   prioridad?: Int;
   coments?: String;
+  parent?: Boolean;
 }
 
 export interface ActorPreviousValuesPromise
@@ -1397,6 +1665,7 @@ export interface ActorPreviousValuesPromise
   name: () => Promise<String>;
   prioridad: () => Promise<Int>;
   coments: () => Promise<String>;
+  parent: () => Promise<Boolean>;
 }
 
 export interface ActorPreviousValuesSubscription
@@ -1408,6 +1677,7 @@ export interface ActorPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
   prioridad: () => Promise<AsyncIterator<Int>>;
   coments: () => Promise<AsyncIterator<String>>;
+  parent: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface EstadoSubscriptionPayload {
@@ -1455,59 +1725,6 @@ export interface EstadoPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   NumActor: () => Promise<AsyncIterator<Int>>;
   NumTemas: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface LinkSubscriptionPayload {
-  mutation: MutationType;
-  node: Link;
-  updatedFields: String[];
-  previousValues: LinkPreviousValues;
-}
-
-export interface LinkSubscriptionPayloadPromise
-  extends Promise<LinkSubscriptionPayload>,
-    Fragmentable {
-  mutation: () => Promise<MutationType>;
-  node: <T = LinkPromise>() => T;
-  updatedFields: () => Promise<String[]>;
-  previousValues: <T = LinkPreviousValuesPromise>() => T;
-}
-
-export interface LinkSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<LinkSubscriptionPayload>>,
-    Fragmentable {
-  mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = LinkSubscription>() => T;
-  updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = LinkPreviousValuesSubscription>() => T;
-}
-
-export interface LinkPreviousValues {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  description: String;
-  url: String;
-}
-
-export interface LinkPreviousValuesPromise
-  extends Promise<LinkPreviousValues>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  description: () => Promise<String>;
-  url: () => Promise<String>;
-}
-
-export interface LinkPreviousValuesSubscription
-  extends Promise<AsyncIterator<LinkPreviousValues>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  description: () => Promise<AsyncIterator<String>>;
-  url: () => Promise<AsyncIterator<String>>;
 }
 
 export interface MatrizSubscriptionPayload {
@@ -1598,6 +1815,7 @@ export interface TemaPreviousValues {
   name: String;
   prioridad?: Int;
   coments?: String;
+  parent?: Boolean;
 }
 
 export interface TemaPreviousValuesPromise
@@ -1609,6 +1827,7 @@ export interface TemaPreviousValuesPromise
   name: () => Promise<String>;
   prioridad: () => Promise<Int>;
   coments: () => Promise<String>;
+  parent: () => Promise<Boolean>;
 }
 
 export interface TemaPreviousValuesSubscription
@@ -1620,6 +1839,51 @@ export interface TemaPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
   prioridad: () => Promise<AsyncIterator<Int>>;
   coments: () => Promise<AsyncIterator<String>>;
+  parent: () => Promise<AsyncIterator<Boolean>>;
+}
+
+export interface UserSubscriptionPayload {
+  mutation: MutationType;
+  node: User;
+  updatedFields: String[];
+  previousValues: UserPreviousValues;
+}
+
+export interface UserSubscriptionPayloadPromise
+  extends Promise<UserSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = UserPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = UserPreviousValuesPromise>() => T;
+}
+
+export interface UserSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<UserSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = UserSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = UserPreviousValuesSubscription>() => T;
+}
+
+export interface UserPreviousValues {
+  id: ID_Output;
+  name: String;
+}
+
+export interface UserPreviousValuesPromise
+  extends Promise<UserPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface UserPreviousValuesSubscription
+  extends Promise<AsyncIterator<UserPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
 }
 
 /*
@@ -1661,15 +1925,15 @@ export type Long = string;
 
 export const models: Model[] = [
   {
+    name: "User",
+    embedded: false
+  },
+  {
     name: "Actor",
     embedded: false
   },
   {
     name: "Tema",
-    embedded: false
-  },
-  {
-    name: "Link",
     embedded: false
   },
   {

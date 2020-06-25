@@ -10,7 +10,8 @@ module.exports = {
   name: String!
   prioridad: Int
   coments: String
-  parent: Actor
+  parent: Boolean
+  hijos(where: ActorWhereInput, orderBy: ActorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Actor!]
 }
 
 type ActorConnection {
@@ -23,7 +24,13 @@ input ActorCreateInput {
   name: String!
   prioridad: Int
   coments: String
-  parent: ActorCreateOneInput
+  parent: Boolean
+  hijos: ActorCreateManyInput
+}
+
+input ActorCreateManyInput {
+  create: [ActorCreateInput!]
+  connect: [ActorWhereUniqueInput!]
 }
 
 input ActorCreateOneInput {
@@ -49,6 +56,8 @@ enum ActorOrderByInput {
   prioridad_DESC
   coments_ASC
   coments_DESC
+  parent_ASC
+  parent_DESC
 }
 
 type ActorPreviousValues {
@@ -58,6 +67,75 @@ type ActorPreviousValues {
   name: String!
   prioridad: Int
   coments: String
+  parent: Boolean
+}
+
+input ActorScalarWhereInput {
+  id: Int
+  id_not: Int
+  id_in: [Int!]
+  id_not_in: [Int!]
+  id_lt: Int
+  id_lte: Int
+  id_gt: Int
+  id_gte: Int
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  prioridad: Int
+  prioridad_not: Int
+  prioridad_in: [Int!]
+  prioridad_not_in: [Int!]
+  prioridad_lt: Int
+  prioridad_lte: Int
+  prioridad_gt: Int
+  prioridad_gte: Int
+  coments: String
+  coments_not: String
+  coments_in: [String!]
+  coments_not_in: [String!]
+  coments_lt: String
+  coments_lte: String
+  coments_gt: String
+  coments_gte: String
+  coments_contains: String
+  coments_not_contains: String
+  coments_starts_with: String
+  coments_not_starts_with: String
+  coments_ends_with: String
+  coments_not_ends_with: String
+  parent: Boolean
+  parent_not: Boolean
+  AND: [ActorScalarWhereInput!]
+  OR: [ActorScalarWhereInput!]
+  NOT: [ActorScalarWhereInput!]
 }
 
 type ActorSubscriptionPayload {
@@ -82,20 +160,47 @@ input ActorUpdateDataInput {
   name: String
   prioridad: Int
   coments: String
-  parent: ActorUpdateOneInput
+  parent: Boolean
+  hijos: ActorUpdateManyInput
 }
 
 input ActorUpdateInput {
   name: String
   prioridad: Int
   coments: String
-  parent: ActorUpdateOneInput
+  parent: Boolean
+  hijos: ActorUpdateManyInput
+}
+
+input ActorUpdateManyDataInput {
+  name: String
+  prioridad: Int
+  coments: String
+  parent: Boolean
+}
+
+input ActorUpdateManyInput {
+  create: [ActorCreateInput!]
+  update: [ActorUpdateWithWhereUniqueNestedInput!]
+  upsert: [ActorUpsertWithWhereUniqueNestedInput!]
+  delete: [ActorWhereUniqueInput!]
+  connect: [ActorWhereUniqueInput!]
+  set: [ActorWhereUniqueInput!]
+  disconnect: [ActorWhereUniqueInput!]
+  deleteMany: [ActorScalarWhereInput!]
+  updateMany: [ActorUpdateManyWithWhereNestedInput!]
 }
 
 input ActorUpdateManyMutationInput {
   name: String
   prioridad: Int
   coments: String
+  parent: Boolean
+}
+
+input ActorUpdateManyWithWhereNestedInput {
+  where: ActorScalarWhereInput!
+  data: ActorUpdateManyDataInput!
 }
 
 input ActorUpdateOneInput {
@@ -107,7 +212,18 @@ input ActorUpdateOneInput {
   connect: ActorWhereUniqueInput
 }
 
+input ActorUpdateWithWhereUniqueNestedInput {
+  where: ActorWhereUniqueInput!
+  data: ActorUpdateDataInput!
+}
+
 input ActorUpsertNestedInput {
+  update: ActorUpdateDataInput!
+  create: ActorCreateInput!
+}
+
+input ActorUpsertWithWhereUniqueNestedInput {
+  where: ActorWhereUniqueInput!
   update: ActorUpdateDataInput!
   create: ActorCreateInput!
 }
@@ -173,7 +289,11 @@ input ActorWhereInput {
   coments_not_starts_with: String
   coments_ends_with: String
   coments_not_ends_with: String
-  parent: ActorWhereInput
+  parent: Boolean
+  parent_not: Boolean
+  hijos_every: ActorWhereInput
+  hijos_some: ActorWhereInput
+  hijos_none: ActorWhereInput
   AND: [ActorWhereInput!]
   OR: [ActorWhereInput!]
   NOT: [ActorWhereInput!]
@@ -191,15 +311,15 @@ type AggregateEstado {
   count: Int!
 }
 
-type AggregateLink {
-  count: Int!
-}
-
 type AggregateMatriz {
   count: Int!
 }
 
 type AggregateTema {
+  count: Int!
+}
+
+type AggregateUser {
   count: Int!
 }
 
@@ -312,148 +432,6 @@ input EstadoWhereInput {
 }
 
 input EstadoWhereUniqueInput {
-  id: ID
-}
-
-type Link {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  description: String!
-  url: String!
-}
-
-type LinkConnection {
-  pageInfo: PageInfo!
-  edges: [LinkEdge]!
-  aggregate: AggregateLink!
-}
-
-input LinkCreateInput {
-  id: ID
-  description: String!
-  url: String!
-}
-
-type LinkEdge {
-  node: Link!
-  cursor: String!
-}
-
-enum LinkOrderByInput {
-  id_ASC
-  id_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-  description_ASC
-  description_DESC
-  url_ASC
-  url_DESC
-}
-
-type LinkPreviousValues {
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  description: String!
-  url: String!
-}
-
-type LinkSubscriptionPayload {
-  mutation: MutationType!
-  node: Link
-  updatedFields: [String!]
-  previousValues: LinkPreviousValues
-}
-
-input LinkSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: LinkWhereInput
-  AND: [LinkSubscriptionWhereInput!]
-  OR: [LinkSubscriptionWhereInput!]
-  NOT: [LinkSubscriptionWhereInput!]
-}
-
-input LinkUpdateInput {
-  description: String
-  url: String
-}
-
-input LinkUpdateManyMutationInput {
-  description: String
-  url: String
-}
-
-input LinkWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  createdAt: DateTime
-  createdAt_not: DateTime
-  createdAt_in: [DateTime!]
-  createdAt_not_in: [DateTime!]
-  createdAt_lt: DateTime
-  createdAt_lte: DateTime
-  createdAt_gt: DateTime
-  createdAt_gte: DateTime
-  updatedAt: DateTime
-  updatedAt_not: DateTime
-  updatedAt_in: [DateTime!]
-  updatedAt_not_in: [DateTime!]
-  updatedAt_lt: DateTime
-  updatedAt_lte: DateTime
-  updatedAt_gt: DateTime
-  updatedAt_gte: DateTime
-  description: String
-  description_not: String
-  description_in: [String!]
-  description_not_in: [String!]
-  description_lt: String
-  description_lte: String
-  description_gt: String
-  description_gte: String
-  description_contains: String
-  description_not_contains: String
-  description_starts_with: String
-  description_not_starts_with: String
-  description_ends_with: String
-  description_not_ends_with: String
-  url: String
-  url_not: String
-  url_in: [String!]
-  url_not_in: [String!]
-  url_lt: String
-  url_lte: String
-  url_gt: String
-  url_gte: String
-  url_contains: String
-  url_not_contains: String
-  url_starts_with: String
-  url_not_starts_with: String
-  url_ends_with: String
-  url_not_ends_with: String
-  AND: [LinkWhereInput!]
-  OR: [LinkWhereInput!]
-  NOT: [LinkWhereInput!]
-}
-
-input LinkWhereUniqueInput {
   id: ID
 }
 
@@ -631,12 +609,6 @@ type Mutation {
   upsertEstado(where: EstadoWhereUniqueInput!, create: EstadoCreateInput!, update: EstadoUpdateInput!): Estado!
   deleteEstado(where: EstadoWhereUniqueInput!): Estado
   deleteManyEstadoes(where: EstadoWhereInput): BatchPayload!
-  createLink(data: LinkCreateInput!): Link!
-  updateLink(data: LinkUpdateInput!, where: LinkWhereUniqueInput!): Link
-  updateManyLinks(data: LinkUpdateManyMutationInput!, where: LinkWhereInput): BatchPayload!
-  upsertLink(where: LinkWhereUniqueInput!, create: LinkCreateInput!, update: LinkUpdateInput!): Link!
-  deleteLink(where: LinkWhereUniqueInput!): Link
-  deleteManyLinks(where: LinkWhereInput): BatchPayload!
   createMatriz(data: MatrizCreateInput!): Matriz!
   updateMatriz(data: MatrizUpdateInput!, where: MatrizWhereUniqueInput!): Matriz
   updateManyMatrizes(data: MatrizUpdateManyMutationInput!, where: MatrizWhereInput): BatchPayload!
@@ -649,6 +621,12 @@ type Mutation {
   upsertTema(where: TemaWhereUniqueInput!, create: TemaCreateInput!, update: TemaUpdateInput!): Tema!
   deleteTema(where: TemaWhereUniqueInput!): Tema
   deleteManyTemas(where: TemaWhereInput): BatchPayload!
+  createUser(data: UserCreateInput!): User!
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
+  updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
+  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  deleteUser(where: UserWhereUniqueInput!): User
+  deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -675,24 +653,24 @@ type Query {
   estado(where: EstadoWhereUniqueInput!): Estado
   estadoes(where: EstadoWhereInput, orderBy: EstadoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Estado]!
   estadoesConnection(where: EstadoWhereInput, orderBy: EstadoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EstadoConnection!
-  link(where: LinkWhereUniqueInput!): Link
-  links(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Link]!
-  linksConnection(where: LinkWhereInput, orderBy: LinkOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): LinkConnection!
   matriz(where: MatrizWhereUniqueInput!): Matriz
   matrizes(where: MatrizWhereInput, orderBy: MatrizOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Matriz]!
   matrizesConnection(where: MatrizWhereInput, orderBy: MatrizOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MatrizConnection!
   tema(where: TemaWhereUniqueInput!): Tema
   temas(where: TemaWhereInput, orderBy: TemaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tema]!
   temasConnection(where: TemaWhereInput, orderBy: TemaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TemaConnection!
+  user(where: UserWhereUniqueInput!): User
+  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
+  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   node(id: ID!): Node
 }
 
 type Subscription {
   actor(where: ActorSubscriptionWhereInput): ActorSubscriptionPayload
   estado(where: EstadoSubscriptionWhereInput): EstadoSubscriptionPayload
-  link(where: LinkSubscriptionWhereInput): LinkSubscriptionPayload
   matriz(where: MatrizSubscriptionWhereInput): MatrizSubscriptionPayload
   tema(where: TemaSubscriptionWhereInput): TemaSubscriptionPayload
+  user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
 type Tema {
@@ -702,7 +680,8 @@ type Tema {
   name: String!
   prioridad: Int
   coments: String
-  parent: Tema
+  parent: Boolean
+  hijos(where: TemaWhereInput, orderBy: TemaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tema!]
 }
 
 type TemaConnection {
@@ -715,12 +694,25 @@ input TemaCreateInput {
   name: String!
   prioridad: Int
   coments: String
-  parent: TemaCreateOneInput
+  parent: Boolean
+  hijos: TemaCreateManyWithoutHijosInput
+}
+
+input TemaCreateManyWithoutHijosInput {
+  create: [TemaCreateWithoutHijosInput!]
+  connect: [TemaWhereUniqueInput!]
 }
 
 input TemaCreateOneInput {
   create: TemaCreateInput
   connect: TemaWhereUniqueInput
+}
+
+input TemaCreateWithoutHijosInput {
+  name: String!
+  prioridad: Int
+  coments: String
+  parent: Boolean
 }
 
 type TemaEdge {
@@ -741,6 +733,8 @@ enum TemaOrderByInput {
   prioridad_DESC
   coments_ASC
   coments_DESC
+  parent_ASC
+  parent_DESC
 }
 
 type TemaPreviousValues {
@@ -750,6 +744,75 @@ type TemaPreviousValues {
   name: String!
   prioridad: Int
   coments: String
+  parent: Boolean
+}
+
+input TemaScalarWhereInput {
+  id: Int
+  id_not: Int
+  id_in: [Int!]
+  id_not_in: [Int!]
+  id_lt: Int
+  id_lte: Int
+  id_gt: Int
+  id_gte: Int
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  prioridad: Int
+  prioridad_not: Int
+  prioridad_in: [Int!]
+  prioridad_not_in: [Int!]
+  prioridad_lt: Int
+  prioridad_lte: Int
+  prioridad_gt: Int
+  prioridad_gte: Int
+  coments: String
+  coments_not: String
+  coments_in: [String!]
+  coments_not_in: [String!]
+  coments_lt: String
+  coments_lte: String
+  coments_gt: String
+  coments_gte: String
+  coments_contains: String
+  coments_not_contains: String
+  coments_starts_with: String
+  coments_not_starts_with: String
+  coments_ends_with: String
+  coments_not_ends_with: String
+  parent: Boolean
+  parent_not: Boolean
+  AND: [TemaScalarWhereInput!]
+  OR: [TemaScalarWhereInput!]
+  NOT: [TemaScalarWhereInput!]
 }
 
 type TemaSubscriptionPayload {
@@ -774,20 +837,47 @@ input TemaUpdateDataInput {
   name: String
   prioridad: Int
   coments: String
-  parent: TemaUpdateOneInput
+  parent: Boolean
+  hijos: TemaUpdateManyWithoutHijosInput
 }
 
 input TemaUpdateInput {
   name: String
   prioridad: Int
   coments: String
-  parent: TemaUpdateOneInput
+  parent: Boolean
+  hijos: TemaUpdateManyWithoutHijosInput
+}
+
+input TemaUpdateManyDataInput {
+  name: String
+  prioridad: Int
+  coments: String
+  parent: Boolean
 }
 
 input TemaUpdateManyMutationInput {
   name: String
   prioridad: Int
   coments: String
+  parent: Boolean
+}
+
+input TemaUpdateManyWithoutHijosInput {
+  create: [TemaCreateWithoutHijosInput!]
+  delete: [TemaWhereUniqueInput!]
+  connect: [TemaWhereUniqueInput!]
+  set: [TemaWhereUniqueInput!]
+  disconnect: [TemaWhereUniqueInput!]
+  update: [TemaUpdateWithWhereUniqueWithoutHijosInput!]
+  upsert: [TemaUpsertWithWhereUniqueWithoutHijosInput!]
+  deleteMany: [TemaScalarWhereInput!]
+  updateMany: [TemaUpdateManyWithWhereNestedInput!]
+}
+
+input TemaUpdateManyWithWhereNestedInput {
+  where: TemaScalarWhereInput!
+  data: TemaUpdateManyDataInput!
 }
 
 input TemaUpdateOneInput {
@@ -799,9 +889,27 @@ input TemaUpdateOneInput {
   connect: TemaWhereUniqueInput
 }
 
+input TemaUpdateWithoutHijosDataInput {
+  name: String
+  prioridad: Int
+  coments: String
+  parent: Boolean
+}
+
+input TemaUpdateWithWhereUniqueWithoutHijosInput {
+  where: TemaWhereUniqueInput!
+  data: TemaUpdateWithoutHijosDataInput!
+}
+
 input TemaUpsertNestedInput {
   update: TemaUpdateDataInput!
   create: TemaCreateInput!
+}
+
+input TemaUpsertWithWhereUniqueWithoutHijosInput {
+  where: TemaWhereUniqueInput!
+  update: TemaUpdateWithoutHijosDataInput!
+  create: TemaCreateWithoutHijosInput!
 }
 
 input TemaWhereInput {
@@ -865,7 +973,11 @@ input TemaWhereInput {
   coments_not_starts_with: String
   coments_ends_with: String
   coments_not_ends_with: String
-  parent: TemaWhereInput
+  parent: Boolean
+  parent_not: Boolean
+  hijos_every: TemaWhereInput
+  hijos_some: TemaWhereInput
+  hijos_none: TemaWhereInput
   AND: [TemaWhereInput!]
   OR: [TemaWhereInput!]
   NOT: [TemaWhereInput!]
@@ -873,6 +985,103 @@ input TemaWhereInput {
 
 input TemaWhereUniqueInput {
   id: Int
+}
+
+type User {
+  id: ID!
+  name: String!
+}
+
+type UserConnection {
+  pageInfo: PageInfo!
+  edges: [UserEdge]!
+  aggregate: AggregateUser!
+}
+
+input UserCreateInput {
+  id: ID
+  name: String!
+}
+
+type UserEdge {
+  node: User!
+  cursor: String!
+}
+
+enum UserOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+}
+
+type UserPreviousValues {
+  id: ID!
+  name: String!
+}
+
+type UserSubscriptionPayload {
+  mutation: MutationType!
+  node: User
+  updatedFields: [String!]
+  previousValues: UserPreviousValues
+}
+
+input UserSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: UserWhereInput
+  AND: [UserSubscriptionWhereInput!]
+  OR: [UserSubscriptionWhereInput!]
+  NOT: [UserSubscriptionWhereInput!]
+}
+
+input UserUpdateInput {
+  name: String
+}
+
+input UserUpdateManyMutationInput {
+  name: String
+}
+
+input UserWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  NOT: [UserWhereInput!]
+}
+
+input UserWhereUniqueInput {
+  id: ID
 }
 `
       }
