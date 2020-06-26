@@ -86,17 +86,31 @@ export interface AllActoresQueryResponse {
 
 export const CREATE_ACTOR_MUTATION = gql`
   # 2
-  mutation createActorMutation($name:String!, $prioridad: Int!, $coments: String, $id: Int!){
+	mutation createActorMutation($name:String!, $prioridad: Int!, $coments: String){
     createActor(data:{
       name: $name,
       prioridad: $prioridad,
       coments: $coments,
       parent: false
     }){
+      id
       name
       prioridad
       coments
       parent
+    }
+  }
+`;
+
+export const CONNECT_ACTOR = gql`
+  mutation ConnectActorParent($idHijo: Int!, $idPadre: Int!){
+    updateActor(data:{
+      hijos: {connect:{id: $idHijo}}},
+      where: {id: $idPadre}
+    ){
+      name
+      prioridad
+      coments
     }
   }
 `;
@@ -196,6 +210,20 @@ export const CREATE_TEMA_MUTATION = gql`
       coments: $coments,
       parent: false
     }){
+      id
+      name
+      prioridad
+      coments
+    }
+  }
+`;
+
+export const CONNECT_TEMA = gql`
+  mutation ConnectTemaParent($idHijo: Int!, $idPadre: Int!){
+    updateTema(data:{
+      hijos: {connect:{id: $idHijo}}},
+      where: {id: $idPadre}
+    ){
       name
       prioridad
       coments

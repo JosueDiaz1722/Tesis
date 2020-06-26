@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild,Directive, Output, EventEmitter, Input, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { IDataOptions, IDataSet } from '@syncfusion/ej2-angular-pivotview';
-import {HIJO_TEMA_QUERY,PARENT_TEMA_QUERY, HIJO_ACTOR_QUERY,PARENT_ACTOR_QUERY, 
+import { ALL_ACTORES_QUERY,ALL_TEMAS_QUERY, 
   ALL_MATRIZ_QUERY, UPDATE_CELL_PRIORIDAD_MUTATION, DELETE_CELL_MUTATION, 
   CREATE_CELL_MUTATION,UPDATE_ESTADO_TEMA_MUTATION,UPDATE_ESTADO_ACTOR_MUTATION,
 ESTADO_QUERY,DELETE_ALL_MATRIZ_QUERY,UPDATE_CELL_TIEMPO_MUTATION} from '../graphql';
@@ -77,14 +77,14 @@ export class MatrizComponent implements OnInit, OnDestroy {
 
   datasource(){
     this.apollo.watchQuery({
-      query: PARENT_TEMA_QUERY
+      query: ALL_TEMAS_QUERY
     }).valueChanges.subscribe((response) => {
       this.ParentTemas = response.data['temas'];
       this.loading = response.loading;
     });
     
     this.apollo.watchQuery({
-      query: PARENT_ACTOR_QUERY
+      query: ALL_ACTORES_QUERY
     }).valueChanges.subscribe((response) => {
       this.ParentActor = response.data['actors'];
       this.loading = response.loading;
@@ -115,14 +115,14 @@ export class MatrizComponent implements OnInit, OnDestroy {
   
   childData(){
     this.apollo.watchQuery({
-      query: HIJO_TEMA_QUERY
+      query: ALL_TEMAS_QUERY
     }).valueChanges.subscribe((response) => {
       this.HijosTemas = response.data['temas'];
       this.loading = response.loading;
     }); 
 
     this.apollo.watchQuery({
-      query: HIJO_ACTOR_QUERY
+      query: ALL_ACTORES_QUERY
     }).valueChanges.subscribe((response) => {
       this.HijosActor = response.data['actors'];
       this.loading = response.loading;

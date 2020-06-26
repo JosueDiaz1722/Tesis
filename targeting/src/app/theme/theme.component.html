@@ -6,12 +6,12 @@
   <button mat-icon-button color="success" (click)="dataSource()">
       <mat-icon>refresh</mat-icon>
   </button>
-  <button mat-button (click)="openDialog('AddNew',{},null)" mat-flat-button color="primary">Nuevo Tema</button>   
+  <button mat-button (click)="openDialog('Crear Padre',{},null)" mat-flat-button color="primary">Nuevo Tema</button>   
 </div>
 <ejs-treegrid #treegrid 
 [dataSource]="allLinks" 
 [treeColumnIndex]= "1"
-idMapping ="id" parentIdMapping= "parent.id"
+idMapping ="id" childMapping= "hijos"
 [allowPaging]="true" 
 [pageSettings]="pageSettings" [allowSorting]="true" 
 [allowFiltering]="true" 
@@ -52,13 +52,13 @@ idMapping ="id" parentIdMapping= "parent.id"
       ></e-column>
       <e-column width="150"> 
           <ng-template #template let-data> 
-              <button mat-icon-button color="primary" (click)="openDialog('Add',{},data)" *ngIf="data.level == 0 || data.level == 1  || data.level == 2">
+              <button mat-icon-button color="primary" (click)="openDialog('Crear',{},data)" *ngIf="data.level == 0 || data.level == 1  || data.level == 2">
                   <mat-icon>person_add</mat-icon>
               </button>
-              <button mat-icon-button color="accent" (click)="openDialog('Update',data,data)">
+              <button mat-icon-button color="accent" (click)="openDialog('Editar',data,data)">
                   <mat-icon>edit</mat-icon>
               </button>
-              <button mat-icon-button color="warn" (click)="openDialog('Delete',data,data)">
+              <button mat-icon-button color="warn" (click)="openDialog('Eliminar',data,data)">
                   <mat-icon>delete</mat-icon>
               </button>
           </ng-template> 

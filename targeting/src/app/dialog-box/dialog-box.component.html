@@ -1,22 +1,22 @@
 
 <div id="modal">
-    <h1 mat-dialog-title>Row Action :: <strong>{{action}}</strong></h1>
+    <h1 mat-dialog-title><strong>{{action}}</strong></h1>
     <div mat-dialog-content>
-      <mat-form-field style="width:100%" *ngIf="action != 'Delete'; else elseTemplate">
-        <input   placeholder="{{action}} Nombre" matInput [(ngModel)]="local_data.name">
+      <mat-form-field style="width:100%" *ngIf="action != 'Eliminar'; else elseTemplate">
+        <input type="text" class="form-control" required placeholder="Nombre" matInput [(ngModel)]="local_data.name">
       </mat-form-field>
-      <mat-form-field style="width:100%" *ngIf="action != 'Delete';">
-        <input   placeholder="{{action}} Prioridad" matInput [(ngModel)]="local_data.prioridad">
+      <mat-form-field style="width:100%" *ngIf="action != 'Eliminar';">
+        <input type="number"  required min="0" max="4" placeholder="Prioridad" matInput [(ngModel)]="local_data.prioridad">
       </mat-form-field>
-      <mat-form-field style="width:100%" *ngIf="action != 'Delete';">
-        <input   placeholder="{{action}} Comentario" matInput [(ngModel)]="local_data.coments">
+      <mat-form-field  style="width:100%" *ngIf="action != 'Eliminar';">
+        <textarea matInput placeholder="Comentario" [(ngModel)]="local_data.coments"></textarea>
       </mat-form-field>
       <ng-template style="width:100%" #elseTemplate>
-        Sure to delete <b>{{local_data.nombre}}</b>?
+        Seguro que quiere eliminar a <b>{{local_data.name}}</b>?
       </ng-template>
     </div>
     <div mat-dialog-actions align = "center">
-      <button mat-button (click)="doAction()">{{action}}</button>
-      <button mat-button (click)="closeDialog()" mat-flat-button color="warn">Cancel</button>
+      <button mat-button [disabled]="!local_data.name  || !local_data.prioridad" (click)="doAction()" mat-flat-button color="primary">{{action}}</button>
+      <button mat-button (click)="closeDialog()" mat-flat-button color="warn">Cancelar</button>
     </div>    
 </div>

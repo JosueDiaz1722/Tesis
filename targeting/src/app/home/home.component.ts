@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import {Actor, Tema, Estado} from '../types';
 import {Apollo} from 'apollo-angular';
-import {PARENT_TEMA_QUERY,PARENT_ACTOR_QUERY, ESTADO_QUERY,CREATE_CELL_MUTATION,
+import {ALL_ACTORES_QUERY, ALL_TEMAS_QUERY, ESTADO_QUERY,CREATE_CELL_MUTATION,
   DELETE_ALL_MATRIZ_QUERY,
   UPDATE_ESTADO_ACTOR_MUTATION, UPDATE_ESTADO_TEMA_MUTATION} from '../graphql';
 import {Router} from "@angular/router";
@@ -21,14 +21,14 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.apollo.watchQuery({
-      query: PARENT_TEMA_QUERY
+      query: ALL_TEMAS_QUERY
     }).valueChanges.subscribe((response) => {
       this.ParentTemas = response.data['temas'];
       console.log(this.ParentTemas.length)
     });
     
     this.apollo.watchQuery({
-      query: PARENT_ACTOR_QUERY
+      query: ALL_ACTORES_QUERY
     }).valueChanges.subscribe((response) => {
       this.ParentActor = response.data['actors'];
       console.log(this.ParentActor.length);
@@ -199,7 +199,7 @@ export class HomeComponent implements OnInit {
   datasource(){
     this.apollo.watchQuery({
       fetchPolicy: 'cache-and-network',
-      query: PARENT_TEMA_QUERY
+      query: ALL_TEMAS_QUERY
     }).valueChanges.subscribe((response) => {
       this.ParentTemas = response.data['temas'];
       console.log(this.ParentTemas.length)
@@ -207,7 +207,7 @@ export class HomeComponent implements OnInit {
     
     this.apollo.watchQuery({
       fetchPolicy: 'cache-and-network',
-      query: PARENT_ACTOR_QUERY
+      query: ALL_ACTORES_QUERY
     }).valueChanges.subscribe((response) => {
       this.ParentActor = response.data['actors'];
       console.log(this.ParentActor.length);

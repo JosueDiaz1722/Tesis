@@ -8,11 +8,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageSettingsModel,EditSettingsModel,TreeGridComponent } from "@syncfusion/ej2-angular-treegrid";
 
 // 1
-import {DELETE_TEMA_MUTATION,UPDATE_TEMA_MUTATION,CREATE_TEMA_MUTATION, 
-  ALL_TEMAS_QUERY, CREATE_NEW_TEMA_MUTATION,DELETE_HIJO_TEMA_MUTATION,
+import { DELETE_TEMA_MUTATION,UPDATE_TEMA_MUTATION,CREATE_TEMA_MUTATION, 
+  ALL_TEMAS_QUERY, CREATE_NEW_TEMA_MUTATION, CONNECT_TEMA,
   ESTADO_QUERY, DELETE_TEMA_CELL_MUTATION, UPDATE_ESTADO_TEMA_MUTATION,
-  PARENT_TEMA_QUERY,
-  DELETE_HIJO_ACTOR_MUTATION} from '../graphql';
+  } from '../graphql';
 
 /**
  * @title Table with expandable rows
@@ -50,8 +49,6 @@ export class ThemeComponent {
       this.allLinks = response.data['temas'];
       this.loading = response.loading;
      });
-      
-
      this.pageSettings = {pageSize: 12};
       this.editSettings =  {
         allowEditing: true,
@@ -68,10 +65,9 @@ export class ThemeComponent {
           query: ESTADO_QUERY
         }).valueChanges.subscribe((response) => {
           this.Estado = response.data['estadoes'];
-          console.log(this.Estado[0].id);
         });
         this.apollo.watchQuery({
-          query: PARENT_TEMA_QUERY
+          query: ALL_TEMAS_QUERY
         }).valueChanges.subscribe((response) => {
           this.ParentTemas = response.data['temas'];
           this.loading = response.loading;
@@ -93,14 +89,14 @@ export class ThemeComponent {
     });
  
     dialogRef.afterClosed().subscribe(result => {
-      if(result.event == 'Add'){
+      if(result.event == 'Crear'){
         this.treegrid.editSettings.newRowPosition ="Child"
         this.addRowData(result.data,data);
-      }else if(result.event == 'Update'){
+      }else if(result.event == 'Editar'){
         this.updateRowData(result.data);
-      }else if(result.event == 'Delete'){
+      }else if(result.event == 'Eliminar'){
         this.deleteRowData(result.data);
-      }else if(result.event == 'AddNew'){
+      }else if(result.event == 'Crear Padre'){
         this.treegrid.editSettings.newRowPosition ="Bottom"
         this.addNewData(result.data);
       } 
@@ -120,7 +116,7 @@ export class ThemeComponent {
   parents(){
     this.apollo.watchQuery({
       fetchPolicy: 'cache-and-network', 
-      query: PARENT_TEMA_QUERY
+      query: ALL_TEMAS_QUERY
     }).valueChanges.subscribe((response) => {
       this.ParentTemas = response.data['temas'];
      }); 
@@ -132,10 +128,18 @@ export class ThemeComponent {
        name: row_obj.name,
        prioridad: parseInt(row_obj.prioridad),
        coments: row_obj.coments,
-       id: data.id
       }
     }).subscribe((response) => {
-        this.dataSource();
+        let tema = response.data['createTema'];
+        this.apollo.mutate({
+          mutation: CONNECT_TEMA,
+          variables: {
+            idHijo: parseInt(tema.id),
+            idPadre: parseInt(data.id),
+          }
+        }).subscribe((response) => {
+          this.dataSource();
+        });
     });
   }
 
@@ -150,19 +154,6 @@ export class ThemeComponent {
     }).subscribe((response) => {
         this.dataSource();
     });
-
-    
-    var childRow = {
-      taskId: row_obj.id,
-        taskName: row_obj.nombre,
-        startDate: new Date("02/03/1994"),
-        endDate: new Date("02/07/2012"),
-        progress: 100,
-        duration: row_obj.prioridad,
-        priority: row_obj.comentario,
-        approved: false,
-        isInExpandState: true,
-    };
   }
 
   updateRowData(row_obj){
@@ -175,52 +166,19 @@ export class ThemeComponent {
        id: parseInt(row_obj.id)
       }
     }).subscribe((response) => {
-        console.log(response)
         this.dataSource();
     });
   }
   
   deleteRowData(row_obj){
-    let estado = this.ParentTemas.length-1;
-    console.log(estado);
     this.apollo.mutate({
-      mutation: DELETE_HIJO_ACTOR_MUTATION,
+      mutation: DELETE_TEMA_MUTATION,
       variables: {
-       id: parseInt(row_obj.id)
+      id: parseInt(row_obj.id)
       }
     }).subscribe((response) => {
-      this.apollo.mutate({
-        mutation: DELETE_TEMA_CELL_MUTATION,
-        variables: {
-         id: parseInt(row_obj.id),
-        }
-      }).subscribe((response) => {
-        this.apollo.mutate({
-          mutation: DELETE_TEMA_MUTATION,
-          variables: {
-           id: parseInt(row_obj.id)
-          }
-        }).subscribe((response) => {
-          if(row_obj.parent == null){
-            console.log("entro al if");
-            this.apollo.mutate({
-            mutation: UPDATE_ESTADO_TEMA_MUTATION,
-            variables: {
-             id: this.Estado[0].id,
-             NumActor: estado,
-            }
-          }).subscribe((response) => {
-              console.log(response);
-              this.dataSource();
-              this.parents();
-          });
-          }else{
-            this.dataSource();
-          }
-          
-        });
-      });     
-    });
+      this.dataSource(); 
+    });   
   }
   
 }
