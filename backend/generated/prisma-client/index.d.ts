@@ -17,6 +17,7 @@ export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
   actor: (where?: ActorWhereInput) => Promise<boolean>;
+  celda: (where?: CeldaWhereInput) => Promise<boolean>;
   estado: (where?: EstadoWhereInput) => Promise<boolean>;
   matriz: (where?: MatrizWhereInput) => Promise<boolean>;
   tema: (where?: TemaWhereInput) => Promise<boolean>;
@@ -61,6 +62,25 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => ActorConnectionPromise;
+  celda: (where: CeldaWhereUniqueInput) => CeldaNullablePromise;
+  celdas: (args?: {
+    where?: CeldaWhereInput;
+    orderBy?: CeldaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Celda>;
+  celdasConnection: (args?: {
+    where?: CeldaWhereInput;
+    orderBy?: CeldaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => CeldaConnectionPromise;
   estado: (where: EstadoWhereUniqueInput) => EstadoNullablePromise;
   estadoes: (args?: {
     where?: EstadoWhereInput;
@@ -159,6 +179,22 @@ export interface Prisma {
   }) => ActorPromise;
   deleteActor: (where: ActorWhereUniqueInput) => ActorPromise;
   deleteManyActors: (where?: ActorWhereInput) => BatchPayloadPromise;
+  createCelda: (data: CeldaCreateInput) => CeldaPromise;
+  updateCelda: (args: {
+    data: CeldaUpdateInput;
+    where: CeldaWhereUniqueInput;
+  }) => CeldaPromise;
+  updateManyCeldas: (args: {
+    data: CeldaUpdateManyMutationInput;
+    where?: CeldaWhereInput;
+  }) => BatchPayloadPromise;
+  upsertCelda: (args: {
+    where: CeldaWhereUniqueInput;
+    create: CeldaCreateInput;
+    update: CeldaUpdateInput;
+  }) => CeldaPromise;
+  deleteCelda: (where: CeldaWhereUniqueInput) => CeldaPromise;
+  deleteManyCeldas: (where?: CeldaWhereInput) => BatchPayloadPromise;
   createEstado: (data: EstadoCreateInput) => EstadoPromise;
   updateEstado: (args: {
     data: EstadoUpdateInput;
@@ -180,10 +216,6 @@ export interface Prisma {
     data: MatrizUpdateInput;
     where: MatrizWhereUniqueInput;
   }) => MatrizPromise;
-  updateManyMatrizes: (args: {
-    data: MatrizUpdateManyMutationInput;
-    where?: MatrizWhereInput;
-  }) => BatchPayloadPromise;
   upsertMatriz: (args: {
     where: MatrizWhereUniqueInput;
     create: MatrizCreateInput;
@@ -235,6 +267,9 @@ export interface Subscription {
   actor: (
     where?: ActorSubscriptionWhereInput
   ) => ActorSubscriptionPayloadSubscription;
+  celda: (
+    where?: CeldaSubscriptionWhereInput
+  ) => CeldaSubscriptionPayloadSubscription;
   estado: (
     where?: EstadoSubscriptionWhereInput
   ) => EstadoSubscriptionPayloadSubscription;
@@ -273,13 +308,19 @@ export type ActorOrderByInput =
   | "parent_ASC"
   | "parent_DESC";
 
-export type EstadoOrderByInput =
+export type CeldaOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "NumActor_ASC"
-  | "NumActor_DESC"
-  | "NumTemas_ASC"
-  | "NumTemas_DESC";
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "prioridad_ASC"
+  | "prioridad_DESC"
+  | "tiempo_ASC"
+  | "tiempo_DESC"
+  | "coment_ASC"
+  | "coment_DESC";
 
 export type TemaOrderByInput =
   | "id_ASC"
@@ -297,19 +338,21 @@ export type TemaOrderByInput =
   | "parent_ASC"
   | "parent_DESC";
 
+export type EstadoOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "NumActor_ASC"
+  | "NumActor_DESC"
+  | "NumTemas_ASC"
+  | "NumTemas_DESC";
+
 export type MatrizOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
-  | "updatedAt_DESC"
-  | "prioridad_ASC"
-  | "prioridad_DESC"
-  | "tiempo_ASC"
-  | "tiempo_DESC"
-  | "coment_ASC"
-  | "coment_DESC";
+  | "updatedAt_DESC";
 
 export type UserOrderByInput = "id_ASC" | "id_DESC" | "name_ASC" | "name_DESC";
 
@@ -385,16 +428,15 @@ export interface ActorWhereInput {
   hijos_every?: Maybe<ActorWhereInput>;
   hijos_some?: Maybe<ActorWhereInput>;
   hijos_none?: Maybe<ActorWhereInput>;
+  celdas_every?: Maybe<CeldaWhereInput>;
+  celdas_some?: Maybe<CeldaWhereInput>;
+  celdas_none?: Maybe<CeldaWhereInput>;
   AND?: Maybe<ActorWhereInput[] | ActorWhereInput>;
   OR?: Maybe<ActorWhereInput[] | ActorWhereInput>;
   NOT?: Maybe<ActorWhereInput[] | ActorWhereInput>;
 }
 
-export type EstadoWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export interface EstadoWhereInput {
+export interface CeldaWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -409,30 +451,59 @@ export interface EstadoWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  NumActor?: Maybe<Int>;
-  NumActor_not?: Maybe<Int>;
-  NumActor_in?: Maybe<Int[] | Int>;
-  NumActor_not_in?: Maybe<Int[] | Int>;
-  NumActor_lt?: Maybe<Int>;
-  NumActor_lte?: Maybe<Int>;
-  NumActor_gt?: Maybe<Int>;
-  NumActor_gte?: Maybe<Int>;
-  NumTemas?: Maybe<Int>;
-  NumTemas_not?: Maybe<Int>;
-  NumTemas_in?: Maybe<Int[] | Int>;
-  NumTemas_not_in?: Maybe<Int[] | Int>;
-  NumTemas_lt?: Maybe<Int>;
-  NumTemas_lte?: Maybe<Int>;
-  NumTemas_gt?: Maybe<Int>;
-  NumTemas_gte?: Maybe<Int>;
-  AND?: Maybe<EstadoWhereInput[] | EstadoWhereInput>;
-  OR?: Maybe<EstadoWhereInput[] | EstadoWhereInput>;
-  NOT?: Maybe<EstadoWhereInput[] | EstadoWhereInput>;
+  TemaParent?: Maybe<TemaWhereInput>;
+  ActorParent?: Maybe<ActorWhereInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  prioridad?: Maybe<Int>;
+  prioridad_not?: Maybe<Int>;
+  prioridad_in?: Maybe<Int[] | Int>;
+  prioridad_not_in?: Maybe<Int[] | Int>;
+  prioridad_lt?: Maybe<Int>;
+  prioridad_lte?: Maybe<Int>;
+  prioridad_gt?: Maybe<Int>;
+  prioridad_gte?: Maybe<Int>;
+  tiempo?: Maybe<Int>;
+  tiempo_not?: Maybe<Int>;
+  tiempo_in?: Maybe<Int[] | Int>;
+  tiempo_not_in?: Maybe<Int[] | Int>;
+  tiempo_lt?: Maybe<Int>;
+  tiempo_lte?: Maybe<Int>;
+  tiempo_gt?: Maybe<Int>;
+  tiempo_gte?: Maybe<Int>;
+  coment?: Maybe<String>;
+  coment_not?: Maybe<String>;
+  coment_in?: Maybe<String[] | String>;
+  coment_not_in?: Maybe<String[] | String>;
+  coment_lt?: Maybe<String>;
+  coment_lte?: Maybe<String>;
+  coment_gt?: Maybe<String>;
+  coment_gte?: Maybe<String>;
+  coment_contains?: Maybe<String>;
+  coment_not_contains?: Maybe<String>;
+  coment_starts_with?: Maybe<String>;
+  coment_not_starts_with?: Maybe<String>;
+  coment_ends_with?: Maybe<String>;
+  coment_not_ends_with?: Maybe<String>;
+  matriz?: Maybe<MatrizWhereInput>;
+  AND?: Maybe<CeldaWhereInput[] | CeldaWhereInput>;
+  OR?: Maybe<CeldaWhereInput[] | CeldaWhereInput>;
+  NOT?: Maybe<CeldaWhereInput[] | CeldaWhereInput>;
 }
-
-export type MatrizWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
 
 export interface TemaWhereInput {
   id?: Maybe<Int>;
@@ -500,6 +571,9 @@ export interface TemaWhereInput {
   hijos_every?: Maybe<TemaWhereInput>;
   hijos_some?: Maybe<TemaWhereInput>;
   hijos_none?: Maybe<TemaWhereInput>;
+  celdas_every?: Maybe<CeldaWhereInput>;
+  celdas_some?: Maybe<CeldaWhereInput>;
+  celdas_none?: Maybe<CeldaWhereInput>;
   AND?: Maybe<TemaWhereInput[] | TemaWhereInput>;
   OR?: Maybe<TemaWhereInput[] | TemaWhereInput>;
   NOT?: Maybe<TemaWhereInput[] | TemaWhereInput>;
@@ -520,8 +594,606 @@ export interface MatrizWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  TemaParent?: Maybe<TemaWhereInput>;
-  ActorParent?: Maybe<ActorWhereInput>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  User?: Maybe<UserWhereInput>;
+  Actores_every?: Maybe<ActorWhereInput>;
+  Actores_some?: Maybe<ActorWhereInput>;
+  Actores_none?: Maybe<ActorWhereInput>;
+  Temas_every?: Maybe<TemaWhereInput>;
+  Temas_some?: Maybe<TemaWhereInput>;
+  Temas_none?: Maybe<TemaWhereInput>;
+  Celdas_every?: Maybe<CeldaWhereInput>;
+  Celdas_some?: Maybe<CeldaWhereInput>;
+  Celdas_none?: Maybe<CeldaWhereInput>;
+  AND?: Maybe<MatrizWhereInput[] | MatrizWhereInput>;
+  OR?: Maybe<MatrizWhereInput[] | MatrizWhereInput>;
+  NOT?: Maybe<MatrizWhereInput[] | MatrizWhereInput>;
+}
+
+export interface UserWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  AND?: Maybe<UserWhereInput[] | UserWhereInput>;
+  OR?: Maybe<UserWhereInput[] | UserWhereInput>;
+  NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
+}
+
+export type CeldaWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export type EstadoWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface EstadoWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  NumActor?: Maybe<Int>;
+  NumActor_not?: Maybe<Int>;
+  NumActor_in?: Maybe<Int[] | Int>;
+  NumActor_not_in?: Maybe<Int[] | Int>;
+  NumActor_lt?: Maybe<Int>;
+  NumActor_lte?: Maybe<Int>;
+  NumActor_gt?: Maybe<Int>;
+  NumActor_gte?: Maybe<Int>;
+  NumTemas?: Maybe<Int>;
+  NumTemas_not?: Maybe<Int>;
+  NumTemas_in?: Maybe<Int[] | Int>;
+  NumTemas_not_in?: Maybe<Int[] | Int>;
+  NumTemas_lt?: Maybe<Int>;
+  NumTemas_lte?: Maybe<Int>;
+  NumTemas_gt?: Maybe<Int>;
+  NumTemas_gte?: Maybe<Int>;
+  AND?: Maybe<EstadoWhereInput[] | EstadoWhereInput>;
+  OR?: Maybe<EstadoWhereInput[] | EstadoWhereInput>;
+  NOT?: Maybe<EstadoWhereInput[] | EstadoWhereInput>;
+}
+
+export type MatrizWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export type TemaWhereUniqueInput = AtLeastOne<{
+  id: Maybe<Int>;
+}>;
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
+export interface ActorCreateInput {
+  name: String;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  hijos?: Maybe<ActorCreateManyInput>;
+  celdas?: Maybe<CeldaCreateManyWithoutActorParentInput>;
+}
+
+export interface ActorCreateManyInput {
+  create?: Maybe<ActorCreateInput[] | ActorCreateInput>;
+  connect?: Maybe<ActorWhereUniqueInput[] | ActorWhereUniqueInput>;
+}
+
+export interface CeldaCreateManyWithoutActorParentInput {
+  create?: Maybe<
+    CeldaCreateWithoutActorParentInput[] | CeldaCreateWithoutActorParentInput
+  >;
+  connect?: Maybe<CeldaWhereUniqueInput[] | CeldaWhereUniqueInput>;
+}
+
+export interface CeldaCreateWithoutActorParentInput {
+  id?: Maybe<ID_Input>;
+  TemaParent: TemaCreateOneWithoutCeldasInput;
+  prioridad?: Maybe<Int>;
+  tiempo?: Maybe<Int>;
+  coment?: Maybe<String>;
+  matriz: MatrizCreateOneWithoutCeldasInput;
+}
+
+export interface TemaCreateOneWithoutCeldasInput {
+  create?: Maybe<TemaCreateWithoutCeldasInput>;
+  connect?: Maybe<TemaWhereUniqueInput>;
+}
+
+export interface TemaCreateWithoutCeldasInput {
+  name: String;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  hijos?: Maybe<TemaCreateManyWithoutHijosInput>;
+}
+
+export interface TemaCreateManyWithoutHijosInput {
+  create?: Maybe<TemaCreateWithoutHijosInput[] | TemaCreateWithoutHijosInput>;
+  connect?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+}
+
+export interface TemaCreateWithoutHijosInput {
+  name: String;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  celdas?: Maybe<CeldaCreateManyWithoutTemaParentInput>;
+}
+
+export interface CeldaCreateManyWithoutTemaParentInput {
+  create?: Maybe<
+    CeldaCreateWithoutTemaParentInput[] | CeldaCreateWithoutTemaParentInput
+  >;
+  connect?: Maybe<CeldaWhereUniqueInput[] | CeldaWhereUniqueInput>;
+}
+
+export interface CeldaCreateWithoutTemaParentInput {
+  id?: Maybe<ID_Input>;
+  ActorParent: ActorCreateOneWithoutCeldasInput;
+  prioridad?: Maybe<Int>;
+  tiempo?: Maybe<Int>;
+  coment?: Maybe<String>;
+  matriz: MatrizCreateOneWithoutCeldasInput;
+}
+
+export interface ActorCreateOneWithoutCeldasInput {
+  create?: Maybe<ActorCreateWithoutCeldasInput>;
+  connect?: Maybe<ActorWhereUniqueInput>;
+}
+
+export interface ActorCreateWithoutCeldasInput {
+  name: String;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  hijos?: Maybe<ActorCreateManyInput>;
+}
+
+export interface MatrizCreateOneWithoutCeldasInput {
+  create?: Maybe<MatrizCreateWithoutCeldasInput>;
+  connect?: Maybe<MatrizWhereUniqueInput>;
+}
+
+export interface MatrizCreateWithoutCeldasInput {
+  id?: Maybe<ID_Input>;
+  User?: Maybe<UserCreateOneInput>;
+  Actores?: Maybe<ActorCreateManyInput>;
+  Temas?: Maybe<TemaCreateManyInput>;
+}
+
+export interface UserCreateOneInput {
+  create?: Maybe<UserCreateInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+}
+
+export interface TemaCreateManyInput {
+  create?: Maybe<TemaCreateInput[] | TemaCreateInput>;
+  connect?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+}
+
+export interface TemaCreateInput {
+  name: String;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  hijos?: Maybe<TemaCreateManyWithoutHijosInput>;
+  celdas?: Maybe<CeldaCreateManyWithoutTemaParentInput>;
+}
+
+export interface ActorUpdateInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  hijos?: Maybe<ActorUpdateManyInput>;
+  celdas?: Maybe<CeldaUpdateManyWithoutActorParentInput>;
+}
+
+export interface ActorUpdateManyInput {
+  create?: Maybe<ActorCreateInput[] | ActorCreateInput>;
+  update?: Maybe<
+    | ActorUpdateWithWhereUniqueNestedInput[]
+    | ActorUpdateWithWhereUniqueNestedInput
+  >;
+  upsert?: Maybe<
+    | ActorUpsertWithWhereUniqueNestedInput[]
+    | ActorUpsertWithWhereUniqueNestedInput
+  >;
+  delete?: Maybe<ActorWhereUniqueInput[] | ActorWhereUniqueInput>;
+  connect?: Maybe<ActorWhereUniqueInput[] | ActorWhereUniqueInput>;
+  set?: Maybe<ActorWhereUniqueInput[] | ActorWhereUniqueInput>;
+  disconnect?: Maybe<ActorWhereUniqueInput[] | ActorWhereUniqueInput>;
+  deleteMany?: Maybe<ActorScalarWhereInput[] | ActorScalarWhereInput>;
+  updateMany?: Maybe<
+    ActorUpdateManyWithWhereNestedInput[] | ActorUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface ActorUpdateWithWhereUniqueNestedInput {
+  where: ActorWhereUniqueInput;
+  data: ActorUpdateDataInput;
+}
+
+export interface ActorUpdateDataInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  hijos?: Maybe<ActorUpdateManyInput>;
+  celdas?: Maybe<CeldaUpdateManyWithoutActorParentInput>;
+}
+
+export interface CeldaUpdateManyWithoutActorParentInput {
+  create?: Maybe<
+    CeldaCreateWithoutActorParentInput[] | CeldaCreateWithoutActorParentInput
+  >;
+  delete?: Maybe<CeldaWhereUniqueInput[] | CeldaWhereUniqueInput>;
+  connect?: Maybe<CeldaWhereUniqueInput[] | CeldaWhereUniqueInput>;
+  set?: Maybe<CeldaWhereUniqueInput[] | CeldaWhereUniqueInput>;
+  disconnect?: Maybe<CeldaWhereUniqueInput[] | CeldaWhereUniqueInput>;
+  update?: Maybe<
+    | CeldaUpdateWithWhereUniqueWithoutActorParentInput[]
+    | CeldaUpdateWithWhereUniqueWithoutActorParentInput
+  >;
+  upsert?: Maybe<
+    | CeldaUpsertWithWhereUniqueWithoutActorParentInput[]
+    | CeldaUpsertWithWhereUniqueWithoutActorParentInput
+  >;
+  deleteMany?: Maybe<CeldaScalarWhereInput[] | CeldaScalarWhereInput>;
+  updateMany?: Maybe<
+    CeldaUpdateManyWithWhereNestedInput[] | CeldaUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface CeldaUpdateWithWhereUniqueWithoutActorParentInput {
+  where: CeldaWhereUniqueInput;
+  data: CeldaUpdateWithoutActorParentDataInput;
+}
+
+export interface CeldaUpdateWithoutActorParentDataInput {
+  TemaParent?: Maybe<TemaUpdateOneRequiredWithoutCeldasInput>;
+  prioridad?: Maybe<Int>;
+  tiempo?: Maybe<Int>;
+  coment?: Maybe<String>;
+  matriz?: Maybe<MatrizUpdateOneRequiredWithoutCeldasInput>;
+}
+
+export interface TemaUpdateOneRequiredWithoutCeldasInput {
+  create?: Maybe<TemaCreateWithoutCeldasInput>;
+  update?: Maybe<TemaUpdateWithoutCeldasDataInput>;
+  upsert?: Maybe<TemaUpsertWithoutCeldasInput>;
+  connect?: Maybe<TemaWhereUniqueInput>;
+}
+
+export interface TemaUpdateWithoutCeldasDataInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  hijos?: Maybe<TemaUpdateManyWithoutHijosInput>;
+}
+
+export interface TemaUpdateManyWithoutHijosInput {
+  create?: Maybe<TemaCreateWithoutHijosInput[] | TemaCreateWithoutHijosInput>;
+  delete?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+  connect?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+  set?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+  disconnect?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+  update?: Maybe<
+    | TemaUpdateWithWhereUniqueWithoutHijosInput[]
+    | TemaUpdateWithWhereUniqueWithoutHijosInput
+  >;
+  upsert?: Maybe<
+    | TemaUpsertWithWhereUniqueWithoutHijosInput[]
+    | TemaUpsertWithWhereUniqueWithoutHijosInput
+  >;
+  deleteMany?: Maybe<TemaScalarWhereInput[] | TemaScalarWhereInput>;
+  updateMany?: Maybe<
+    TemaUpdateManyWithWhereNestedInput[] | TemaUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface TemaUpdateWithWhereUniqueWithoutHijosInput {
+  where: TemaWhereUniqueInput;
+  data: TemaUpdateWithoutHijosDataInput;
+}
+
+export interface TemaUpdateWithoutHijosDataInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  celdas?: Maybe<CeldaUpdateManyWithoutTemaParentInput>;
+}
+
+export interface CeldaUpdateManyWithoutTemaParentInput {
+  create?: Maybe<
+    CeldaCreateWithoutTemaParentInput[] | CeldaCreateWithoutTemaParentInput
+  >;
+  delete?: Maybe<CeldaWhereUniqueInput[] | CeldaWhereUniqueInput>;
+  connect?: Maybe<CeldaWhereUniqueInput[] | CeldaWhereUniqueInput>;
+  set?: Maybe<CeldaWhereUniqueInput[] | CeldaWhereUniqueInput>;
+  disconnect?: Maybe<CeldaWhereUniqueInput[] | CeldaWhereUniqueInput>;
+  update?: Maybe<
+    | CeldaUpdateWithWhereUniqueWithoutTemaParentInput[]
+    | CeldaUpdateWithWhereUniqueWithoutTemaParentInput
+  >;
+  upsert?: Maybe<
+    | CeldaUpsertWithWhereUniqueWithoutTemaParentInput[]
+    | CeldaUpsertWithWhereUniqueWithoutTemaParentInput
+  >;
+  deleteMany?: Maybe<CeldaScalarWhereInput[] | CeldaScalarWhereInput>;
+  updateMany?: Maybe<
+    CeldaUpdateManyWithWhereNestedInput[] | CeldaUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface CeldaUpdateWithWhereUniqueWithoutTemaParentInput {
+  where: CeldaWhereUniqueInput;
+  data: CeldaUpdateWithoutTemaParentDataInput;
+}
+
+export interface CeldaUpdateWithoutTemaParentDataInput {
+  ActorParent?: Maybe<ActorUpdateOneRequiredWithoutCeldasInput>;
+  prioridad?: Maybe<Int>;
+  tiempo?: Maybe<Int>;
+  coment?: Maybe<String>;
+  matriz?: Maybe<MatrizUpdateOneRequiredWithoutCeldasInput>;
+}
+
+export interface ActorUpdateOneRequiredWithoutCeldasInput {
+  create?: Maybe<ActorCreateWithoutCeldasInput>;
+  update?: Maybe<ActorUpdateWithoutCeldasDataInput>;
+  upsert?: Maybe<ActorUpsertWithoutCeldasInput>;
+  connect?: Maybe<ActorWhereUniqueInput>;
+}
+
+export interface ActorUpdateWithoutCeldasDataInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  hijos?: Maybe<ActorUpdateManyInput>;
+}
+
+export interface ActorUpsertWithoutCeldasInput {
+  update: ActorUpdateWithoutCeldasDataInput;
+  create: ActorCreateWithoutCeldasInput;
+}
+
+export interface MatrizUpdateOneRequiredWithoutCeldasInput {
+  create?: Maybe<MatrizCreateWithoutCeldasInput>;
+  update?: Maybe<MatrizUpdateWithoutCeldasDataInput>;
+  upsert?: Maybe<MatrizUpsertWithoutCeldasInput>;
+  connect?: Maybe<MatrizWhereUniqueInput>;
+}
+
+export interface MatrizUpdateWithoutCeldasDataInput {
+  User?: Maybe<UserUpdateOneInput>;
+  Actores?: Maybe<ActorUpdateManyInput>;
+  Temas?: Maybe<TemaUpdateManyInput>;
+}
+
+export interface UserUpdateOneInput {
+  create?: Maybe<UserCreateInput>;
+  update?: Maybe<UserUpdateDataInput>;
+  upsert?: Maybe<UserUpsertNestedInput>;
+  delete?: Maybe<Boolean>;
+  disconnect?: Maybe<Boolean>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateDataInput {
+  name?: Maybe<String>;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface TemaUpdateManyInput {
+  create?: Maybe<TemaCreateInput[] | TemaCreateInput>;
+  update?: Maybe<
+    | TemaUpdateWithWhereUniqueNestedInput[]
+    | TemaUpdateWithWhereUniqueNestedInput
+  >;
+  upsert?: Maybe<
+    | TemaUpsertWithWhereUniqueNestedInput[]
+    | TemaUpsertWithWhereUniqueNestedInput
+  >;
+  delete?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+  connect?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+  set?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+  disconnect?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+  deleteMany?: Maybe<TemaScalarWhereInput[] | TemaScalarWhereInput>;
+  updateMany?: Maybe<
+    TemaUpdateManyWithWhereNestedInput[] | TemaUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface TemaUpdateWithWhereUniqueNestedInput {
+  where: TemaWhereUniqueInput;
+  data: TemaUpdateDataInput;
+}
+
+export interface TemaUpdateDataInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  hijos?: Maybe<TemaUpdateManyWithoutHijosInput>;
+  celdas?: Maybe<CeldaUpdateManyWithoutTemaParentInput>;
+}
+
+export interface TemaUpsertWithWhereUniqueNestedInput {
+  where: TemaWhereUniqueInput;
+  update: TemaUpdateDataInput;
+  create: TemaCreateInput;
+}
+
+export interface TemaScalarWhereInput {
+  id?: Maybe<Int>;
+  id_not?: Maybe<Int>;
+  id_in?: Maybe<Int[] | Int>;
+  id_not_in?: Maybe<Int[] | Int>;
+  id_lt?: Maybe<Int>;
+  id_lte?: Maybe<Int>;
+  id_gt?: Maybe<Int>;
+  id_gte?: Maybe<Int>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  prioridad_not?: Maybe<Int>;
+  prioridad_in?: Maybe<Int[] | Int>;
+  prioridad_not_in?: Maybe<Int[] | Int>;
+  prioridad_lt?: Maybe<Int>;
+  prioridad_lte?: Maybe<Int>;
+  prioridad_gt?: Maybe<Int>;
+  prioridad_gte?: Maybe<Int>;
+  coments?: Maybe<String>;
+  coments_not?: Maybe<String>;
+  coments_in?: Maybe<String[] | String>;
+  coments_not_in?: Maybe<String[] | String>;
+  coments_lt?: Maybe<String>;
+  coments_lte?: Maybe<String>;
+  coments_gt?: Maybe<String>;
+  coments_gte?: Maybe<String>;
+  coments_contains?: Maybe<String>;
+  coments_not_contains?: Maybe<String>;
+  coments_starts_with?: Maybe<String>;
+  coments_not_starts_with?: Maybe<String>;
+  coments_ends_with?: Maybe<String>;
+  coments_not_ends_with?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+  parent_not?: Maybe<Boolean>;
+  AND?: Maybe<TemaScalarWhereInput[] | TemaScalarWhereInput>;
+  OR?: Maybe<TemaScalarWhereInput[] | TemaScalarWhereInput>;
+  NOT?: Maybe<TemaScalarWhereInput[] | TemaScalarWhereInput>;
+}
+
+export interface TemaUpdateManyWithWhereNestedInput {
+  where: TemaScalarWhereInput;
+  data: TemaUpdateManyDataInput;
+}
+
+export interface TemaUpdateManyDataInput {
+  name?: Maybe<String>;
+  prioridad?: Maybe<Int>;
+  coments?: Maybe<String>;
+  parent?: Maybe<Boolean>;
+}
+
+export interface MatrizUpsertWithoutCeldasInput {
+  update: MatrizUpdateWithoutCeldasDataInput;
+  create: MatrizCreateWithoutCeldasInput;
+}
+
+export interface CeldaUpsertWithWhereUniqueWithoutTemaParentInput {
+  where: CeldaWhereUniqueInput;
+  update: CeldaUpdateWithoutTemaParentDataInput;
+  create: CeldaCreateWithoutTemaParentInput;
+}
+
+export interface CeldaScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -568,105 +1240,37 @@ export interface MatrizWhereInput {
   coment_not_starts_with?: Maybe<String>;
   coment_ends_with?: Maybe<String>;
   coment_not_ends_with?: Maybe<String>;
-  AND?: Maybe<MatrizWhereInput[] | MatrizWhereInput>;
-  OR?: Maybe<MatrizWhereInput[] | MatrizWhereInput>;
-  NOT?: Maybe<MatrizWhereInput[] | MatrizWhereInput>;
+  AND?: Maybe<CeldaScalarWhereInput[] | CeldaScalarWhereInput>;
+  OR?: Maybe<CeldaScalarWhereInput[] | CeldaScalarWhereInput>;
+  NOT?: Maybe<CeldaScalarWhereInput[] | CeldaScalarWhereInput>;
 }
 
-export type TemaWhereUniqueInput = AtLeastOne<{
-  id: Maybe<Int>;
-}>;
-
-export type UserWhereUniqueInput = AtLeastOne<{
-  id: Maybe<ID_Input>;
-}>;
-
-export interface UserWhereInput {
-  id?: Maybe<ID_Input>;
-  id_not?: Maybe<ID_Input>;
-  id_in?: Maybe<ID_Input[] | ID_Input>;
-  id_not_in?: Maybe<ID_Input[] | ID_Input>;
-  id_lt?: Maybe<ID_Input>;
-  id_lte?: Maybe<ID_Input>;
-  id_gt?: Maybe<ID_Input>;
-  id_gte?: Maybe<ID_Input>;
-  id_contains?: Maybe<ID_Input>;
-  id_not_contains?: Maybe<ID_Input>;
-  id_starts_with?: Maybe<ID_Input>;
-  id_not_starts_with?: Maybe<ID_Input>;
-  id_ends_with?: Maybe<ID_Input>;
-  id_not_ends_with?: Maybe<ID_Input>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  AND?: Maybe<UserWhereInput[] | UserWhereInput>;
-  OR?: Maybe<UserWhereInput[] | UserWhereInput>;
-  NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
+export interface CeldaUpdateManyWithWhereNestedInput {
+  where: CeldaScalarWhereInput;
+  data: CeldaUpdateManyDataInput;
 }
 
-export interface ActorCreateInput {
-  name: String;
+export interface CeldaUpdateManyDataInput {
   prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<Boolean>;
-  hijos?: Maybe<ActorCreateManyInput>;
+  tiempo?: Maybe<Int>;
+  coment?: Maybe<String>;
 }
 
-export interface ActorCreateManyInput {
-  create?: Maybe<ActorCreateInput[] | ActorCreateInput>;
-  connect?: Maybe<ActorWhereUniqueInput[] | ActorWhereUniqueInput>;
+export interface TemaUpsertWithWhereUniqueWithoutHijosInput {
+  where: TemaWhereUniqueInput;
+  update: TemaUpdateWithoutHijosDataInput;
+  create: TemaCreateWithoutHijosInput;
 }
 
-export interface ActorUpdateInput {
-  name?: Maybe<String>;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<Boolean>;
-  hijos?: Maybe<ActorUpdateManyInput>;
+export interface TemaUpsertWithoutCeldasInput {
+  update: TemaUpdateWithoutCeldasDataInput;
+  create: TemaCreateWithoutCeldasInput;
 }
 
-export interface ActorUpdateManyInput {
-  create?: Maybe<ActorCreateInput[] | ActorCreateInput>;
-  update?: Maybe<
-    | ActorUpdateWithWhereUniqueNestedInput[]
-    | ActorUpdateWithWhereUniqueNestedInput
-  >;
-  upsert?: Maybe<
-    | ActorUpsertWithWhereUniqueNestedInput[]
-    | ActorUpsertWithWhereUniqueNestedInput
-  >;
-  delete?: Maybe<ActorWhereUniqueInput[] | ActorWhereUniqueInput>;
-  connect?: Maybe<ActorWhereUniqueInput[] | ActorWhereUniqueInput>;
-  set?: Maybe<ActorWhereUniqueInput[] | ActorWhereUniqueInput>;
-  disconnect?: Maybe<ActorWhereUniqueInput[] | ActorWhereUniqueInput>;
-  deleteMany?: Maybe<ActorScalarWhereInput[] | ActorScalarWhereInput>;
-  updateMany?: Maybe<
-    ActorUpdateManyWithWhereNestedInput[] | ActorUpdateManyWithWhereNestedInput
-  >;
-}
-
-export interface ActorUpdateWithWhereUniqueNestedInput {
-  where: ActorWhereUniqueInput;
-  data: ActorUpdateDataInput;
-}
-
-export interface ActorUpdateDataInput {
-  name?: Maybe<String>;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<Boolean>;
-  hijos?: Maybe<ActorUpdateManyInput>;
+export interface CeldaUpsertWithWhereUniqueWithoutActorParentInput {
+  where: CeldaWhereUniqueInput;
+  update: CeldaUpdateWithoutActorParentDataInput;
+  create: CeldaCreateWithoutActorParentInput;
 }
 
 export interface ActorUpsertWithWhereUniqueNestedInput {
@@ -762,6 +1366,31 @@ export interface ActorUpdateManyMutationInput {
   parent?: Maybe<Boolean>;
 }
 
+export interface CeldaCreateInput {
+  id?: Maybe<ID_Input>;
+  TemaParent: TemaCreateOneWithoutCeldasInput;
+  ActorParent: ActorCreateOneWithoutCeldasInput;
+  prioridad?: Maybe<Int>;
+  tiempo?: Maybe<Int>;
+  coment?: Maybe<String>;
+  matriz: MatrizCreateOneWithoutCeldasInput;
+}
+
+export interface CeldaUpdateInput {
+  TemaParent?: Maybe<TemaUpdateOneRequiredWithoutCeldasInput>;
+  ActorParent?: Maybe<ActorUpdateOneRequiredWithoutCeldasInput>;
+  prioridad?: Maybe<Int>;
+  tiempo?: Maybe<Int>;
+  coment?: Maybe<String>;
+  matriz?: Maybe<MatrizUpdateOneRequiredWithoutCeldasInput>;
+}
+
+export interface CeldaUpdateManyMutationInput {
+  prioridad?: Maybe<Int>;
+  tiempo?: Maybe<Int>;
+  coment?: Maybe<String>;
+}
+
 export interface EstadoCreateInput {
   id?: Maybe<ID_Input>;
   NumActor: Int;
@@ -780,209 +1409,74 @@ export interface EstadoUpdateManyMutationInput {
 
 export interface MatrizCreateInput {
   id?: Maybe<ID_Input>;
-  TemaParent?: Maybe<TemaCreateOneInput>;
-  ActorParent?: Maybe<ActorCreateOneInput>;
+  User?: Maybe<UserCreateOneInput>;
+  Actores?: Maybe<ActorCreateManyInput>;
+  Temas?: Maybe<TemaCreateManyInput>;
+  Celdas?: Maybe<CeldaCreateManyWithoutMatrizInput>;
+}
+
+export interface CeldaCreateManyWithoutMatrizInput {
+  create?: Maybe<
+    CeldaCreateWithoutMatrizInput[] | CeldaCreateWithoutMatrizInput
+  >;
+  connect?: Maybe<CeldaWhereUniqueInput[] | CeldaWhereUniqueInput>;
+}
+
+export interface CeldaCreateWithoutMatrizInput {
+  id?: Maybe<ID_Input>;
+  TemaParent: TemaCreateOneWithoutCeldasInput;
+  ActorParent: ActorCreateOneWithoutCeldasInput;
   prioridad?: Maybe<Int>;
   tiempo?: Maybe<Int>;
   coment?: Maybe<String>;
-}
-
-export interface TemaCreateOneInput {
-  create?: Maybe<TemaCreateInput>;
-  connect?: Maybe<TemaWhereUniqueInput>;
-}
-
-export interface TemaCreateInput {
-  name: String;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<Boolean>;
-  hijos?: Maybe<TemaCreateManyWithoutHijosInput>;
-}
-
-export interface TemaCreateManyWithoutHijosInput {
-  create?: Maybe<TemaCreateWithoutHijosInput[] | TemaCreateWithoutHijosInput>;
-  connect?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
-}
-
-export interface TemaCreateWithoutHijosInput {
-  name: String;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<Boolean>;
-}
-
-export interface ActorCreateOneInput {
-  create?: Maybe<ActorCreateInput>;
-  connect?: Maybe<ActorWhereUniqueInput>;
 }
 
 export interface MatrizUpdateInput {
-  TemaParent?: Maybe<TemaUpdateOneInput>;
-  ActorParent?: Maybe<ActorUpdateOneInput>;
-  prioridad?: Maybe<Int>;
-  tiempo?: Maybe<Int>;
-  coment?: Maybe<String>;
+  User?: Maybe<UserUpdateOneInput>;
+  Actores?: Maybe<ActorUpdateManyInput>;
+  Temas?: Maybe<TemaUpdateManyInput>;
+  Celdas?: Maybe<CeldaUpdateManyWithoutMatrizInput>;
 }
 
-export interface TemaUpdateOneInput {
-  create?: Maybe<TemaCreateInput>;
-  update?: Maybe<TemaUpdateDataInput>;
-  upsert?: Maybe<TemaUpsertNestedInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
-  connect?: Maybe<TemaWhereUniqueInput>;
-}
-
-export interface TemaUpdateDataInput {
-  name?: Maybe<String>;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<Boolean>;
-  hijos?: Maybe<TemaUpdateManyWithoutHijosInput>;
-}
-
-export interface TemaUpdateManyWithoutHijosInput {
-  create?: Maybe<TemaCreateWithoutHijosInput[] | TemaCreateWithoutHijosInput>;
-  delete?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
-  connect?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
-  set?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
-  disconnect?: Maybe<TemaWhereUniqueInput[] | TemaWhereUniqueInput>;
+export interface CeldaUpdateManyWithoutMatrizInput {
+  create?: Maybe<
+    CeldaCreateWithoutMatrizInput[] | CeldaCreateWithoutMatrizInput
+  >;
+  delete?: Maybe<CeldaWhereUniqueInput[] | CeldaWhereUniqueInput>;
+  connect?: Maybe<CeldaWhereUniqueInput[] | CeldaWhereUniqueInput>;
+  set?: Maybe<CeldaWhereUniqueInput[] | CeldaWhereUniqueInput>;
+  disconnect?: Maybe<CeldaWhereUniqueInput[] | CeldaWhereUniqueInput>;
   update?: Maybe<
-    | TemaUpdateWithWhereUniqueWithoutHijosInput[]
-    | TemaUpdateWithWhereUniqueWithoutHijosInput
+    | CeldaUpdateWithWhereUniqueWithoutMatrizInput[]
+    | CeldaUpdateWithWhereUniqueWithoutMatrizInput
   >;
   upsert?: Maybe<
-    | TemaUpsertWithWhereUniqueWithoutHijosInput[]
-    | TemaUpsertWithWhereUniqueWithoutHijosInput
+    | CeldaUpsertWithWhereUniqueWithoutMatrizInput[]
+    | CeldaUpsertWithWhereUniqueWithoutMatrizInput
   >;
-  deleteMany?: Maybe<TemaScalarWhereInput[] | TemaScalarWhereInput>;
+  deleteMany?: Maybe<CeldaScalarWhereInput[] | CeldaScalarWhereInput>;
   updateMany?: Maybe<
-    TemaUpdateManyWithWhereNestedInput[] | TemaUpdateManyWithWhereNestedInput
+    CeldaUpdateManyWithWhereNestedInput[] | CeldaUpdateManyWithWhereNestedInput
   >;
 }
 
-export interface TemaUpdateWithWhereUniqueWithoutHijosInput {
-  where: TemaWhereUniqueInput;
-  data: TemaUpdateWithoutHijosDataInput;
+export interface CeldaUpdateWithWhereUniqueWithoutMatrizInput {
+  where: CeldaWhereUniqueInput;
+  data: CeldaUpdateWithoutMatrizDataInput;
 }
 
-export interface TemaUpdateWithoutHijosDataInput {
-  name?: Maybe<String>;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<Boolean>;
-}
-
-export interface TemaUpsertWithWhereUniqueWithoutHijosInput {
-  where: TemaWhereUniqueInput;
-  update: TemaUpdateWithoutHijosDataInput;
-  create: TemaCreateWithoutHijosInput;
-}
-
-export interface TemaScalarWhereInput {
-  id?: Maybe<Int>;
-  id_not?: Maybe<Int>;
-  id_in?: Maybe<Int[] | Int>;
-  id_not_in?: Maybe<Int[] | Int>;
-  id_lt?: Maybe<Int>;
-  id_lte?: Maybe<Int>;
-  id_gt?: Maybe<Int>;
-  id_gte?: Maybe<Int>;
-  createdAt?: Maybe<DateTimeInput>;
-  createdAt_not?: Maybe<DateTimeInput>;
-  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  createdAt_lt?: Maybe<DateTimeInput>;
-  createdAt_lte?: Maybe<DateTimeInput>;
-  createdAt_gt?: Maybe<DateTimeInput>;
-  createdAt_gte?: Maybe<DateTimeInput>;
-  updatedAt?: Maybe<DateTimeInput>;
-  updatedAt_not?: Maybe<DateTimeInput>;
-  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
-  updatedAt_lt?: Maybe<DateTimeInput>;
-  updatedAt_lte?: Maybe<DateTimeInput>;
-  updatedAt_gt?: Maybe<DateTimeInput>;
-  updatedAt_gte?: Maybe<DateTimeInput>;
-  name?: Maybe<String>;
-  name_not?: Maybe<String>;
-  name_in?: Maybe<String[] | String>;
-  name_not_in?: Maybe<String[] | String>;
-  name_lt?: Maybe<String>;
-  name_lte?: Maybe<String>;
-  name_gt?: Maybe<String>;
-  name_gte?: Maybe<String>;
-  name_contains?: Maybe<String>;
-  name_not_contains?: Maybe<String>;
-  name_starts_with?: Maybe<String>;
-  name_not_starts_with?: Maybe<String>;
-  name_ends_with?: Maybe<String>;
-  name_not_ends_with?: Maybe<String>;
-  prioridad?: Maybe<Int>;
-  prioridad_not?: Maybe<Int>;
-  prioridad_in?: Maybe<Int[] | Int>;
-  prioridad_not_in?: Maybe<Int[] | Int>;
-  prioridad_lt?: Maybe<Int>;
-  prioridad_lte?: Maybe<Int>;
-  prioridad_gt?: Maybe<Int>;
-  prioridad_gte?: Maybe<Int>;
-  coments?: Maybe<String>;
-  coments_not?: Maybe<String>;
-  coments_in?: Maybe<String[] | String>;
-  coments_not_in?: Maybe<String[] | String>;
-  coments_lt?: Maybe<String>;
-  coments_lte?: Maybe<String>;
-  coments_gt?: Maybe<String>;
-  coments_gte?: Maybe<String>;
-  coments_contains?: Maybe<String>;
-  coments_not_contains?: Maybe<String>;
-  coments_starts_with?: Maybe<String>;
-  coments_not_starts_with?: Maybe<String>;
-  coments_ends_with?: Maybe<String>;
-  coments_not_ends_with?: Maybe<String>;
-  parent?: Maybe<Boolean>;
-  parent_not?: Maybe<Boolean>;
-  AND?: Maybe<TemaScalarWhereInput[] | TemaScalarWhereInput>;
-  OR?: Maybe<TemaScalarWhereInput[] | TemaScalarWhereInput>;
-  NOT?: Maybe<TemaScalarWhereInput[] | TemaScalarWhereInput>;
-}
-
-export interface TemaUpdateManyWithWhereNestedInput {
-  where: TemaScalarWhereInput;
-  data: TemaUpdateManyDataInput;
-}
-
-export interface TemaUpdateManyDataInput {
-  name?: Maybe<String>;
-  prioridad?: Maybe<Int>;
-  coments?: Maybe<String>;
-  parent?: Maybe<Boolean>;
-}
-
-export interface TemaUpsertNestedInput {
-  update: TemaUpdateDataInput;
-  create: TemaCreateInput;
-}
-
-export interface ActorUpdateOneInput {
-  create?: Maybe<ActorCreateInput>;
-  update?: Maybe<ActorUpdateDataInput>;
-  upsert?: Maybe<ActorUpsertNestedInput>;
-  delete?: Maybe<Boolean>;
-  disconnect?: Maybe<Boolean>;
-  connect?: Maybe<ActorWhereUniqueInput>;
-}
-
-export interface ActorUpsertNestedInput {
-  update: ActorUpdateDataInput;
-  create: ActorCreateInput;
-}
-
-export interface MatrizUpdateManyMutationInput {
+export interface CeldaUpdateWithoutMatrizDataInput {
+  TemaParent?: Maybe<TemaUpdateOneRequiredWithoutCeldasInput>;
+  ActorParent?: Maybe<ActorUpdateOneRequiredWithoutCeldasInput>;
   prioridad?: Maybe<Int>;
   tiempo?: Maybe<Int>;
   coment?: Maybe<String>;
+}
+
+export interface CeldaUpsertWithWhereUniqueWithoutMatrizInput {
+  where: CeldaWhereUniqueInput;
+  update: CeldaUpdateWithoutMatrizDataInput;
+  create: CeldaCreateWithoutMatrizInput;
 }
 
 export interface TemaUpdateInput {
@@ -991,6 +1485,7 @@ export interface TemaUpdateInput {
   coments?: Maybe<String>;
   parent?: Maybe<Boolean>;
   hijos?: Maybe<TemaUpdateManyWithoutHijosInput>;
+  celdas?: Maybe<CeldaUpdateManyWithoutTemaParentInput>;
 }
 
 export interface TemaUpdateManyMutationInput {
@@ -998,11 +1493,6 @@ export interface TemaUpdateManyMutationInput {
   prioridad?: Maybe<Int>;
   coments?: Maybe<String>;
   parent?: Maybe<Boolean>;
-}
-
-export interface UserCreateInput {
-  id?: Maybe<ID_Input>;
-  name: String;
 }
 
 export interface UserUpdateInput {
@@ -1022,6 +1512,17 @@ export interface ActorSubscriptionWhereInput {
   AND?: Maybe<ActorSubscriptionWhereInput[] | ActorSubscriptionWhereInput>;
   OR?: Maybe<ActorSubscriptionWhereInput[] | ActorSubscriptionWhereInput>;
   NOT?: Maybe<ActorSubscriptionWhereInput[] | ActorSubscriptionWhereInput>;
+}
+
+export interface CeldaSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<CeldaWhereInput>;
+  AND?: Maybe<CeldaSubscriptionWhereInput[] | CeldaSubscriptionWhereInput>;
+  OR?: Maybe<CeldaSubscriptionWhereInput[] | CeldaSubscriptionWhereInput>;
+  NOT?: Maybe<CeldaSubscriptionWhereInput[] | CeldaSubscriptionWhereInput>;
 }
 
 export interface EstadoSubscriptionWhereInput {
@@ -1099,6 +1600,15 @@ export interface ActorPromise extends Promise<Actor>, Fragmentable {
     first?: Int;
     last?: Int;
   }) => T;
+  celdas: <T = FragmentableArray<Celda>>(args?: {
+    where?: CeldaWhereInput;
+    orderBy?: CeldaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
 }
 
 export interface ActorSubscription
@@ -1114,6 +1624,15 @@ export interface ActorSubscription
   hijos: <T = Promise<AsyncIterator<ActorSubscription>>>(args?: {
     where?: ActorWhereInput;
     orderBy?: ActorOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  celdas: <T = Promise<AsyncIterator<CeldaSubscription>>>(args?: {
+    where?: CeldaWhereInput;
+    orderBy?: CeldaOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -1141,6 +1660,298 @@ export interface ActorNullablePromise
     first?: Int;
     last?: Int;
   }) => T;
+  celdas: <T = FragmentableArray<Celda>>(args?: {
+    where?: CeldaWhereInput;
+    orderBy?: CeldaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface Celda {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  prioridad?: Int;
+  tiempo?: Int;
+  coment?: String;
+}
+
+export interface CeldaPromise extends Promise<Celda>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  TemaParent: <T = TemaPromise>() => T;
+  ActorParent: <T = ActorPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  prioridad: () => Promise<Int>;
+  tiempo: () => Promise<Int>;
+  coment: () => Promise<String>;
+  matriz: <T = MatrizPromise>() => T;
+}
+
+export interface CeldaSubscription
+  extends Promise<AsyncIterator<Celda>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  TemaParent: <T = TemaSubscription>() => T;
+  ActorParent: <T = ActorSubscription>() => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  prioridad: () => Promise<AsyncIterator<Int>>;
+  tiempo: () => Promise<AsyncIterator<Int>>;
+  coment: () => Promise<AsyncIterator<String>>;
+  matriz: <T = MatrizSubscription>() => T;
+}
+
+export interface CeldaNullablePromise
+  extends Promise<Celda | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  TemaParent: <T = TemaPromise>() => T;
+  ActorParent: <T = ActorPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  prioridad: () => Promise<Int>;
+  tiempo: () => Promise<Int>;
+  coment: () => Promise<String>;
+  matriz: <T = MatrizPromise>() => T;
+}
+
+export interface Tema {
+  id: Int;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  name: String;
+  prioridad?: Int;
+  coments?: String;
+  parent?: Boolean;
+}
+
+export interface TemaPromise extends Promise<Tema>, Fragmentable {
+  id: () => Promise<Int>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  prioridad: () => Promise<Int>;
+  coments: () => Promise<String>;
+  parent: () => Promise<Boolean>;
+  hijos: <T = FragmentableArray<Tema>>(args?: {
+    where?: TemaWhereInput;
+    orderBy?: TemaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  celdas: <T = FragmentableArray<Celda>>(args?: {
+    where?: CeldaWhereInput;
+    orderBy?: CeldaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface TemaSubscription
+  extends Promise<AsyncIterator<Tema>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<Int>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+  prioridad: () => Promise<AsyncIterator<Int>>;
+  coments: () => Promise<AsyncIterator<String>>;
+  parent: () => Promise<AsyncIterator<Boolean>>;
+  hijos: <T = Promise<AsyncIterator<TemaSubscription>>>(args?: {
+    where?: TemaWhereInput;
+    orderBy?: TemaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  celdas: <T = Promise<AsyncIterator<CeldaSubscription>>>(args?: {
+    where?: CeldaWhereInput;
+    orderBy?: CeldaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface TemaNullablePromise
+  extends Promise<Tema | null>,
+    Fragmentable {
+  id: () => Promise<Int>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  prioridad: () => Promise<Int>;
+  coments: () => Promise<String>;
+  parent: () => Promise<Boolean>;
+  hijos: <T = FragmentableArray<Tema>>(args?: {
+    where?: TemaWhereInput;
+    orderBy?: TemaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  celdas: <T = FragmentableArray<Celda>>(args?: {
+    where?: CeldaWhereInput;
+    orderBy?: CeldaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface Matriz {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface MatrizPromise extends Promise<Matriz>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  User: <T = UserPromise>() => T;
+  Actores: <T = FragmentableArray<Actor>>(args?: {
+    where?: ActorWhereInput;
+    orderBy?: ActorOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  Temas: <T = FragmentableArray<Tema>>(args?: {
+    where?: TemaWhereInput;
+    orderBy?: TemaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  Celdas: <T = FragmentableArray<Celda>>(args?: {
+    where?: CeldaWhereInput;
+    orderBy?: CeldaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface MatrizSubscription
+  extends Promise<AsyncIterator<Matriz>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  User: <T = UserSubscription>() => T;
+  Actores: <T = Promise<AsyncIterator<ActorSubscription>>>(args?: {
+    where?: ActorWhereInput;
+    orderBy?: ActorOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  Temas: <T = Promise<AsyncIterator<TemaSubscription>>>(args?: {
+    where?: TemaWhereInput;
+    orderBy?: TemaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  Celdas: <T = Promise<AsyncIterator<CeldaSubscription>>>(args?: {
+    where?: CeldaWhereInput;
+    orderBy?: CeldaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface MatrizNullablePromise
+  extends Promise<Matriz | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  User: <T = UserPromise>() => T;
+  Actores: <T = FragmentableArray<Actor>>(args?: {
+    where?: ActorWhereInput;
+    orderBy?: ActorOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  Temas: <T = FragmentableArray<Tema>>(args?: {
+    where?: TemaWhereInput;
+    orderBy?: TemaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  Celdas: <T = FragmentableArray<Celda>>(args?: {
+    where?: CeldaWhereInput;
+    orderBy?: CeldaOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface User {
+  id: ID_Output;
+  name: String;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UserNullablePromise
+  extends Promise<User | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
 }
 
 export interface ActorConnection {
@@ -1216,6 +2027,60 @@ export interface AggregateActorPromise
 
 export interface AggregateActorSubscription
   extends Promise<AsyncIterator<AggregateActor>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface CeldaConnection {
+  pageInfo: PageInfo;
+  edges: CeldaEdge[];
+}
+
+export interface CeldaConnectionPromise
+  extends Promise<CeldaConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<CeldaEdge>>() => T;
+  aggregate: <T = AggregateCeldaPromise>() => T;
+}
+
+export interface CeldaConnectionSubscription
+  extends Promise<AsyncIterator<CeldaConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<CeldaEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateCeldaSubscription>() => T;
+}
+
+export interface CeldaEdge {
+  node: Celda;
+  cursor: String;
+}
+
+export interface CeldaEdgePromise extends Promise<CeldaEdge>, Fragmentable {
+  node: <T = CeldaPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface CeldaEdgeSubscription
+  extends Promise<AsyncIterator<CeldaEdge>>,
+    Fragmentable {
+  node: <T = CeldaSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateCelda {
+  count: Int;
+}
+
+export interface AggregateCeldaPromise
+  extends Promise<AggregateCelda>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateCeldaSubscription
+  extends Promise<AsyncIterator<AggregateCelda>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -1300,123 +2165,6 @@ export interface AggregateEstadoSubscription
   extends Promise<AsyncIterator<AggregateEstado>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface Matriz {
-  id: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  prioridad?: Int;
-  tiempo?: Int;
-  coment?: String;
-}
-
-export interface MatrizPromise extends Promise<Matriz>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  TemaParent: <T = TemaPromise>() => T;
-  ActorParent: <T = ActorPromise>() => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  prioridad: () => Promise<Int>;
-  tiempo: () => Promise<Int>;
-  coment: () => Promise<String>;
-}
-
-export interface MatrizSubscription
-  extends Promise<AsyncIterator<Matriz>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  TemaParent: <T = TemaSubscription>() => T;
-  ActorParent: <T = ActorSubscription>() => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  prioridad: () => Promise<AsyncIterator<Int>>;
-  tiempo: () => Promise<AsyncIterator<Int>>;
-  coment: () => Promise<AsyncIterator<String>>;
-}
-
-export interface MatrizNullablePromise
-  extends Promise<Matriz | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  TemaParent: <T = TemaPromise>() => T;
-  ActorParent: <T = ActorPromise>() => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  prioridad: () => Promise<Int>;
-  tiempo: () => Promise<Int>;
-  coment: () => Promise<String>;
-}
-
-export interface Tema {
-  id: Int;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-  name: String;
-  prioridad?: Int;
-  coments?: String;
-  parent?: Boolean;
-}
-
-export interface TemaPromise extends Promise<Tema>, Fragmentable {
-  id: () => Promise<Int>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-  prioridad: () => Promise<Int>;
-  coments: () => Promise<String>;
-  parent: () => Promise<Boolean>;
-  hijos: <T = FragmentableArray<Tema>>(args?: {
-    where?: TemaWhereInput;
-    orderBy?: TemaOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-}
-
-export interface TemaSubscription
-  extends Promise<AsyncIterator<Tema>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<Int>>;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  name: () => Promise<AsyncIterator<String>>;
-  prioridad: () => Promise<AsyncIterator<Int>>;
-  coments: () => Promise<AsyncIterator<String>>;
-  parent: () => Promise<AsyncIterator<Boolean>>;
-  hijos: <T = Promise<AsyncIterator<TemaSubscription>>>(args?: {
-    where?: TemaWhereInput;
-    orderBy?: TemaOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
-}
-
-export interface TemaNullablePromise
-  extends Promise<Tema | null>,
-    Fragmentable {
-  id: () => Promise<Int>;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  name: () => Promise<String>;
-  prioridad: () => Promise<Int>;
-  coments: () => Promise<String>;
-  parent: () => Promise<Boolean>;
-  hijos: <T = FragmentableArray<Tema>>(args?: {
-    where?: TemaWhereInput;
-    orderBy?: TemaOrderByInput;
-    skip?: Int;
-    after?: String;
-    before?: String;
-    first?: Int;
-    last?: Int;
-  }) => T;
 }
 
 export interface MatrizConnection {
@@ -1525,30 +2273,6 @@ export interface AggregateTemaSubscription
   extends Promise<AsyncIterator<AggregateTema>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface User {
-  id: ID_Output;
-  name: String;
-}
-
-export interface UserPromise extends Promise<User>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
-}
-
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  name: () => Promise<AsyncIterator<String>>;
-}
-
-export interface UserNullablePromise
-  extends Promise<User | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  name: () => Promise<String>;
 }
 
 export interface UserConnection {
@@ -1680,6 +2404,62 @@ export interface ActorPreviousValuesSubscription
   parent: () => Promise<AsyncIterator<Boolean>>;
 }
 
+export interface CeldaSubscriptionPayload {
+  mutation: MutationType;
+  node: Celda;
+  updatedFields: String[];
+  previousValues: CeldaPreviousValues;
+}
+
+export interface CeldaSubscriptionPayloadPromise
+  extends Promise<CeldaSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = CeldaPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = CeldaPreviousValuesPromise>() => T;
+}
+
+export interface CeldaSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<CeldaSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = CeldaSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = CeldaPreviousValuesSubscription>() => T;
+}
+
+export interface CeldaPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  prioridad?: Int;
+  tiempo?: Int;
+  coment?: String;
+}
+
+export interface CeldaPreviousValuesPromise
+  extends Promise<CeldaPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  prioridad: () => Promise<Int>;
+  tiempo: () => Promise<Int>;
+  coment: () => Promise<String>;
+}
+
+export interface CeldaPreviousValuesSubscription
+  extends Promise<AsyncIterator<CeldaPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  prioridad: () => Promise<AsyncIterator<Int>>;
+  tiempo: () => Promise<AsyncIterator<Int>>;
+  coment: () => Promise<AsyncIterator<String>>;
+}
+
 export interface EstadoSubscriptionPayload {
   mutation: MutationType;
   node: Estado;
@@ -1756,9 +2536,6 @@ export interface MatrizPreviousValues {
   id: ID_Output;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
-  prioridad?: Int;
-  tiempo?: Int;
-  coment?: String;
 }
 
 export interface MatrizPreviousValuesPromise
@@ -1767,9 +2544,6 @@ export interface MatrizPreviousValuesPromise
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
-  prioridad: () => Promise<Int>;
-  tiempo: () => Promise<Int>;
-  coment: () => Promise<String>;
 }
 
 export interface MatrizPreviousValuesSubscription
@@ -1778,9 +2552,6 @@ export interface MatrizPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  prioridad: () => Promise<AsyncIterator<Int>>;
-  tiempo: () => Promise<AsyncIterator<Int>>;
-  coment: () => Promise<AsyncIterator<String>>;
 }
 
 export interface TemaSubscriptionPayload {
@@ -1937,11 +2708,15 @@ export const models: Model[] = [
     embedded: false
   },
   {
-    name: "Matriz",
+    name: "Celda",
     embedded: false
   },
   {
     name: "Estado",
+    embedded: false
+  },
+  {
+    name: "Matriz",
     embedded: false
   }
 ];

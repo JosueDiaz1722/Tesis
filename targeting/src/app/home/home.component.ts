@@ -20,7 +20,7 @@ export class HomeComponent implements OnInit {
   constructor(private confirmation: ConfirmationService, private apollo: Apollo,private router: Router) { }
 
   ngOnInit(): void {
-    this.apollo.watchQuery({
+    /*this.apollo.watchQuery({
       query: ALL_TEMAS_QUERY
     }).valueChanges.subscribe((response) => {
       this.ParentTemas = response.data['temas'];
@@ -39,9 +39,13 @@ export class HomeComponent implements OnInit {
     }).valueChanges.subscribe((response) => {
       this.Estado = response.data['estadoes'];
       console.log(this.Estado);
-    });
+    });*/
   }
-  ParentTemas: Tema[] = [];
+
+  Matriz(){
+    this.router.navigate(['/matrices']);
+  }
+  /*ParentTemas: Tema[] = [];
   ParentActor: Actor[] = [];
   confirmDropDatabaseDialogVisible = false;
   Estado: Estado[] = [];
@@ -220,6 +224,6 @@ export class HomeComponent implements OnInit {
       this.Estado = response.data['estadoes'];
       console.log(this.Estado);
     });
-  }
+  }*/
 
 }

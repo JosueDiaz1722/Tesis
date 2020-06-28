@@ -12,6 +12,7 @@ prioridad: Int
 coments: String
 parent: Boolean
 hijos: [Actor] @relation (onDelete: CASCADE)
+celdas: [Celda] @relation(name: "ActorCelda", onDelete: CASCADE)
 }
 
 type Tema {
@@ -23,22 +24,34 @@ prioridad: Int
 coments: String
 parent: Boolean
 hijos: [Tema] @relation(name: "HijosTema" onDelete: CASCADE)
+celdas: [Celda] @relation(name: "TemaCelda", onDelete: CASCADE)
 }
 
 
-type Matriz {
+type Celda {
   id: ID! @id
-  TemaParent: Tema  
-  ActorParent: Actor
+  TemaParent: Tema!  @relation(name: "TemaCelda")
+  ActorParent: Actor! @relation(name: "ActorCelda")
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   prioridad: Int
   tiempo: Int
   coment: String
+  matriz: Matriz! @relation(name: "MatrizCelda")
 }
 
 type Estado {
   id: ID! @id
   NumActor : Int!
   NumTemas : Int!
+}
+
+type Matriz{
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  User: User
+  Actores: [Actor]
+  Temas: [Tema]
+  Celdas: [Celda] @relation(name: "MatrizCelda", onDelete: CASCADE)
 }

@@ -49,8 +49,10 @@ import {MatCardModule} from '@angular/material/card';
 import { LoginComponent } from './login/login.component';
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './auth/auth.guard';
-
-
+import { MatrizesComponent } from './matrizes/matrizes.component';
+import {CarouselModule} from 'primeng/carousel';
+import {TabViewModule} from 'primeng/tabview';
+import {CodeHighlighterModule} from 'primeng/codehighlighter';
 
 
 @NgModule({
@@ -75,6 +77,8 @@ import { AuthGuard } from './auth/auth.guard';
     MatrizComponent,
 
     LoginComponent,
+
+    MatrizesComponent,
   ],
   imports: [
     DatePickerAllModule,
@@ -109,6 +113,10 @@ import { AuthGuard } from './auth/auth.guard';
     MessageModule,
     ToastModule,
     MatCardModule,
+    CarouselModule,
+    ToastModule,
+    TabViewModule,
+    CodeHighlighterModule
   ],
   entryComponents: [
     DialogBoxComponent

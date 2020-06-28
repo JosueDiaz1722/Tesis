@@ -17,11 +17,15 @@ var models = [
     embedded: false
   },
   {
-    name: "Matriz",
+    name: "Celda",
     embedded: false
   },
   {
     name: "Estado",
+    embedded: false
+  },
+  {
+    name: "Matriz",
     embedded: false
   }
 ];

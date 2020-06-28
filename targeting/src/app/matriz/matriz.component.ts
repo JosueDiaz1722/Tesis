@@ -189,7 +189,7 @@ export class MatrizComponent implements OnInit, OnDestroy {
       if(actor["id"] === actorid && tema["id"]===temaid){
         console.log("si existe");
         console.log(item);
-        return item.tiempo;
+        return item.id;
       }else{
         return 0;
       }

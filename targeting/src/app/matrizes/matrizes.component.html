@@ -1,0 +1,62 @@
+<div>
+    <p-carousel [value]="Matrices" [numVisible]="4" [numScroll]="3" [circular]="false"  [responsiveOptions]="responsiveOptions">
+        <p-header>
+            <h3>Matrices Disponibles</h3>
+        </p-header>
+        <ng-template let-matriz pTemplate="item">
+            <div class="car-details">
+                <div class="p-grid p-nogutter">
+                    <div class="p-col-12">
+                        <mat-icon class="main">analytics
+                        </mat-icon>
+                    </div>
+                    <div class="p-col-12 car-data">
+                        <div class="car-title">Creado Por: {{matriz.User.name}}</div>
+                        <div class="car-subtitle">Creado: {{matriz.createdAt| date: "dd/MM/yyyy hh:mm"}} | Actualizdo :{{matriz.updatedAt| date: "dd/MM/yyyy hh:mm"}}</div>
+                        
+
+                        <div class="car-buttons">
+                            <button mat-icon-button color="primary" aria-label="Example icon button with a menu icon">
+                                <mat-icon>visibility</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-carousel>
+</div >
+<div class="center">
+    <button mat-raised-button color="primary">Nueva</button>
+</div>
+<div>
+    <p-carousel [value]="MatricesUsuario" [numVisible]="4" [numScroll]="3" [circular]="false"  [responsiveOptions]="responsiveOptions">
+        <p-header>
+            <h3>Mis Matrices</h3>
+        </p-header>
+        <ng-template let-matriz pTemplate="item">
+            <div class="car-details">
+                <div class="p-grid p-nogutter">
+                    <div class="p-col-12">
+                        <mat-icon class="main">analytics
+                        </mat-icon>
+                    </div>
+                    <div class="p-col-12 car-data">
+                        <div class="car-title">Creado Por: {{matriz.User.name}}</div>
+                        <div class="car-subtitle">Creado: {{matriz.createdAt| date: "dd/MM/yyyy hh:mm"}} | Actualizdo :{{matriz.updatedAt| date: "dd/MM/yyyy hh:mm"}}</div>
+                        
+
+                        <div class="car-buttons">
+                            <button mat-icon-button color="primary" aria-label="Example icon button with a menu icon">
+                                <mat-icon>visibility</mat-icon>
+                            </button>
+                            <button mat-icon-button color="accent" aria-label="Example icon button with a home icon">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </p-carousel>
+</div>

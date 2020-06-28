@@ -10,10 +10,14 @@ import {CreateLinkComponent} from './create-link/create-link.component';
 import { MatrizComponent } from "./matriz/matriz.component";
 import { LoginComponent } from "./login/login.component";
 import { AuthGuard } from './auth/auth.guard';
+import {MatrizesComponent} from './matrizes/matrizes.component';
 
 
 
 const routes: Routes = [
+  {
+    path: 'matrices', component: MatrizesComponent
+  },
   {
     path: 'matriz', component: MatrizComponent
   },

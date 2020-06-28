@@ -23,8 +23,18 @@ export class Link {
 
   export class Matriz{
     id: string;
-    TemaParent: [Tema];
-    ActorParent: [Actor];
+    createdAt: Date;
+    updatedAt: Date;
+    User: User;
+    Actores: [Actor];
+    Temas: [Tema];
+    Celdas: [Celda];
+
+  }
+  export class Celda{
+    id: string;
+    TemaParent: Tema;
+    ActorParent: Actor;
     prioridad: number;
     tiempo: number;
     coment: string;
@@ -34,4 +44,9 @@ export class Link {
     id: string;
     NumActor: number;
     NumTemas: number;
+  }
+
+  export class User{
+    id: string;
+    name: string;
   }

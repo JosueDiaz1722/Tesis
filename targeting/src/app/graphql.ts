@@ -284,19 +284,22 @@ export const ALL_MATRIZ_QUERY = gql`
   query MatrizQuery {
     matrizes{
       id
-      tiempo
-      prioridad
-      coment
-      TemaParent{
-        id
-        name
-      }
-      ActorParent{
-        id
-        name
-      }
+      createdAt
+      updatedAt
+      User{name}
     }
   }
+`;
+
+export const USER_MATRIZ_QUERY = gql`
+query MatrizUser($id:ID!){
+  matrizes(where:{User:{id:$id}}){
+    id
+    createdAt
+    updatedAt
+    User{name}
+  }
+}
 `;
 
 export const DELETE_ALL_MATRIZ_QUERY = gql`

@@ -12,6 +12,7 @@ module.exports = {
   coments: String
   parent: Boolean
   hijos(where: ActorWhereInput, orderBy: ActorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Actor!]
+  celdas(where: CeldaWhereInput, orderBy: CeldaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Celda!]
 }
 
 type ActorConnection {
@@ -26,6 +27,7 @@ input ActorCreateInput {
   coments: String
   parent: Boolean
   hijos: ActorCreateManyInput
+  celdas: CeldaCreateManyWithoutActorParentInput
 }
 
 input ActorCreateManyInput {
@@ -33,9 +35,17 @@ input ActorCreateManyInput {
   connect: [ActorWhereUniqueInput!]
 }
 
-input ActorCreateOneInput {
-  create: ActorCreateInput
+input ActorCreateOneWithoutCeldasInput {
+  create: ActorCreateWithoutCeldasInput
   connect: ActorWhereUniqueInput
+}
+
+input ActorCreateWithoutCeldasInput {
+  name: String!
+  prioridad: Int
+  coments: String
+  parent: Boolean
+  hijos: ActorCreateManyInput
 }
 
 type ActorEdge {
@@ -162,6 +172,7 @@ input ActorUpdateDataInput {
   coments: String
   parent: Boolean
   hijos: ActorUpdateManyInput
+  celdas: CeldaUpdateManyWithoutActorParentInput
 }
 
 input ActorUpdateInput {
@@ -170,6 +181,7 @@ input ActorUpdateInput {
   coments: String
   parent: Boolean
   hijos: ActorUpdateManyInput
+  celdas: CeldaUpdateManyWithoutActorParentInput
 }
 
 input ActorUpdateManyDataInput {
@@ -203,13 +215,19 @@ input ActorUpdateManyWithWhereNestedInput {
   data: ActorUpdateManyDataInput!
 }
 
-input ActorUpdateOneInput {
-  create: ActorCreateInput
-  update: ActorUpdateDataInput
-  upsert: ActorUpsertNestedInput
-  delete: Boolean
-  disconnect: Boolean
+input ActorUpdateOneRequiredWithoutCeldasInput {
+  create: ActorCreateWithoutCeldasInput
+  update: ActorUpdateWithoutCeldasDataInput
+  upsert: ActorUpsertWithoutCeldasInput
   connect: ActorWhereUniqueInput
+}
+
+input ActorUpdateWithoutCeldasDataInput {
+  name: String
+  prioridad: Int
+  coments: String
+  parent: Boolean
+  hijos: ActorUpdateManyInput
 }
 
 input ActorUpdateWithWhereUniqueNestedInput {
@@ -217,9 +235,9 @@ input ActorUpdateWithWhereUniqueNestedInput {
   data: ActorUpdateDataInput!
 }
 
-input ActorUpsertNestedInput {
-  update: ActorUpdateDataInput!
-  create: ActorCreateInput!
+input ActorUpsertWithoutCeldasInput {
+  update: ActorUpdateWithoutCeldasDataInput!
+  create: ActorCreateWithoutCeldasInput!
 }
 
 input ActorUpsertWithWhereUniqueNestedInput {
@@ -294,6 +312,9 @@ input ActorWhereInput {
   hijos_every: ActorWhereInput
   hijos_some: ActorWhereInput
   hijos_none: ActorWhereInput
+  celdas_every: CeldaWhereInput
+  celdas_some: CeldaWhereInput
+  celdas_none: CeldaWhereInput
   AND: [ActorWhereInput!]
   OR: [ActorWhereInput!]
   NOT: [ActorWhereInput!]
@@ -304,6 +325,10 @@ input ActorWhereUniqueInput {
 }
 
 type AggregateActor {
+  count: Int!
+}
+
+type AggregateCelda {
   count: Int!
 }
 
@@ -325,6 +350,381 @@ type AggregateUser {
 
 type BatchPayload {
   count: Long!
+}
+
+type Celda {
+  id: ID!
+  TemaParent: Tema!
+  ActorParent: Actor!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  prioridad: Int
+  tiempo: Int
+  coment: String
+  matriz: Matriz!
+}
+
+type CeldaConnection {
+  pageInfo: PageInfo!
+  edges: [CeldaEdge]!
+  aggregate: AggregateCelda!
+}
+
+input CeldaCreateInput {
+  id: ID
+  TemaParent: TemaCreateOneWithoutCeldasInput!
+  ActorParent: ActorCreateOneWithoutCeldasInput!
+  prioridad: Int
+  tiempo: Int
+  coment: String
+  matriz: MatrizCreateOneWithoutCeldasInput!
+}
+
+input CeldaCreateManyWithoutActorParentInput {
+  create: [CeldaCreateWithoutActorParentInput!]
+  connect: [CeldaWhereUniqueInput!]
+}
+
+input CeldaCreateManyWithoutMatrizInput {
+  create: [CeldaCreateWithoutMatrizInput!]
+  connect: [CeldaWhereUniqueInput!]
+}
+
+input CeldaCreateManyWithoutTemaParentInput {
+  create: [CeldaCreateWithoutTemaParentInput!]
+  connect: [CeldaWhereUniqueInput!]
+}
+
+input CeldaCreateWithoutActorParentInput {
+  id: ID
+  TemaParent: TemaCreateOneWithoutCeldasInput!
+  prioridad: Int
+  tiempo: Int
+  coment: String
+  matriz: MatrizCreateOneWithoutCeldasInput!
+}
+
+input CeldaCreateWithoutMatrizInput {
+  id: ID
+  TemaParent: TemaCreateOneWithoutCeldasInput!
+  ActorParent: ActorCreateOneWithoutCeldasInput!
+  prioridad: Int
+  tiempo: Int
+  coment: String
+}
+
+input CeldaCreateWithoutTemaParentInput {
+  id: ID
+  ActorParent: ActorCreateOneWithoutCeldasInput!
+  prioridad: Int
+  tiempo: Int
+  coment: String
+  matriz: MatrizCreateOneWithoutCeldasInput!
+}
+
+type CeldaEdge {
+  node: Celda!
+  cursor: String!
+}
+
+enum CeldaOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  prioridad_ASC
+  prioridad_DESC
+  tiempo_ASC
+  tiempo_DESC
+  coment_ASC
+  coment_DESC
+}
+
+type CeldaPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  prioridad: Int
+  tiempo: Int
+  coment: String
+}
+
+input CeldaScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  prioridad: Int
+  prioridad_not: Int
+  prioridad_in: [Int!]
+  prioridad_not_in: [Int!]
+  prioridad_lt: Int
+  prioridad_lte: Int
+  prioridad_gt: Int
+  prioridad_gte: Int
+  tiempo: Int
+  tiempo_not: Int
+  tiempo_in: [Int!]
+  tiempo_not_in: [Int!]
+  tiempo_lt: Int
+  tiempo_lte: Int
+  tiempo_gt: Int
+  tiempo_gte: Int
+  coment: String
+  coment_not: String
+  coment_in: [String!]
+  coment_not_in: [String!]
+  coment_lt: String
+  coment_lte: String
+  coment_gt: String
+  coment_gte: String
+  coment_contains: String
+  coment_not_contains: String
+  coment_starts_with: String
+  coment_not_starts_with: String
+  coment_ends_with: String
+  coment_not_ends_with: String
+  AND: [CeldaScalarWhereInput!]
+  OR: [CeldaScalarWhereInput!]
+  NOT: [CeldaScalarWhereInput!]
+}
+
+type CeldaSubscriptionPayload {
+  mutation: MutationType!
+  node: Celda
+  updatedFields: [String!]
+  previousValues: CeldaPreviousValues
+}
+
+input CeldaSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CeldaWhereInput
+  AND: [CeldaSubscriptionWhereInput!]
+  OR: [CeldaSubscriptionWhereInput!]
+  NOT: [CeldaSubscriptionWhereInput!]
+}
+
+input CeldaUpdateInput {
+  TemaParent: TemaUpdateOneRequiredWithoutCeldasInput
+  ActorParent: ActorUpdateOneRequiredWithoutCeldasInput
+  prioridad: Int
+  tiempo: Int
+  coment: String
+  matriz: MatrizUpdateOneRequiredWithoutCeldasInput
+}
+
+input CeldaUpdateManyDataInput {
+  prioridad: Int
+  tiempo: Int
+  coment: String
+}
+
+input CeldaUpdateManyMutationInput {
+  prioridad: Int
+  tiempo: Int
+  coment: String
+}
+
+input CeldaUpdateManyWithoutActorParentInput {
+  create: [CeldaCreateWithoutActorParentInput!]
+  delete: [CeldaWhereUniqueInput!]
+  connect: [CeldaWhereUniqueInput!]
+  set: [CeldaWhereUniqueInput!]
+  disconnect: [CeldaWhereUniqueInput!]
+  update: [CeldaUpdateWithWhereUniqueWithoutActorParentInput!]
+  upsert: [CeldaUpsertWithWhereUniqueWithoutActorParentInput!]
+  deleteMany: [CeldaScalarWhereInput!]
+  updateMany: [CeldaUpdateManyWithWhereNestedInput!]
+}
+
+input CeldaUpdateManyWithoutMatrizInput {
+  create: [CeldaCreateWithoutMatrizInput!]
+  delete: [CeldaWhereUniqueInput!]
+  connect: [CeldaWhereUniqueInput!]
+  set: [CeldaWhereUniqueInput!]
+  disconnect: [CeldaWhereUniqueInput!]
+  update: [CeldaUpdateWithWhereUniqueWithoutMatrizInput!]
+  upsert: [CeldaUpsertWithWhereUniqueWithoutMatrizInput!]
+  deleteMany: [CeldaScalarWhereInput!]
+  updateMany: [CeldaUpdateManyWithWhereNestedInput!]
+}
+
+input CeldaUpdateManyWithoutTemaParentInput {
+  create: [CeldaCreateWithoutTemaParentInput!]
+  delete: [CeldaWhereUniqueInput!]
+  connect: [CeldaWhereUniqueInput!]
+  set: [CeldaWhereUniqueInput!]
+  disconnect: [CeldaWhereUniqueInput!]
+  update: [CeldaUpdateWithWhereUniqueWithoutTemaParentInput!]
+  upsert: [CeldaUpsertWithWhereUniqueWithoutTemaParentInput!]
+  deleteMany: [CeldaScalarWhereInput!]
+  updateMany: [CeldaUpdateManyWithWhereNestedInput!]
+}
+
+input CeldaUpdateManyWithWhereNestedInput {
+  where: CeldaScalarWhereInput!
+  data: CeldaUpdateManyDataInput!
+}
+
+input CeldaUpdateWithoutActorParentDataInput {
+  TemaParent: TemaUpdateOneRequiredWithoutCeldasInput
+  prioridad: Int
+  tiempo: Int
+  coment: String
+  matriz: MatrizUpdateOneRequiredWithoutCeldasInput
+}
+
+input CeldaUpdateWithoutMatrizDataInput {
+  TemaParent: TemaUpdateOneRequiredWithoutCeldasInput
+  ActorParent: ActorUpdateOneRequiredWithoutCeldasInput
+  prioridad: Int
+  tiempo: Int
+  coment: String
+}
+
+input CeldaUpdateWithoutTemaParentDataInput {
+  ActorParent: ActorUpdateOneRequiredWithoutCeldasInput
+  prioridad: Int
+  tiempo: Int
+  coment: String
+  matriz: MatrizUpdateOneRequiredWithoutCeldasInput
+}
+
+input CeldaUpdateWithWhereUniqueWithoutActorParentInput {
+  where: CeldaWhereUniqueInput!
+  data: CeldaUpdateWithoutActorParentDataInput!
+}
+
+input CeldaUpdateWithWhereUniqueWithoutMatrizInput {
+  where: CeldaWhereUniqueInput!
+  data: CeldaUpdateWithoutMatrizDataInput!
+}
+
+input CeldaUpdateWithWhereUniqueWithoutTemaParentInput {
+  where: CeldaWhereUniqueInput!
+  data: CeldaUpdateWithoutTemaParentDataInput!
+}
+
+input CeldaUpsertWithWhereUniqueWithoutActorParentInput {
+  where: CeldaWhereUniqueInput!
+  update: CeldaUpdateWithoutActorParentDataInput!
+  create: CeldaCreateWithoutActorParentInput!
+}
+
+input CeldaUpsertWithWhereUniqueWithoutMatrizInput {
+  where: CeldaWhereUniqueInput!
+  update: CeldaUpdateWithoutMatrizDataInput!
+  create: CeldaCreateWithoutMatrizInput!
+}
+
+input CeldaUpsertWithWhereUniqueWithoutTemaParentInput {
+  where: CeldaWhereUniqueInput!
+  update: CeldaUpdateWithoutTemaParentDataInput!
+  create: CeldaCreateWithoutTemaParentInput!
+}
+
+input CeldaWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  TemaParent: TemaWhereInput
+  ActorParent: ActorWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  prioridad: Int
+  prioridad_not: Int
+  prioridad_in: [Int!]
+  prioridad_not_in: [Int!]
+  prioridad_lt: Int
+  prioridad_lte: Int
+  prioridad_gt: Int
+  prioridad_gte: Int
+  tiempo: Int
+  tiempo_not: Int
+  tiempo_in: [Int!]
+  tiempo_not_in: [Int!]
+  tiempo_lt: Int
+  tiempo_lte: Int
+  tiempo_gt: Int
+  tiempo_gte: Int
+  coment: String
+  coment_not: String
+  coment_in: [String!]
+  coment_not_in: [String!]
+  coment_lt: String
+  coment_lte: String
+  coment_gt: String
+  coment_gte: String
+  coment_contains: String
+  coment_not_contains: String
+  coment_starts_with: String
+  coment_not_starts_with: String
+  coment_ends_with: String
+  coment_not_ends_with: String
+  matriz: MatrizWhereInput
+  AND: [CeldaWhereInput!]
+  OR: [CeldaWhereInput!]
+  NOT: [CeldaWhereInput!]
+}
+
+input CeldaWhereUniqueInput {
+  id: ID
 }
 
 scalar DateTime
@@ -439,13 +839,12 @@ scalar Long
 
 type Matriz {
   id: ID!
-  TemaParent: Tema
-  ActorParent: Actor
   createdAt: DateTime!
   updatedAt: DateTime!
-  prioridad: Int
-  tiempo: Int
-  coment: String
+  User: User
+  Actores(where: ActorWhereInput, orderBy: ActorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Actor!]
+  Temas(where: TemaWhereInput, orderBy: TemaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tema!]
+  Celdas(where: CeldaWhereInput, orderBy: CeldaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Celda!]
 }
 
 type MatrizConnection {
@@ -456,11 +855,22 @@ type MatrizConnection {
 
 input MatrizCreateInput {
   id: ID
-  TemaParent: TemaCreateOneInput
-  ActorParent: ActorCreateOneInput
-  prioridad: Int
-  tiempo: Int
-  coment: String
+  User: UserCreateOneInput
+  Actores: ActorCreateManyInput
+  Temas: TemaCreateManyInput
+  Celdas: CeldaCreateManyWithoutMatrizInput
+}
+
+input MatrizCreateOneWithoutCeldasInput {
+  create: MatrizCreateWithoutCeldasInput
+  connect: MatrizWhereUniqueInput
+}
+
+input MatrizCreateWithoutCeldasInput {
+  id: ID
+  User: UserCreateOneInput
+  Actores: ActorCreateManyInput
+  Temas: TemaCreateManyInput
 }
 
 type MatrizEdge {
@@ -475,21 +885,12 @@ enum MatrizOrderByInput {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
-  prioridad_ASC
-  prioridad_DESC
-  tiempo_ASC
-  tiempo_DESC
-  coment_ASC
-  coment_DESC
 }
 
 type MatrizPreviousValues {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-  prioridad: Int
-  tiempo: Int
-  coment: String
 }
 
 type MatrizSubscriptionPayload {
@@ -511,17 +912,28 @@ input MatrizSubscriptionWhereInput {
 }
 
 input MatrizUpdateInput {
-  TemaParent: TemaUpdateOneInput
-  ActorParent: ActorUpdateOneInput
-  prioridad: Int
-  tiempo: Int
-  coment: String
+  User: UserUpdateOneInput
+  Actores: ActorUpdateManyInput
+  Temas: TemaUpdateManyInput
+  Celdas: CeldaUpdateManyWithoutMatrizInput
 }
 
-input MatrizUpdateManyMutationInput {
-  prioridad: Int
-  tiempo: Int
-  coment: String
+input MatrizUpdateOneRequiredWithoutCeldasInput {
+  create: MatrizCreateWithoutCeldasInput
+  update: MatrizUpdateWithoutCeldasDataInput
+  upsert: MatrizUpsertWithoutCeldasInput
+  connect: MatrizWhereUniqueInput
+}
+
+input MatrizUpdateWithoutCeldasDataInput {
+  User: UserUpdateOneInput
+  Actores: ActorUpdateManyInput
+  Temas: TemaUpdateManyInput
+}
+
+input MatrizUpsertWithoutCeldasInput {
+  update: MatrizUpdateWithoutCeldasDataInput!
+  create: MatrizCreateWithoutCeldasInput!
 }
 
 input MatrizWhereInput {
@@ -539,8 +951,6 @@ input MatrizWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  TemaParent: TemaWhereInput
-  ActorParent: ActorWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -557,36 +967,16 @@ input MatrizWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
-  prioridad: Int
-  prioridad_not: Int
-  prioridad_in: [Int!]
-  prioridad_not_in: [Int!]
-  prioridad_lt: Int
-  prioridad_lte: Int
-  prioridad_gt: Int
-  prioridad_gte: Int
-  tiempo: Int
-  tiempo_not: Int
-  tiempo_in: [Int!]
-  tiempo_not_in: [Int!]
-  tiempo_lt: Int
-  tiempo_lte: Int
-  tiempo_gt: Int
-  tiempo_gte: Int
-  coment: String
-  coment_not: String
-  coment_in: [String!]
-  coment_not_in: [String!]
-  coment_lt: String
-  coment_lte: String
-  coment_gt: String
-  coment_gte: String
-  coment_contains: String
-  coment_not_contains: String
-  coment_starts_with: String
-  coment_not_starts_with: String
-  coment_ends_with: String
-  coment_not_ends_with: String
+  User: UserWhereInput
+  Actores_every: ActorWhereInput
+  Actores_some: ActorWhereInput
+  Actores_none: ActorWhereInput
+  Temas_every: TemaWhereInput
+  Temas_some: TemaWhereInput
+  Temas_none: TemaWhereInput
+  Celdas_every: CeldaWhereInput
+  Celdas_some: CeldaWhereInput
+  Celdas_none: CeldaWhereInput
   AND: [MatrizWhereInput!]
   OR: [MatrizWhereInput!]
   NOT: [MatrizWhereInput!]
@@ -603,6 +993,12 @@ type Mutation {
   upsertActor(where: ActorWhereUniqueInput!, create: ActorCreateInput!, update: ActorUpdateInput!): Actor!
   deleteActor(where: ActorWhereUniqueInput!): Actor
   deleteManyActors(where: ActorWhereInput): BatchPayload!
+  createCelda(data: CeldaCreateInput!): Celda!
+  updateCelda(data: CeldaUpdateInput!, where: CeldaWhereUniqueInput!): Celda
+  updateManyCeldas(data: CeldaUpdateManyMutationInput!, where: CeldaWhereInput): BatchPayload!
+  upsertCelda(where: CeldaWhereUniqueInput!, create: CeldaCreateInput!, update: CeldaUpdateInput!): Celda!
+  deleteCelda(where: CeldaWhereUniqueInput!): Celda
+  deleteManyCeldas(where: CeldaWhereInput): BatchPayload!
   createEstado(data: EstadoCreateInput!): Estado!
   updateEstado(data: EstadoUpdateInput!, where: EstadoWhereUniqueInput!): Estado
   updateManyEstadoes(data: EstadoUpdateManyMutationInput!, where: EstadoWhereInput): BatchPayload!
@@ -611,7 +1007,6 @@ type Mutation {
   deleteManyEstadoes(where: EstadoWhereInput): BatchPayload!
   createMatriz(data: MatrizCreateInput!): Matriz!
   updateMatriz(data: MatrizUpdateInput!, where: MatrizWhereUniqueInput!): Matriz
-  updateManyMatrizes(data: MatrizUpdateManyMutationInput!, where: MatrizWhereInput): BatchPayload!
   upsertMatriz(where: MatrizWhereUniqueInput!, create: MatrizCreateInput!, update: MatrizUpdateInput!): Matriz!
   deleteMatriz(where: MatrizWhereUniqueInput!): Matriz
   deleteManyMatrizes(where: MatrizWhereInput): BatchPayload!
@@ -650,6 +1045,9 @@ type Query {
   actor(where: ActorWhereUniqueInput!): Actor
   actors(where: ActorWhereInput, orderBy: ActorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Actor]!
   actorsConnection(where: ActorWhereInput, orderBy: ActorOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ActorConnection!
+  celda(where: CeldaWhereUniqueInput!): Celda
+  celdas(where: CeldaWhereInput, orderBy: CeldaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Celda]!
+  celdasConnection(where: CeldaWhereInput, orderBy: CeldaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CeldaConnection!
   estado(where: EstadoWhereUniqueInput!): Estado
   estadoes(where: EstadoWhereInput, orderBy: EstadoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Estado]!
   estadoesConnection(where: EstadoWhereInput, orderBy: EstadoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): EstadoConnection!
@@ -667,6 +1065,7 @@ type Query {
 
 type Subscription {
   actor(where: ActorSubscriptionWhereInput): ActorSubscriptionPayload
+  celda(where: CeldaSubscriptionWhereInput): CeldaSubscriptionPayload
   estado(where: EstadoSubscriptionWhereInput): EstadoSubscriptionPayload
   matriz(where: MatrizSubscriptionWhereInput): MatrizSubscriptionPayload
   tema(where: TemaSubscriptionWhereInput): TemaSubscriptionPayload
@@ -682,6 +1081,7 @@ type Tema {
   coments: String
   parent: Boolean
   hijos(where: TemaWhereInput, orderBy: TemaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Tema!]
+  celdas(where: CeldaWhereInput, orderBy: CeldaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Celda!]
 }
 
 type TemaConnection {
@@ -696,6 +1096,12 @@ input TemaCreateInput {
   coments: String
   parent: Boolean
   hijos: TemaCreateManyWithoutHijosInput
+  celdas: CeldaCreateManyWithoutTemaParentInput
+}
+
+input TemaCreateManyInput {
+  create: [TemaCreateInput!]
+  connect: [TemaWhereUniqueInput!]
 }
 
 input TemaCreateManyWithoutHijosInput {
@@ -703,9 +1109,17 @@ input TemaCreateManyWithoutHijosInput {
   connect: [TemaWhereUniqueInput!]
 }
 
-input TemaCreateOneInput {
-  create: TemaCreateInput
+input TemaCreateOneWithoutCeldasInput {
+  create: TemaCreateWithoutCeldasInput
   connect: TemaWhereUniqueInput
+}
+
+input TemaCreateWithoutCeldasInput {
+  name: String!
+  prioridad: Int
+  coments: String
+  parent: Boolean
+  hijos: TemaCreateManyWithoutHijosInput
 }
 
 input TemaCreateWithoutHijosInput {
@@ -713,6 +1127,7 @@ input TemaCreateWithoutHijosInput {
   prioridad: Int
   coments: String
   parent: Boolean
+  celdas: CeldaCreateManyWithoutTemaParentInput
 }
 
 type TemaEdge {
@@ -839,6 +1254,7 @@ input TemaUpdateDataInput {
   coments: String
   parent: Boolean
   hijos: TemaUpdateManyWithoutHijosInput
+  celdas: CeldaUpdateManyWithoutTemaParentInput
 }
 
 input TemaUpdateInput {
@@ -847,6 +1263,7 @@ input TemaUpdateInput {
   coments: String
   parent: Boolean
   hijos: TemaUpdateManyWithoutHijosInput
+  celdas: CeldaUpdateManyWithoutTemaParentInput
 }
 
 input TemaUpdateManyDataInput {
@@ -854,6 +1271,18 @@ input TemaUpdateManyDataInput {
   prioridad: Int
   coments: String
   parent: Boolean
+}
+
+input TemaUpdateManyInput {
+  create: [TemaCreateInput!]
+  update: [TemaUpdateWithWhereUniqueNestedInput!]
+  upsert: [TemaUpsertWithWhereUniqueNestedInput!]
+  delete: [TemaWhereUniqueInput!]
+  connect: [TemaWhereUniqueInput!]
+  set: [TemaWhereUniqueInput!]
+  disconnect: [TemaWhereUniqueInput!]
+  deleteMany: [TemaScalarWhereInput!]
+  updateMany: [TemaUpdateManyWithWhereNestedInput!]
 }
 
 input TemaUpdateManyMutationInput {
@@ -880,13 +1309,19 @@ input TemaUpdateManyWithWhereNestedInput {
   data: TemaUpdateManyDataInput!
 }
 
-input TemaUpdateOneInput {
-  create: TemaCreateInput
-  update: TemaUpdateDataInput
-  upsert: TemaUpsertNestedInput
-  delete: Boolean
-  disconnect: Boolean
+input TemaUpdateOneRequiredWithoutCeldasInput {
+  create: TemaCreateWithoutCeldasInput
+  update: TemaUpdateWithoutCeldasDataInput
+  upsert: TemaUpsertWithoutCeldasInput
   connect: TemaWhereUniqueInput
+}
+
+input TemaUpdateWithoutCeldasDataInput {
+  name: String
+  prioridad: Int
+  coments: String
+  parent: Boolean
+  hijos: TemaUpdateManyWithoutHijosInput
 }
 
 input TemaUpdateWithoutHijosDataInput {
@@ -894,6 +1329,12 @@ input TemaUpdateWithoutHijosDataInput {
   prioridad: Int
   coments: String
   parent: Boolean
+  celdas: CeldaUpdateManyWithoutTemaParentInput
+}
+
+input TemaUpdateWithWhereUniqueNestedInput {
+  where: TemaWhereUniqueInput!
+  data: TemaUpdateDataInput!
 }
 
 input TemaUpdateWithWhereUniqueWithoutHijosInput {
@@ -901,7 +1342,13 @@ input TemaUpdateWithWhereUniqueWithoutHijosInput {
   data: TemaUpdateWithoutHijosDataInput!
 }
 
-input TemaUpsertNestedInput {
+input TemaUpsertWithoutCeldasInput {
+  update: TemaUpdateWithoutCeldasDataInput!
+  create: TemaCreateWithoutCeldasInput!
+}
+
+input TemaUpsertWithWhereUniqueNestedInput {
+  where: TemaWhereUniqueInput!
   update: TemaUpdateDataInput!
   create: TemaCreateInput!
 }
@@ -978,6 +1425,9 @@ input TemaWhereInput {
   hijos_every: TemaWhereInput
   hijos_some: TemaWhereInput
   hijos_none: TemaWhereInput
+  celdas_every: CeldaWhereInput
+  celdas_some: CeldaWhereInput
+  celdas_none: CeldaWhereInput
   AND: [TemaWhereInput!]
   OR: [TemaWhereInput!]
   NOT: [TemaWhereInput!]
@@ -1001,6 +1451,11 @@ type UserConnection {
 input UserCreateInput {
   id: ID
   name: String!
+}
+
+input UserCreateOneInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 type UserEdge {
@@ -1038,12 +1493,30 @@ input UserSubscriptionWhereInput {
   NOT: [UserSubscriptionWhereInput!]
 }
 
+input UserUpdateDataInput {
+  name: String
+}
+
 input UserUpdateInput {
   name: String
 }
 
 input UserUpdateManyMutationInput {
   name: String
+}
+
+input UserUpdateOneInput {
+  create: UserCreateInput
+  update: UserUpdateDataInput
+  upsert: UserUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: UserWhereUniqueInput
+}
+
+input UserUpsertNestedInput {
+  update: UserUpdateDataInput!
+  create: UserCreateInput!
 }
 
 input UserWhereInput {
