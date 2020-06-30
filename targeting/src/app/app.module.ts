@@ -53,6 +53,12 @@ import { MatrizesComponent } from './matrizes/matrizes.component';
 import {CarouselModule} from 'primeng/carousel';
 import {TabViewModule} from 'primeng/tabview';
 import {CodeHighlighterModule} from 'primeng/codehighlighter';
+import {DataViewModule} from 'primeng/dataview';
+import {DialogModule} from 'primeng/dialog';
+import {DropdownModule} from 'primeng/dropdown';
+import {PanelModule} from 'primeng/panel';
+import {InputTextModule} from 'primeng/inputtext';
+import {ButtonModule} from 'primeng/button';
 
 
 @NgModule({
@@ -116,7 +122,13 @@ import {CodeHighlighterModule} from 'primeng/codehighlighter';
     CarouselModule,
     ToastModule,
     TabViewModule,
-    CodeHighlighterModule
+    CodeHighlighterModule,
+    DataViewModule,
+    DialogModule,
+    DropdownModule,
+    PanelModule,
+    InputTextModule,
+    ButtonModule
   ],
   entryComponents: [
     DialogBoxComponent

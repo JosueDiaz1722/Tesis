@@ -25,7 +25,9 @@ export class GraphQLModule {
     // 5
     apollo.create({
       link: http,
-      cache: new InMemoryCache()
+      cache: new InMemoryCache({
+        addTypename: false
+      })
     });
   }
 }

@@ -281,7 +281,7 @@ export const DELETE_TEMA_MUTATION = gql`
 //////Matriz////////
 
 export const ALL_MATRIZ_QUERY = gql`
-  query MatrizQuery {
+  query AllMatrizQuery {
     matrizes{
       id
       createdAt
@@ -291,6 +291,63 @@ export const ALL_MATRIZ_QUERY = gql`
   }
 `;
 
+export const MATRIZ_QUERY = gql`
+query MatriQuery ($id:ID) {
+  matrizes(where:{id: $id}){
+    id
+    Actores {
+      name
+       hijos{
+        name
+        hijos{
+          name
+          hijos{
+            name
+          }
+        }
+      }
+    }
+    Temas {
+      name
+       hijos{
+        name
+        hijos{
+          name
+          hijos{
+            name
+          }
+        }
+      }
+    }
+    Celdas{
+      id
+      prioridad
+      tiempo
+      coment
+      ActorParent{id}
+      TemaParent{id}
+    }
+  }
+}
+
+`;
+
+export const ID_ACTORES = gql`
+query idActores{
+  actors(where: {parent: true}){
+   id
+ } 
+ }
+`;
+
+export const ID_TEMAS = gql`
+query idTemass{
+  temas(where: {parent: true}){
+   id
+ } 
+ }
+`;
+
 export const USER_MATRIZ_QUERY = gql`
 query MatrizUser($id:ID!){
   matrizes(where:{User:{id:$id}}){
@@ -298,6 +355,31 @@ query MatrizUser($id:ID!){
     createdAt
     updatedAt
     User{name}
+  }
+}
+`;
+
+export const CREAR_MATRIZ = gql`
+mutation crearMatriz($id:ID,$actors:[ActorWhereUniqueInput!], $temas: [TemaWhereUniqueInput!], $celdas:[CeldaCreateWithoutMatrizInput!]){
+  createMatriz(
+  data:{
+    Actores: {connect: $actors}
+    Temas : {connect: $temas}
+    Celdas: {create: $celdas}
+    User: {connect:{id:$id}}
+  }){
+    id
+     Actores{
+      id
+      parent
+    }
+    Temas{
+      id
+    }
+    Celdas{
+      id
+      matriz{id}
+    }
   }
 }
 `;

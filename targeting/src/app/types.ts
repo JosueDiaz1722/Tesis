@@ -10,7 +10,8 @@ export class Link {
     name: string;
     prioridad: number;
     coments: string;
-    parent: [Actor];
+    parent: Boolean;
+    hijos: [Actor];
   }
 
   export class Tema {
@@ -18,7 +19,8 @@ export class Link {
     name: string;
     prioridad: number;
     coments: string;
-    parent: [Tema];
+    parent: Boolean;
+    hijos: [Tema];
   }
 
   export class Matriz{

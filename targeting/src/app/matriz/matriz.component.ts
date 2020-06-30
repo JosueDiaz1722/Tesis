@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild,Directive, Output, EventEmitter, Input, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { IDataOptions, IDataSet } from '@syncfusion/ej2-angular-pivotview';
-import { ALL_ACTORES_QUERY,ALL_TEMAS_QUERY, 
+import { MATRIZ_QUERY, ALL_ACTORES_QUERY,ALL_TEMAS_QUERY, 
   ALL_MATRIZ_QUERY, UPDATE_CELL_PRIORIDAD_MUTATION, DELETE_CELL_MUTATION, 
   CREATE_CELL_MUTATION,UPDATE_ESTADO_TEMA_MUTATION,UPDATE_ESTADO_ACTOR_MUTATION,
 ESTADO_QUERY,DELETE_ALL_MATRIZ_QUERY,UPDATE_CELL_TIEMPO_MUTATION} from '../graphql';
@@ -9,8 +9,11 @@ import {Apollo} from 'apollo-angular';
 import {MessageService, Message} from 'primeng/api';
 import {ConfirmationService} from 'primeng/api';
 import {Observable} from 'rxjs/Rx';
-import {Router} from '@angular/router'
+import {Router, ActivatedRoute} from '@angular/router'
 import { Location } from "@angular/common";
+import { map } from 'rxjs/operators';
+
+ 
 
 @Component({
   selector: 'app-matriz',
@@ -36,12 +39,25 @@ export class MatrizComponent implements OnInit, OnDestroy {
   public pivotData: IDataSet[];
   public dataSourceSettings: IDataOptions;
 
-  constructor(public _router: Router, public _location: Location, private apollo: Apollo,private messageService: MessageService,private confirmationService: ConfirmationService ) { }
+  constructor(public activatedRoute: ActivatedRoute,public _router: Router, public _location: Location, private apollo: Apollo,private messageService: MessageService,private confirmationService: ConfirmationService ) { }
+
+  state: any;
 
   async ngOnInit(): Promise<void> {
+    /*
     this.datasource();
     this.childData();
-    this.matriz();
+    this.matriz();*/
+    this.state = this._location.getState();
+    this.apollo.watchQuery({
+      query: MATRIZ_QUERY,
+      variables: {
+        id: this.state.id
+      }
+    }).valueChanges.subscribe((response) => {
+      this.DatosMatriz = response.data['matrizes'];
+      console.log(this.DatosMatriz);
+    });
   }
 
   ngOnDestroy(){
