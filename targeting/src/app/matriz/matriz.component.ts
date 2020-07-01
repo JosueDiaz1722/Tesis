@@ -34,6 +34,7 @@ export class MatrizComponent implements OnInit, OnDestroy {
   ParentActor: Actor[] = [];
   HijosActor: Actor[] =[];
   DatosMatriz: Matriz[]=[];
+  Matriz: Matriz;
   lista: Observable<Array<Matriz>>
   loading: boolean = true;
   public pivotData: IDataSet[];
@@ -49,15 +50,19 @@ export class MatrizComponent implements OnInit, OnDestroy {
     this.childData();
     this.matriz();*/
     this.state = this._location.getState();
-    this.apollo.watchQuery({
-      query: MATRIZ_QUERY,
-      variables: {
-        id: this.state.id
-      }
-    }).valueChanges.subscribe((response) => {
-      this.DatosMatriz = response.data['matrizes'];
-      console.log(this.DatosMatriz);
-    });
+    if(!this.state.id){
+      console.log("vacio")
+    }else{
+      this.apollo.watchQuery({
+        query: MATRIZ_QUERY,
+        variables: {
+          id: this.state.id
+        }
+      }).valueChanges.subscribe((response) => {
+        this.Matriz = response.data['matriz'];
+        this.loading = response.loading;
+      });  
+    }
   }
 
   ngOnDestroy(){
@@ -81,13 +86,7 @@ export class MatrizComponent implements OnInit, OnDestroy {
     }).valueChanges.subscribe((response) => {
       this.DatosMatriz = response.data['matrizes'];
       this.loading = response.loading;
-      this.lista = response.data['matrizes'];
-      /*if(this.DatosMatriz.length === 0){
-        console.log("Esta Vacio");
-        this.createCell();
-      }else{
-        console.log(this.DatosMatriz);
-      }*/
+      console.log(this.DatosMatriz)
     });
   }
 

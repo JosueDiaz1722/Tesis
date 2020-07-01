@@ -59,6 +59,8 @@ import {DropdownModule} from 'primeng/dropdown';
 import {PanelModule} from 'primeng/panel';
 import {InputTextModule} from 'primeng/inputtext';
 import {ButtonModule} from 'primeng/button';
+import {TreeTableModule} from 'primeng/treetable';
+
 
 
 @NgModule({
@@ -128,7 +130,8 @@ import {ButtonModule} from 'primeng/button';
     DropdownModule,
     PanelModule,
     InputTextModule,
-    ButtonModule
+    ButtonModule,
+    TreeTableModule
   ],
   entryComponents: [
     DialogBoxComponent

@@ -2,7 +2,7 @@
   <h4>LOADING</h4>
 </div>
 <ng-template #notShow>
-<div align="right">
+<!--<div align="right">
   <button mat-icon-button color="success" (click)="dataSource()">
       <mat-icon>refresh</mat-icon>
   </button>
@@ -15,7 +15,6 @@ idMapping ="id" childMapping= "hijos"
 [allowPaging]="true" 
 [pageSettings]="pageSettings" [allowSorting]="true" 
 [allowFiltering]="true" 
-
 
 >
   <e-columns>
@@ -64,5 +63,25 @@ idMapping ="id" childMapping= "hijos"
           </ng-template> 
       </e-column>
   </e-columns>
-</ejs-treegrid>
+</ejs-treegrid>-->
+<h3 class="first">Basic</h3>
+<p-treeTable [value]="allLinks">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Type</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+        <tr [ttRow]="rowNode">
+            <td>
+                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                {{rowData.id}}
+            </td>
+            <td>{{rowData.name}}</td>
+            <td>{{rowData.prioridad}}</td>
+        </tr>
+    </ng-template>
+</p-treeTable>
 </ng-template>

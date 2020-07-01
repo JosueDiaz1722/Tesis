@@ -293,9 +293,10 @@ export const ALL_MATRIZ_QUERY = gql`
 
 export const MATRIZ_QUERY = gql`
 query MatriQuery ($id:ID) {
-  matrizes(where:{id: $id}){
+  matriz(where:{id: $id}){
     id
     Actores {
+      id
       name
        hijos{
         name
@@ -308,6 +309,7 @@ query MatriQuery ($id:ID) {
       }
     }
     Temas {
+      id
       name
        hijos{
         name

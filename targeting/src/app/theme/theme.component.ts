@@ -22,13 +22,14 @@ import { DELETE_TEMA_MUTATION,UPDATE_TEMA_MUTATION,CREATE_TEMA_MUTATION,
   styleUrls: ['./theme.component.css'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
+      state('collapsed', style({height: '0px', minHeight: '0', display: 'Add'})),
       state('expanded', style({height: '*'})),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
 })
 export class ThemeComponent {
+  public cssClass: string = "custom";
   allLinks: Tema[] = [];
   loading: boolean = true;
   ParentTemas: Tema[] = [];

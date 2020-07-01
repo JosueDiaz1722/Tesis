@@ -2,3 +2,33 @@
 
   color: rgb(5, 5, 5);
 }
+.e-treegrid .e-treegridexpand {
+  background-image: url(https://clipartart.com/images/plus-button-clipart-3.jpg);
+  background-repeat: no-repeat;
+  width: 14px;
+  height: 14px;
+}
+.e-treegrid .e-treegridcollapse {
+  background-image: url(https://clipartart.com/images/plus-button-clipart-3.jpg);
+  background-repeat: no-repeat;
+  width: 14px;
+  height: 14px;
+}
+.e-treegrid .e-doc {
+  background-image: url(https://clipartart.com/images/plus-button-clipart-3.jpg);
+  background-repeat: no-repeat;
+  width: 14px;
+  height: 14px;
+}
+
+.e-treegrid .e-treegridexpand:before {
+  content: none;
+}
+
+.e-treegrid .e-treegridcollapse:before {
+  content: none;
+}
+.e-treegrid .e-treegridcollapse:after,
+.e-treegrid .e-treegridexpand:after {
+  opacity: 0;
+}

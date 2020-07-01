@@ -1,17 +1,7 @@
 <!--<ejs-pivotview #pivotview id='PivotView' height='350' [dataSourceSettings]=dataSourceSettings></ejs-pivotview>-->
-<h1>Table</h1>
+<h1>Matriz de {{state.nombre}}</h1>
 <hr>
-<div align="right">
-  <button mat-icon-button color="success"(click)="refresh()">
-      <mat-icon>refresh</mat-icon>
-  </button>
-  <p-toast position="top-center"></p-toast>
-  <button mat-icon-button color="success" (click)="saveEstado()">
-    <mat-icon>save</mat-icon>
-  </button>
-</div>
-<div class="table-wrapper">
-  <table class="fl-table">
+<!--  <table class="fl-table">
     <thead>
       <tr>
         <th>
@@ -137,12 +127,104 @@
     <mat-icon class="red-icon">fiber_manual_record</mat-icon>
   </mat-button-toggle>
 </mat-button-toggle-group>
-<span class="center">Prioridad: {{group.value}}</span>
+<span class="center">Prioridad: {{group.value}}</span>-->
 
-<br>
-<br>
-<ul>
-  <li *ngFor="let item of lista">
-      {{item.prioridad}}
-  </li>
-</ul>
+<div *ngIf="loading; else notShow">
+  <h4>LOADING</h4>
+</div>
+<ng-template #notShow>
+<div class="table-wrapper">
+<div align="right">
+  <button mat-icon-button color="success"(click)="refresh()">
+      <mat-icon>refresh</mat-icon>
+  </button>
+  <p-toast position="top-center"></p-toast>
+  <button mat-icon-button color="success" (click)="saveEstado()">
+    <mat-icon>save</mat-icon>
+  </button>
+</div>
+<table class="fl-table" style="">
+  <thead>
+    <tr>
+      <th>
+        <div class="center">
+          Actores/Temas
+        </div>
+      </th>
+      <th *ngFor="let item of Matriz.Temas">
+        {{item.name}}
+        <div *ngFor="let hijo of item.hijos">
+          {{hijo.name}}
+          <div *ngFor="let subhijo of hijo.hijos">
+            {{subhijo.name}}
+            <div *ngFor="let subhijo2 of subhijo.hijos">
+              {{subhijo2.name}}
+            </div>
+          </div>
+        </div>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let actor of Matriz.Actores">
+      <th>
+        <span class='empty_fill'>{{actor.name}}
+           <span  *ngFor="let hijo of actor.hijos">
+            <ul>
+              {{hijo.name}}
+            <ul>
+              <span *ngFor="let subhijo of hijo.hijos">
+                {{subhijo.name}}
+                <ul>
+                  <span  *ngFor="let subhijo2 of subhijo.hijos">
+                      <li>
+                        {{subhijo2.name}}
+                      </li>
+                  </span>  
+                </ul> 
+              </span>
+            </ul>
+            </ul> 
+           </span>  
+         </span> 
+      </th>
+      <td *ngFor="let tema of Matriz.Temas">
+          <div *ngFor = "let cell of Matriz.Celdas">
+              <div *ngIf = "actor.id == cell.ActorParent.id && tema.id == cell.TemaParent.id">
+                <mat-button-toggle-group #group="matButtonToggleGroup" value="{{cell.prioridad}}">
+                  <mat-button-toggle value="0" (change)="onPrioridadChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
+                    <mat-icon>close</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle value="1" (change)="onPrioridadChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
+                    <mat-icon class="green-icon">fiber_manual_record</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle value="2" (change)="onPrioridadChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align center">
+                    <mat-icon class="yellow-icon">fiber_manual_record</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle value="3" (change)="onPrioridadChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align right">
+                    <mat-icon class="red-icon">fiber_manual_record</mat-icon>
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+                <br>
+                <mat-button-toggle-group #grouptime="matButtonToggleGroup" value="{{cell.tiempo}}">
+                  <mat-button-toggle value="0" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
+                    <mat-icon>close</mat-icon>
+                  </mat-button-toggle>
+                  <mat-button-toggle value="1" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
+                    <img src="assets/img/courtblack.gif" />
+                  </mat-button-toggle>
+                  <mat-button-toggle value="2" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align center">
+                    <img src="assets/img/moyenblack.gif" />
+                  </mat-button-toggle>
+                  <mat-button-toggle value="3" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align right">
+                    <img src="assets/img/longblack.gif" />    
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+          </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</ng-template>

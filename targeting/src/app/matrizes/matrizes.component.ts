@@ -138,15 +138,15 @@ export class MatrizesComponent implements OnInit {
           }
         }).subscribe((response) => {
           let data = response.data['createMatriz']
-          this.router.navigateByUrl('/matriz',{state:{id: data.id}});
+          this.router.navigateByUrl('/matriz',{state:{id: data.id, nombre: data.User.name}});
         }); 
        });
      });
   }
 
-  verMatriz(id){
-    console.log(id);
-    this.router.navigateByUrl('/matriz',{state:{id: id}});
+  verMatriz(matriz){
+    console.log(matriz);
+    this.router.navigateByUrl('/matriz',{state:{id: matriz.id,nombre: matriz.User.name}});
   }
 
   selectCar(event: Event, matriz: Matriz) {

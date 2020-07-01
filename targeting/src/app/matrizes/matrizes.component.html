@@ -40,7 +40,7 @@
                                 <div class="p-col-12">Actualizdo: <b>{{matriz.updatedAt| date: "dd/MM/yyyy hh:mm"}}</b></div>
                             </div>
                         </div>
-                        <button mat-icon-button color="primary" (click)="verMatriz(matriz.id)">
+                        <button mat-icon-button color="primary" (click)="verMatriz(matriz)">
                             <mat-icon>visibility</mat-icon>
                         </button>
                     </div>
@@ -89,7 +89,7 @@
                                     </div>
                                 </div>
                                 <div class="test">
-                                    <button mat-icon-button color="primary" (click)="verMatriz(matriz.id)">
+                                    <button mat-icon-button color="primary" (click)="verMatriz(matriz)">
                                         <mat-icon>visibility</mat-icon>
                                     </button>
                                     <button mat-icon-button color="accent" (click)="confirm2(matriz.id)">
