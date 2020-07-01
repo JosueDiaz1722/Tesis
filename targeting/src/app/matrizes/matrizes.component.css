@@ -57,3 +57,18 @@
     display: flex;
     justify-content: space-between;
 }
+
+.column {
+    float: left;
+    width: 50%;
+    padding-right: 50px;
+    padding-left: 50px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+    
+}

@@ -1,74 +1,32 @@
-<div>
-    <div>
-        <h3>Matrices Disponibles</h3>
-        <p-dataView #dv [value]="Matrices" [paginator]="true" [rows]="20" paginatorPosition="both" filterBy="User.name"
-        [sortField]="sortField1" [sortOrder]="sortOrder1">
-        <p-header>
-            <div class="ui-helper-clearfix">
-                <div id="block_container">
-                    <div class="p-col-12 p-md-4" style=" display:inline; align-items: flex-start;">
-                        <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey1" placeholder="Ordenar Por" (onChange)="onSortChange($event)" [style]="{'min-width':'140px'}"></p-dropdown>
-                    </div>
-                    <div class="p-col-6 p-md-4 filter-container" style=" display:inline">
-                        <div style="position:relative">
-                            <input type="search" pInputText placeholder="Buscar por Usuario" (input)="dv.filter($event.target.value)">
-                        </div>
-                    </div>
-                    <div class="p-col-6 p-md-4" style="text-align:right; display: inline;">
-                        <b>Matrices Disponibles</b>
-                    </div>
-                </div>
-            </div>
-        </p-header>
-        <ng-template let-matriz pTemplate="listItem">
-            <div class="p-col-12">
-                <div class="car-details">
-                    <div style=" display: inline;">
-                        <mat-icon class="main">analytics
-                        </mat-icon>
-                       </div>
-                    <div id="block_container">
-                       
-                        <div style="align-content: flex-end;">
-                            <div class="p-col-12">Creado Por: <b>{{matriz.User.name}}</b></div>
-                            <div class="p-col-12">Creado: <b>{{matriz.createdAt| date: "dd/MM/yyyy hh:mm"}} </b></div>
-                            <div class="p-col-12">Actualizdo: <b>{{matriz.updatedAt| date: "dd/MM/yyyy hh:mm"}}</b></div>
-                        </div>
-                    </div>
-                    <button mat-icon-button color="primary" (click)="verMatriz(matriz.id)">
-                        <mat-icon>visibility</mat-icon>
-                    </button>
-                </div>
-            </div>
-        </ng-template>
-    </p-dataView>
-    </div>
+<div>  
     <br/>
-    <div>
-    <h3>Mis Matrices</h3>
-    
-        <p-dataView #dv1 [value]="MatricesUsuario" [paginator]="true" [rows]="20" paginatorPosition="both" filterBy="createdAt"
-        [sortField]="sortField" [sortOrder]="sortOrder">
-        <p-header>
-            <div class="ui-helper-clearfix">
-                <div id="block_container">
-                    <div class="p-col-12 p-md-4" style=" display:inline; align-items: flex-start;">
-                        <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Ordenar Por" (onChange)="onSortChange($event)" [style]="{'min-width':'140px'}"></p-dropdown>
-                    </div>
-                    <div class="p-col-6 p-md-4 filter-container" style=" display:inline">
-                        <div style="position:relative">
-                            <input type="search" pInputText placeholder="Fecha: 2020-06-29" (input)="dv1.filter($event.target.value)">
+</div>
+
+<p-confirmDialog key="positionDialog" [style]="{width: '50vw'}"></p-confirmDialog>
+<p-messages [value]="msgs"></p-messages>
+
+<div class="row">
+    <div class="column">
+        <div>
+            <h3>Matrices Disponibles</h3>
+            <p-dataView #dv [value]="Matrices" [paginator]="true" [rows]="20" paginatorPosition="both" filterBy="User.name"
+            [sortField]="sortField1" [sortOrder]="sortOrder1">
+            <p-header>
+                <div class="ui-helper-clearfix">
+                    <div id="block_container">
+                        <div class="p-col-12 p-md-4" style=" display:inline; align-items: flex-start;">
+                            <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey1" placeholder="Ordenar Por" (onChange)="onSortChange1($event)" [style]="{'min-width':'140px'}"></p-dropdown>
+                        </div>
+                        <div class="p-col-6 p-md-4 filter-container" style=" display:inline">
+                            <div style="position:relative">
+                                <input type="search" pInputText placeholder="Buscar por Usuario" (input)="dv.filter($event.target.value)">
+                            </div>
                         </div>
                     </div>
-                    <div class="p-col-6 p-md-4" style="text-align:right; display: inline;">
-                        <button mat-raised-button color="primary" (click)="nuevaMatriz()">Nueva</button>
-                    </div>
                 </div>
-            </div>
-        </p-header>
-        <ng-template let-matriz pTemplate="listItem">
-            <div class="p-col-12">
-                <div>
+            </p-header>
+            <ng-template let-matriz pTemplate="listItem">
+                <div class="p-col-12">
                     <div class="car-details">
                         <div style=" display: inline;">
                             <mat-icon class="main">analytics
@@ -82,19 +40,67 @@
                                 <div class="p-col-12">Actualizdo: <b>{{matriz.updatedAt| date: "dd/MM/yyyy hh:mm"}}</b></div>
                             </div>
                         </div>
-                        <div class="test">
-                            <button mat-icon-button color="primary" (click)="verMatriz(matriz.id)">
-                                <mat-icon>visibility</mat-icon>
-                            </button>
-                            <button mat-icon-button color="accent" aria-label="Example icon button with a home icon">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </div>   
-                    </div>    
+                        <button mat-icon-button color="primary" (click)="verMatriz(matriz.id)">
+                            <mat-icon>visibility</mat-icon>
+                        </button>
+                    </div>
                 </div>
-                
-            </div>
-        </ng-template>
-    </p-dataView>
+            </ng-template>
+        </p-dataView>
+        </div>
     </div>
-</div>
+    <div class="column">
+        <div>
+            <h3>Mis Matrices</h3>
+            
+                <p-dataView #dv1 [value]="MatricesUsuario" [paginator]="true" [rows]="20" paginatorPosition="both" filterBy="createdAt"
+                [sortField]="sortField" [sortOrder]="sortOrder">
+                <p-header>
+                    <div class="ui-helper-clearfix">
+                        <div id="block_container">
+                            <div class="p-col-12 p-md-4" style=" display:inline; align-items: flex-start;">
+                                <p-dropdown [options]="sortOptions" [(ngModel)]="sortKey" placeholder="Ordenar Por" (onChange)="onSortChange($event)" [style]="{'min-width':'140px'}"></p-dropdown>
+                            </div>
+                            <div class="p-col-6 p-md-4 filter-container" style=" display:inline">
+                                <div style="position:relative">
+                                    <input type="search" pInputText placeholder="Fecha: 2020-06-29" (input)="dv1.filter($event.target.value)">
+                                </div>
+                            </div>
+                            <div class="p-col-6 p-md-4" style="text-align:right; display: inline;">
+                                <button mat-raised-button color="primary" (click)="confirm1()">Nueva</button>
+                            </div>
+                        </div>
+                    </div>
+                </p-header>
+                <ng-template let-matriz pTemplate="listItem">
+                    <div class="p-col-12">
+                        <div>
+                            <div class="car-details">
+                                <div style=" display: inline;">
+                                    <mat-icon class="main">analytics
+                                    </mat-icon>
+                                   </div>
+                                <div id="block_container">
+                                   
+                                    <div style="align-content: flex-end;">
+                                        <div class="p-col-12">Creado Por: <b>{{matriz.User.name}}</b></div>
+                                        <div class="p-col-12">Creado: <b>{{matriz.createdAt| date: "dd/MM/yyyy hh:mm"}} </b></div>
+                                        <div class="p-col-12">Actualizdo: <b>{{matriz.updatedAt| date: "dd/MM/yyyy hh:mm"}}</b></div>
+                                    </div>
+                                </div>
+                                <div class="test">
+                                    <button mat-icon-button color="primary" (click)="verMatriz(matriz.id)">
+                                        <mat-icon>visibility</mat-icon>
+                                    </button>
+                                    <button mat-icon-button color="accent" (click)="confirm2(matriz.id)">
+                                        <mat-icon>delete</mat-icon>
+                                    </button>
+                                </div>   
+                            </div>    
+                        </div>      
+                    </div>
+                </ng-template>
+            </p-dataView>
+            </div>
+    </div>
+  </div>

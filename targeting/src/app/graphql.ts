@@ -348,6 +348,7 @@ query idTemass{
  }
 `;
 
+
 export const USER_MATRIZ_QUERY = gql`
 query MatrizUser($id:ID!){
   matrizes(where:{User:{id:$id}}){
@@ -358,7 +359,13 @@ query MatrizUser($id:ID!){
   }
 }
 `;
-
+export const DELETE_MATRIZ_QUERY = gql`
+  mutation DeleteMatrizQuery ($id:ID){
+    deleteMatriz(where:{id: $id}){
+      id
+    }
+  }
+`;
 export const CREAR_MATRIZ = gql`
 mutation crearMatriz($id:ID,$actors:[ActorWhereUniqueInput!], $temas: [TemaWhereUniqueInput!], $celdas:[CeldaCreateWithoutMatrizInput!]){
   createMatriz(

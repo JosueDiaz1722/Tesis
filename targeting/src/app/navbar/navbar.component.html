@@ -5,8 +5,7 @@
   <a mat-button routerLink="">Incio</a>
   <a mat-button routerLink="actores">Actores</a>
   <a mat-button routerLink="theme">Temas</a>
-  <a mat-button (click)="dropDatabase($event);">Colaborativo</a>
-  <p-confirmDialog key="confirm-drop-database" header="Drop database" acceptLabel="Nuevo Tablero" rejectLabel="Existente" [(visible)]="confirmDropDatabaseDialogVisible"></p-confirmDialog>
+  <a mat-button routerLink="matrices">Matrices</a>
   <a mat-button routerLink="about">Info</a>
   <button mat-button (click)="onLogout()" *ngIf="isLoggedIn">Logout</button>
 </mat-toolbar>

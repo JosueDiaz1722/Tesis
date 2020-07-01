@@ -30,6 +30,10 @@ const routes: Routes = [
     path: 'refresh', component: MatrizComponent
   },
   {
+    path: 'refresh1', component: AboutComponent
+  },
+
+  {
     path: 'actor', component: ActorComponent
   },
   {
