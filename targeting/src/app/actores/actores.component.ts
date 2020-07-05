@@ -11,7 +11,7 @@ import {Router} from '@angular/router';
 
 // 1
 import {DELETE_ACTOR_MUTATION,UPDATE_ACTOR_MUTATION,CREATE_ACTOR_MUTATION
-  ,ALL_ACTORES_QUERY, CREATE_NEW_ACTOR_MUTATION, CONNECT_ACTOR
+  ,ALL_ACTORES_QUERY, CREATE_NEW_ACTOR_MUTATION, CONNECT_ACTOR, UPDATE_ACTOR_PRIORIDAD_MUTATION
   ,UPDATE_ESTADO_ACTOR_MUTATION, ESTADO_QUERY,DELETE_ACTOR_CELL_MUTATION} from '../graphql';
 
 
@@ -162,6 +162,18 @@ export class ActoresComponent implements OnInit {
     }).subscribe((response) => {
         this.dataSource();
     });     
+  }
+
+  handleRate(event,id) {
+    this.apollo.mutate({
+      mutation: UPDATE_ACTOR_PRIORIDAD_MUTATION,
+      variables: {
+       prioridad: parseInt(event.value),
+       id: parseInt(id)
+      }
+    }).subscribe((response) => {
+        
+    });
   }
 }
 

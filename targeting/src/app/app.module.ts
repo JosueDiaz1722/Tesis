@@ -60,7 +60,7 @@ import {PanelModule} from 'primeng/panel';
 import {InputTextModule} from 'primeng/inputtext';
 import {ButtonModule} from 'primeng/button';
 import {TreeTableModule} from 'primeng/treetable';
-
+import {RatingModule} from 'primeng/rating';
 
 
 @NgModule({
@@ -131,7 +131,8 @@ import {TreeTableModule} from 'primeng/treetable';
     PanelModule,
     InputTextModule,
     ButtonModule,
-    TreeTableModule
+    TreeTableModule,
+    RatingModule
   ],
   entryComponents: [
     DialogBoxComponent

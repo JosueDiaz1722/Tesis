@@ -6,7 +6,7 @@
         <input type="text" class="form-control" required placeholder="Nombre" matInput [(ngModel)]="local_data.name">
       </mat-form-field>
       <mat-form-field style="width:100%" *ngIf="action != 'Eliminar';">
-        <input type="number"  required min="0" max="4" placeholder="Prioridad" matInput [(ngModel)]="local_data.prioridad">
+        <input type="number"  required min="1" max="3" placeholder="Prioridad" matInput [(ngModel)]="local_data.prioridad">
       </mat-form-field>
       <mat-form-field  style="width:100%" *ngIf="action != 'Eliminar';">
         <textarea matInput placeholder="Comentario" [(ngModel)]="local_data.coments"></textarea>

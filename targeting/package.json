@@ -36,6 +36,7 @@
     "graphql": "<15.0.0",
     "graphql-tag": "^2.10.3",
     "mdbootstrap": "^4.14.0",
+    "ng-starrating": "^1.0.20",
     "primeicons": "^2.0.0",
     "primeng": "^9.1.0",
     "rxjs": "~6.5.4",

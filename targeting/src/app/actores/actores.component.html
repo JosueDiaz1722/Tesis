@@ -10,7 +10,7 @@
 </div>
 <ejs-treegrid #treegrid 
 [dataSource]="allLinks" 
-[treeColumnIndex]= "1"
+[treeColumnIndex]= "0"
 idMapping ="id"  childMapping= "hijos"
 [allowPaging]="true" 
 [pageSettings]="pageSettings" [allowSorting]="true" 
@@ -20,21 +20,18 @@ idMapping ="id"  childMapping= "hijos"
 >
     <e-columns>
         <e-column
-        field="id"
-        headerText="ActorID"
-        textAlign="Left"
-        type= "number"
-        width= "90"
-        isPrimaryKey = "true"
-        editType = "numericedit"
-        [edit]="numericParams"
-        ></e-column>
-        <e-column
         field="name"
         headerText="Actor Name"
         textAlign="Left"
         width= "160"
-        ></e-column>
+        >
+        <ng-template #template let-data>
+            <span *ngIf="data.parent == false" class="material-icons">
+                <mat-icon class="hijo">subdirectory_arrow_right</mat-icon>
+            </span>
+            {{data.name}} 
+        </ng-template>
+        </e-column>
         <e-column
         field="prioridad"
         headerText="Prioridad"
@@ -43,7 +40,11 @@ idMapping ="id"  childMapping= "hijos"
         width= "60"
         editType = "numericedit"
         [edit]="numericParams"
-        ></e-column>
+        >
+        <ng-template #template let-data>
+            <p-rating class="star" [(ngModel)]="data.prioridad" [cancel]="false" (onRate)="handleRate($event,data.id)" stars="3"></p-rating>
+        </ng-template>
+        </e-column>
         <e-column
         field="coments"
         headerText="Comentario"

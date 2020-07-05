@@ -1,4 +1,4 @@
-import {Component,OnInit,ViewChild} from '@angular/core';
+import {Component,OnInit,ViewChild, ViewEncapsulation} from '@angular/core';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Apollo} from 'apollo-angular';
 import {Estado, Tema} from '../types';
@@ -7,11 +7,13 @@ import {DialogBoxComponent} from '../dialog-box/dialog-box.component';
 import { MatDialog } from '@angular/material/dialog';
 import { PageSettingsModel,EditSettingsModel,TreeGridComponent } from "@syncfusion/ej2-angular-treegrid";
 
+
 // 1
 import { DELETE_TEMA_MUTATION,UPDATE_TEMA_MUTATION,CREATE_TEMA_MUTATION, 
   ALL_TEMAS_QUERY, CREATE_NEW_TEMA_MUTATION, CONNECT_TEMA,
-  ESTADO_QUERY, DELETE_TEMA_CELL_MUTATION, UPDATE_ESTADO_TEMA_MUTATION,
+  UPDATE_TEMA_PRIORIDAD_MUTATION,
   } from '../graphql';
+import { StarRatingComponent } from 'ng-starrating';
 
 /**
  * @title Table with expandable rows
@@ -26,7 +28,7 @@ import { DELETE_TEMA_MUTATION,UPDATE_TEMA_MUTATION,CREATE_TEMA_MUTATION,
       state('expanded', style({height: '*'})),
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
-  ],
+  ]
 })
 export class ThemeComponent {
   public cssClass: string = "custom";
@@ -40,6 +42,9 @@ export class ThemeComponent {
   public toolbar: string[];
   public numericParams: Object;
   @ViewChild(TreeGridComponent, { static: false }) treegrid: TreeGridComponent;
+  
+  val2: number = 2;
+  msg: string;
 
   constructor(public dialog: MatDialog, private apollo: Apollo,private router: Router) { }
 
@@ -60,20 +65,6 @@ export class ThemeComponent {
       };
       this.toolbar = ['Add','Edit','Delete','Update','Cancel'];
       this.numericParams = {params: {format: 'n'}}; 
-
-      setTimeout(() => { 
-        this.apollo.watchQuery({
-          query: ESTADO_QUERY
-        }).valueChanges.subscribe((response) => {
-          this.Estado = response.data['estadoes'];
-        });
-        this.apollo.watchQuery({
-          query: ALL_TEMAS_QUERY
-        }).valueChanges.subscribe((response) => {
-          this.ParentTemas = response.data['temas'];
-          this.loading = response.loading;
-        });
-      }, 1000);
   }
 
   insert(data: any) : void { 
@@ -181,5 +172,18 @@ export class ThemeComponent {
       this.dataSource(); 
     });   
   }
-  
+
+  handleRate(event,id) {
+    this.apollo.mutate({
+      mutation: UPDATE_TEMA_PRIORIDAD_MUTATION,
+      variables: {
+       prioridad: parseInt(event.value),
+       id: parseInt(id)
+      }
+    }).subscribe((response) => {
+        
+    });
+  }
+
 }
+

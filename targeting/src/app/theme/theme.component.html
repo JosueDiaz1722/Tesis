@@ -2,7 +2,7 @@
   <h4>LOADING</h4>
 </div>
 <ng-template #notShow>
-<!--<div align="right">
+<div align="right">
   <button mat-icon-button color="success" (click)="dataSource()">
       <mat-icon>refresh</mat-icon>
   </button>
@@ -10,7 +10,7 @@
 </div>
 <ejs-treegrid #treegrid 
 [dataSource]="allLinks" 
-[treeColumnIndex]= "1"
+[treeColumnIndex]= "0"
 idMapping ="id" childMapping= "hijos"
 [allowPaging]="true" 
 [pageSettings]="pageSettings" [allowSorting]="true" 
@@ -18,7 +18,7 @@ idMapping ="id" childMapping= "hijos"
 
 >
   <e-columns>
-      <e-column
+     <!-- <e-column
       field="id"
       headerText="TemaID"
       textAlign="Left"
@@ -27,13 +27,20 @@ idMapping ="id" childMapping= "hijos"
       isPrimaryKey = "true"
       editType = "numericedit"
       [edit]="numericParams"
-      ></e-column>
+      ></e-column>-->
       <e-column
       field="name"
       headerText="Tema Name"
       textAlign="Left"
       width= "160"
-      ></e-column>
+      >
+      <ng-template #template let-data>
+        <span *ngIf="data.parent == false" class="material-icons">
+            <mat-icon class="hijo">subdirectory_arrow_right</mat-icon>
+        </span>
+        {{data.name}} 
+      </ng-template>
+    </e-column>
       <e-column
       field="prioridad"
       headerText="Prioridad"
@@ -42,7 +49,11 @@ idMapping ="id" childMapping= "hijos"
       width= "60"
       editType = "numericedit"
       [edit]="numericParams"
-      ></e-column>
+      >
+      <ng-template #template let-data>
+        <p-rating class="star" [(ngModel)]="data.prioridad" [cancel]="false" (onRate)="handleRate($event,data.id)" stars="3"></p-rating>
+      </ng-template>
+      </e-column>
       <e-column
       field="coments"
       headerText="Comentario"
@@ -63,25 +74,6 @@ idMapping ="id" childMapping= "hijos"
           </ng-template> 
       </e-column>
   </e-columns>
-</ejs-treegrid>-->
-<h3 class="first">Basic</h3>
-<p-treeTable [value]="allLinks">
-    <ng-template pTemplate="header">
-        <tr>
-            <th>Name</th>
-            <th>Size</th>
-            <th>Type</th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
-        <tr [ttRow]="rowNode">
-            <td>
-                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
-                {{rowData.id}}
-            </td>
-            <td>{{rowData.name}}</td>
-            <td>{{rowData.prioridad}}</td>
-        </tr>
-    </ng-template>
-</p-treeTable>
+</ejs-treegrid>
 </ng-template>
+

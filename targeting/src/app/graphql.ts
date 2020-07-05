@@ -147,6 +147,20 @@ export const UPDATE_ACTOR_MUTATION = gql`
   }
 `;
 
+export const UPDATE_ACTOR_PRIORIDAD_MUTATION = gql`
+  # 2
+  mutation updateActorMutation($prioridad: Int!, $id: Int!){
+    updateActor(data:{
+      prioridad: $prioridad}
+      where: {id:$id}
+    ){
+      name
+      prioridad
+      coments
+    }
+  }
+`;
+
 export const DELETE_ACTOR_MUTATION = gql`
   # 2
   mutation deleteActorMutation($id: Int!){
@@ -254,6 +268,20 @@ export const UPDATE_TEMA_MUTATION = gql`
       name: $name,
       prioridad: $prioridad,
       coments: $coments},
+      where: {id:$id}
+    ){
+      name
+      prioridad
+      coments
+    }
+  }
+`;
+
+export const UPDATE_TEMA_PRIORIDAD_MUTATION = gql`
+  # 2
+  mutation updateTemaMutation($prioridad: Int!, $id: Int!){
+    updateTema(data:{
+      prioridad: $prioridad},
       where: {id:$id}
     ){
       name

@@ -2,3 +2,8 @@
 
     color: rgb(5, 5, 5);
 }
+
+.hijo{
+    transform: scale(0.75);
+  }
+  
