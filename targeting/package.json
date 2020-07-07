@@ -33,6 +33,7 @@
     "apollo-angular-link-http": "^1.10.0",
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
+    "apollo-link-ws": "^1.0.20",
     "graphql": "<15.0.0",
     "graphql-tag": "^2.10.3",
     "mdbootstrap": "^4.14.0",
@@ -40,6 +41,7 @@
     "primeicons": "^2.0.0",
     "primeng": "^9.1.0",
     "rxjs": "~6.5.4",
+    "subscriptions-transport-ws": "^0.9.16",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"
   },

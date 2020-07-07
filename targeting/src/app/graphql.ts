@@ -440,7 +440,7 @@ export interface AllMatrizQueryResponse {
 export const UPDATE_CELL_PRIORIDAD_MUTATION = gql`
   # 2
   mutation updateCellPrioridadMutation($prioridad: Int!, $id: ID){
-    updateMatriz(data:{
+    updateCelda(data:{
       prioridad: $prioridad},
       where: {id:$id}
     ){
@@ -460,7 +460,7 @@ export const UPDATE_CELL_PRIORIDAD_MUTATION = gql`
 export const UPDATE_CELL_TIEMPO_MUTATION = gql`
   # 2
   mutation updateCellTiempoMutation($tiempo: Int!, $id: ID){
-    updateMatriz(data:{
+    updateCelda(data:{
       tiempo: $tiempo},
       where: {id:$id}
     ){
@@ -578,3 +578,28 @@ export interface EstadoResponse {
   estado: Estado[];
   loading: boolean;
 }
+
+export const Subscription_Celda = gql`
+subscription followedAuthorCreatedPost ($id:ID!) {
+  celda(
+    where: {
+      mutation_in: [UPDATED]
+      node: {
+        matriz: {
+          id: $id
+        }
+      }
+    }
+  ) {
+    mutation
+    node {
+     id
+      prioridad
+      tiempo
+      TemaParent{id}
+      ActorParent{id}
+      matriz{id}
+    }
+  }
+}
+`;

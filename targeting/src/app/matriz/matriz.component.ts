@@ -3,15 +3,15 @@ import { IDataOptions, IDataSet } from '@syncfusion/ej2-angular-pivotview';
 import { MATRIZ_QUERY, ALL_ACTORES_QUERY,ALL_TEMAS_QUERY, 
   ALL_MATRIZ_QUERY, UPDATE_CELL_PRIORIDAD_MUTATION, DELETE_CELL_MUTATION, 
   CREATE_CELL_MUTATION,UPDATE_ESTADO_TEMA_MUTATION,UPDATE_ESTADO_ACTOR_MUTATION,
-ESTADO_QUERY,DELETE_ALL_MATRIZ_QUERY,UPDATE_CELL_TIEMPO_MUTATION} from '../graphql';
-import {Actor, Tema, Matriz,Estado} from '../types';
+ESTADO_QUERY,DELETE_ALL_MATRIZ_QUERY,UPDATE_CELL_TIEMPO_MUTATION, Subscription_Celda} from '../graphql';
+import {Actor, Tema, Matriz,Estado, Celda} from '../types';
 import {Apollo} from 'apollo-angular';
 import {MessageService, Message} from 'primeng/api';
 import {ConfirmationService} from 'primeng/api';
 import {Observable} from 'rxjs/Rx';
 import {Router, ActivatedRoute} from '@angular/router'
 import { Location } from "@angular/common";
-import { map } from 'rxjs/operators';
+import { Subscription } from 'rxjs/Subscription';
 
  
 
@@ -39,6 +39,8 @@ export class MatrizComponent implements OnInit, OnDestroy {
   loading: boolean = true;
   public pivotData: IDataSet[];
   public dataSourceSettings: IDataOptions;
+  celdaSubscription: Subscription;
+  celdas: Celda[] = [];
 
   constructor(public activatedRoute: ActivatedRoute,public _router: Router, public _location: Location, private apollo: Apollo,private messageService: MessageService,private confirmationService: ConfirmationService ) { }
 
@@ -61,7 +63,17 @@ export class MatrizComponent implements OnInit, OnDestroy {
       }).valueChanges.subscribe((response) => {
         this.Matriz = response.data['matriz'];
         this.loading = response.loading;
-      });  
+      });
+     this.apollo.subscribe({
+        query: Subscription_Celda,
+        variables: {
+          id: this.state.id
+        }
+      })
+      .subscribe(({ data }) => {
+        console.log("Subscripction")
+        console.log(data)
+      });
     }
   }
 
@@ -72,7 +84,7 @@ export class MatrizComponent implements OnInit, OnDestroy {
   refresh(){
     this._router.navigateByUrl("/refresh", {skipLocationChange: true}).then(()=>{
       console.log(decodeURI(this._location.path()));
-      this._router.navigate([decodeURI(this._location.path())]);
+      this._router.navigate([decodeURI(this._location.path())],{state:{id: this.state.id,nombre: this.state.User.name}});
     });
   }
 
