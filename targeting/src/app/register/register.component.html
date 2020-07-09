@@ -1,8 +1,8 @@
-  <div class="signin-content">
+<div class="signin-content">
     <mat-card>
       <mat-card-content>
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
-          <p>Inicio de session</p>
+          <p>Registrar Usuario</p>
           <mat-form-field class="full-width-input">
             <input matInput placeholder="Usuario" formControlName="userName" required>
             <mat-error *ngIf="isFieldInvalid('userName')">
@@ -15,11 +15,9 @@
               Ingrese una contraseña valida
             </mat-error>
           </mat-form-field>
-          <button mat-raised-button color="primary" type="submit">Login</button>
-          
+          <button mat-raised-button color="primary" type="submit">Crear Usuario</button>
+          <br>
         </form>
-        <br>
-        <button mat-raised-button color="primary" (click)="crearUser()">Crear Usuario</button>
       </mat-card-content>
     </mat-card>
   </div>

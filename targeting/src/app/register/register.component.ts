@@ -2,14 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from './../auth/auth.service';
 import { Router } from '@angular/router';
+import {Apollo} from 'apollo-angular';
+import { CREAR_USER
+  } from '../graphql';
+
 
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-register',
+  templateUrl: './register.component.html',
+  styleUrls: ['./register.component.css']
 })
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
 
   form: FormGroup;
   private formSubmitAttempt: boolean;
@@ -18,7 +22,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-  ) {}
+    private apollo: Apollo
+  ) { }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -36,11 +41,16 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.form.valid) {
-      this.authService.login(this.form.value);
+      console.log(this.form.get("userName").value);
+      this.apollo.mutate({
+        mutation: CREAR_USER,
+        variables: {
+         name: this.form.get("userName").value
+        }
+      }).subscribe((response) => {
+          this.router.navigate(['login']);
+        });
     }
     this.formSubmitAttempt = true;
-  }
-  crearUser(){
-    this.router.navigate(['register']);
   }
 }

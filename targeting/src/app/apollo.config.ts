@@ -42,7 +42,9 @@ export class GraphQLModule {
 
     apollo.create({
       link: link,
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({
+        addTypename: false
+      }),
       defaultOptions: {
         query: {
           fetchPolicy: 'network-only'

@@ -603,3 +603,21 @@ subscription followedAuthorCreatedPost ($id:ID!) {
   }
 }
 `;
+
+export const GET_USER = gql`
+query getUser($name:String){
+  users(where:{name:$name} ){
+    id
+    name
+  }
+}
+`;
+
+export const CREAR_USER = gql`
+mutation crearUsuer($name: String!){
+  createUser(data: {name: $name}){
+    id
+    name
+  }
+}
+`;

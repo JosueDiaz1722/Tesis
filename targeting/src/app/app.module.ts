@@ -61,6 +61,7 @@ import {InputTextModule} from 'primeng/inputtext';
 import {ButtonModule} from 'primeng/button';
 import {TreeTableModule} from 'primeng/treetable';
 import {RatingModule} from 'primeng/rating';
+import { RegisterComponent } from './register/register.component';
 
 
 @NgModule({
@@ -87,6 +88,8 @@ import {RatingModule} from 'primeng/rating';
     LoginComponent,
 
     MatrizesComponent,
+
+    RegisterComponent,
   ],
   imports: [
     DatePickerAllModule,

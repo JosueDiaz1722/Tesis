@@ -11,6 +11,7 @@ import { MatrizComponent } from "./matriz/matriz.component";
 import { LoginComponent } from "./login/login.component";
 import { AuthGuard } from './auth/auth.guard';
 import {MatrizesComponent} from './matrizes/matrizes.component';
+import { RegisterComponent } from "./register/register.component";
 
 
 
@@ -23,6 +24,7 @@ const routes: Routes = [
   },
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
   {
     path: 'about', component: AboutComponent
   },

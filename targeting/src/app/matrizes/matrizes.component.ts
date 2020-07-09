@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, ViewChild, OnDestroy, ChangeDetectorRef } fr
 import { DOCUMENT } from '@angular/common';
 import { Location } from "@angular/common";
 import {Apollo} from 'apollo-angular';
-import { Matriz, Actor, Tema} from '../types';
+import { Matriz, Actor, Tema, User} from '../types';
 import {Router, RouterModule, NavigationEnd} from '@angular/router';
 import { ALL_MATRIZ_QUERY, USER_MATRIZ_QUERY, ID_ACTORES, ID_TEMAS, CREAR_MATRIZ, DELETE_MATRIZ_QUERY
   } from '../graphql';
@@ -46,6 +46,7 @@ export class MatrizesComponent implements OnInit {
    Actores: Actor[] =[];
    Temas: Tema[] =[];
    Celdas: any[] =[];
+   user: User;
    sortOptions: SelectItem[];
    selectedMatriz: Matriz;
    displayDialog: boolean;
@@ -62,21 +63,10 @@ export class MatrizesComponent implements OnInit {
 
 
   ngOnInit(): void {
+    
+    this.user = JSON.parse(localStorage.getItem("Usuario"));
+    console.log(this.user.id);
     this.dataSource();
-    /*this.apollo.watchQuery({
-      query: ALL_MATRIZ_QUERY
-    }).valueChanges.subscribe((response) => {
-      this.Matrices = response.data['matrizes'];
-     });
-     this.apollo.watchQuery({
-      query: USER_MATRIZ_QUERY,
-      variables: {
-        id: "ckbzihtfh00dv0725emf839fh"
-       }
-    }).valueChanges.subscribe((response) => {
-      this.MatricesUsuario = response.data['matrizes'];
-     });*/
-
      this.sortOptions = [
       {label: 'Newest First', value: '!createdAt'},
       {label: 'Oldest First', value: 'createdAt'},
@@ -95,7 +85,7 @@ export class MatrizesComponent implements OnInit {
       fetchPolicy: 'network-only',
       query: USER_MATRIZ_QUERY,
       variables: {
-        id: "ckbzihtfh00dv0725emf839fh"
+        id: this.user.id
        }
     }).valueChanges.subscribe((response) => {
       this.MatricesUsuario = response.data['matrizes'];
@@ -131,21 +121,20 @@ export class MatrizesComponent implements OnInit {
         this.apollo.mutate({
           mutation: CREAR_MATRIZ,
           variables: {
-            id: "ckbzihtfh00dv0725emf839fh",
+            id: this.user.id,
             actors: this.Actores,
             temas: this.Temas,
             celdas: this.Celdas
           }
         }).subscribe((response) => {
           let data = response.data['createMatriz']
-          this.router.navigateByUrl('/matriz',{state:{id: data.id, nombre: data.User.name}});
+          this.router.navigateByUrl('/matriz',{state:{id: data.id, nombre: this.user.name}});
         }); 
        });
      });
   }
 
   verMatriz(matriz){
-    console.log(matriz);
     this.router.navigateByUrl('/matriz',{state:{id: matriz.id,nombre: matriz.User.name}});
   }
 
