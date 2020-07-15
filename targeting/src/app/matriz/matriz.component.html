@@ -66,7 +66,7 @@
               <div *ngIf = "actor.id == cell.ActorParent.id && tema.id == cell.TemaParent.id">
                 <mat-button-toggle-group #group="matButtonToggleGroup" value="{{cell.prioridad}}">
                   <mat-button-toggle value="0" (change)="onPrioridadChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
-                    <mat-icon>close</mat-icon>
+                    N/A
                   </mat-button-toggle>
                   <mat-button-toggle value="1" (change)="onPrioridadChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
                     <mat-icon class="green-icon">fiber_manual_record</mat-icon>
@@ -81,7 +81,7 @@
                 <br>
                 <mat-button-toggle-group #grouptime="matButtonToggleGroup" value="{{cell.tiempo}}">
                   <mat-button-toggle value="0" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
-                    <mat-icon>close</mat-icon>
+                    N/A
                   </mat-button-toggle>
                   <mat-button-toggle value="1" (change)="onTimeChange($event.value,tema.id,actor.id,cell.id)" aria-label="Text align left">
                     <img src="assets/img/courtblack.gif" />

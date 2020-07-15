@@ -98,40 +98,57 @@ export class MatrizesComponent implements OnInit {
     return dateOut;
 };
 
+transform1(){
+  this.Actores.forEach(element => {
+    delete element.__typename;
+  });
+  this.Temas
+}
+
+celdas(){
+  this.Actores.forEach(actor=>{
+    this.Temas.forEach(tema=>{
+      delete tema.__typename;
+      delete actor.__typename;
+      let celda = {
+        prioridad: 0,
+        tiempo: 0,
+        TemaParent: {"connect": {"id": tema.id}},
+        ActorParent: {"connect": {"id": actor.id}}
+      }
+      this.Celdas.push(celda);
+    });
+  });
+}
+
   nuevaMatriz(){
     this.apollo.watchQuery({
       query: ID_ACTORES
     }).valueChanges.subscribe((response) => {
-      this.Actores = response.data["actors"];
-      this.apollo.watchQuery({
-        query: ID_TEMAS
-      }).valueChanges.subscribe((response) => {
-        this.Temas = response.data["temas"];
-        this.Actores.forEach(actor=>{
-          this.Temas.forEach(tema=>{
-            let celda = {
-              prioridad: 0,
-              tiempo: 0,
-              TemaParent: {"connect": {"id": tema.id}},
-              ActorParent: {"connect": {"id": actor.id}}
-            }
-            this.Celdas.push(celda);
-          })
-        })
-        this.apollo.mutate({
-          mutation: CREAR_MATRIZ,
-          variables: {
-            id: this.user.id,
-            actors: this.Actores,
-            temas: this.Temas,
-            celdas: this.Celdas
-          }
-        }).subscribe((response) => {
-          let data = response.data['createMatriz']
-          this.router.navigateByUrl('/matriz',{state:{id: data.id, nombre: this.user.name}});
-        }); 
-       });
+      this.Actores = response.data["actors"]
      });
+     this.apollo.watchQuery({
+      query: ID_TEMAS
+    }).valueChanges.subscribe((response) => {
+      this.Temas = response.data["temas"];
+    });
+    setTimeout(() => { 
+      this.celdas()
+    }, 200);
+    setTimeout(() => { 
+      this.apollo.mutate({
+        mutation: CREAR_MATRIZ,
+        variables: {
+          id: this.user.id,
+          actors: this.Actores,
+          temas: this.Temas,
+          celdas: this.Celdas
+        }
+      }).subscribe((response) => {
+        let data = response.data['createMatriz']
+        this.router.navigateByUrl('/matriz',{state:{id: data.id, nombre: this.user.name}});
+      });
+    }, 1000);
   }
 
   verMatriz(matriz){

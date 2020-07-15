@@ -73,6 +73,7 @@ export class MatrizComponent implements OnInit, OnDestroy {
       .subscribe(({ data }) => {
         console.log("Subscripction")
         console.log(data)
+        
       });
     }
   }

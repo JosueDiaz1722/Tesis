@@ -40,6 +40,7 @@ export class ActoresComponent implements OnInit {
     this.apollo.watchQuery({
       query: ALL_ACTORES_QUERY
     }).valueChanges.subscribe((response) => {
+      console.log(response.data)
       this.allLinks = response.data['actors'];
       this.loading = response.loading;
      }); 
@@ -78,14 +79,14 @@ export class ActoresComponent implements OnInit {
     });
  
     dialogRef.afterClosed().subscribe(result => {
-      if(result.event == 'Add'){
+      if(result.event == 'Crear'){
         this.treegrid.editSettings.newRowPosition ="Child"
         this.addRowData(result.data,data);
-      }else if(result.event == 'Update'){
+      }else if(result.event == 'Editar'){
         this.updateRowData(result.data);
-      }else if(result.event == 'Delete'){
+      }else if(result.event == 'Eliminar'){
         this.deleteRowData(result.data);
-      }else if(result.event == 'AddNew'){
+      }else if(result.event == 'Crear Padre'){
         this.treegrid.editSettings.newRowPosition ="Bottom"
         this.addNewData(result.data);
       } 
@@ -98,6 +99,7 @@ export class ActoresComponent implements OnInit {
       query: ALL_ACTORES_QUERY
     }).valueChanges.subscribe((response) => {
       this.allLinks = response.data['actors'];
+      console.log(this.allLinks)
       this.treegrid.dataBind();
      }); 
   }
@@ -126,7 +128,6 @@ export class ActoresComponent implements OnInit {
 
   addNewData(row_obj){
     let estado = this.ParentActor.length+1;
-    console.log(estado);
     this.apollo.mutate({
       mutation: CREATE_NEW_ACTOR_MUTATION,
       variables: {
@@ -136,7 +137,9 @@ export class ActoresComponent implements OnInit {
       }
     }).subscribe((response) => {
       this.dataSource();
-    });
+    },(error) => {
+      console.log('there was an error sending the query', error);
+       });
   }
 
   updateRowData(row_obj){

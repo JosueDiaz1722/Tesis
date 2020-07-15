@@ -12,6 +12,7 @@ export class Link {
     coments: string;
     parent: Boolean;
     hijos: [Actor];
+    __typename: any;
   }
 
   export class Tema {
@@ -21,6 +22,7 @@ export class Link {
     coments: string;
     parent: Boolean;
     hijos: [Tema];
+    __typename: any;
   }
 
   export class Matriz{
