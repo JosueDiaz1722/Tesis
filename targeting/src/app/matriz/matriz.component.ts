@@ -27,6 +27,7 @@ export class MatrizComponent implements OnInit, OnDestroy {
   combinations = [];
   isDisabled= true;
   isActivo = false;
+  cabeceras = 0;
   msgs: Message[] = []
   ParentTemas: Tema[] = [];
   Estado: Estado[] = [];
@@ -252,6 +253,25 @@ export class MatrizComponent implements OnInit, OnDestroy {
         console.log(response);
     });
     this.saveMessage();
+  }
+
+  contador(){
+    console.log(this.cabeceras)
+  }
+
+  maxcolspan(index){
+    var max = index.hijos.length;
+    index.hijos.forEach(element => {
+      if(max < element.hijos.length){
+        max = element.hijos.length;
+      }
+      element.hijos.forEach(element => {
+        if(max < element.hijos.length){
+          max = element.hijos.length
+        }
+      });
+    });
+    return max    
   }
 
 }

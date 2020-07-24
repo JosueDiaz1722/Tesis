@@ -125,4 +125,237 @@
 </mat-button-toggle-group>
 <span class="center">Prioridad: {{group.value}}</span>
 </div>
+<h1>TEST</h1>
+<button mat-icon-button color="success" (click)="contador()">
+  <mat-icon>save</mat-icon>
+  TEST
+</button>
+
+<table class="fl-table">
+  <thead>
+    <tr>
+      <th rowspan="4" colspan="4">
+        <div class="center">
+          Actores/Temas
+        </div>
+      </th>
+    <ng-container *ngFor="let item of Matriz.Temas; let i = index">
+      <ng-container *ngIf = "item.hijos?.length; else padre">
+        <th [attr.colspan]="maxcolspan(item)">{{item.name}} {{maxcolspan(item)}}</th>
+      </ng-container>
+      <ng-template #padre>
+        <th rowspan="4">{{item.name}}</th>
+      </ng-template>
+    </ng-container>
+    </tr>
+    <tr>
+    <ng-container *ngFor="let item of Matriz.Temas" >
+      <ng-container *ngIf = "item.hijos?.length">
+        <ng-container *ngFor="let hijo of item.hijos">
+        <ng-container *ngIf = "hijo.hijos?.length == 0; else subhijo">
+          <th rowspan="3">{{hijo.name}} </th>
+        </ng-container>
+        <ng-template #subhijo>
+          <th [attr.colspan]="maxcolspan(item)  ">{{hijo.name}} {{hijo.hijos?.length}}</th>
+        </ng-template>
+        </ng-container>     
+      </ng-container>
+    </ng-container>
+   </tr>
+   <tr>
+    <ng-container *ngFor="let item of Matriz.Temas" >
+      <ng-container *ngIf = "item.hijos?.length">
+        <ng-container *ngFor="let hijo of item.hijos">
+          <ng-container *ngFor="let subhijo of hijo.hijos">
+          <ng-container *ngIf = "subhijo.hijos?.length == 0; else subhijo1">
+            <th rowspan="2">{{subhijo.name}}</th>
+          </ng-container>
+          <ng-template #subhijo1>
+            <th [attr.colspan]="maxcolspan(item)">{{subhijo.name}}</th>
+          </ng-template>
+          </ng-container>
+        </ng-container>     
+      </ng-container>
+    </ng-container>
+   </tr>
+   <tr>
+    <ng-container *ngFor="let item of Matriz.Temas" >
+      <ng-container *ngIf = "item.hijos?.length">
+        <ng-container *ngFor="let hijo of item.hijos">
+          <ng-container *ngFor="let subhijo of hijo.hijos">
+          <ng-container *ngFor = "let subhijo2 of subhijo.hijos">
+            <th>{{subhijo2.name}}</th>
+          </ng-container>
+          </ng-container>
+        </ng-container>     
+      </ng-container>
+    </ng-container>
+   </tr>
+  </thead>
+  <tbody *ngFor="let item of Matriz.Actores; let i = index">
+    <ng-container *ngIf = "item.hijos?.length; else padre">
+      <tr>
+        <th [attr.rowspan]="maxcolspan(item)">{{item.name}} {{maxcolspan(item)}}</th>
+        <ng-container *ngIf = "item.hijos[0].hijos?.length; else subhijoCabezera">
+          <th [attr.rowspan]="maxcolspan(item)"> {{item.hijos[0].name}}</th>
+          <ng-container *ngIf = "item.hijos[0].hijos[0].hijos?.length; else subsubhijoCabezera">
+            <th [attr.rowspan]="maxcolspan(item)"> {{item.hijos[0].hijos[0].name}}</th>
+            <th>{{item.hijos[0].hijos[0].hijos[0].name}}</th>
+          </ng-container>
+        </ng-container>
+      </tr>
+      <ng-container *ngFor="let hijo of item.hijos| slice:1">
+        <ng-container *ngIf = "hijo.hijos?.length; else subhijoBody">
+          <tr>
+            <th>{{hijo.name}}</th>
+          </tr>    
+        </ng-container>
+        <ng-template #subhijoBody>
+          <tr>
+            <th colspan="3"> {{hijo.name}} 3</th>
+          </tr>  
+        </ng-template>
+      </ng-container>
+    </ng-container>
+    <ng-template #subhijoCabezera>
+      <th colspan="3"> {{item.hijos[0].name}} 3</th>
+    </ng-template>
+    <ng-template #subsubhijoCabezera>
+      <th colspan="2"> {{item.hijos[0].hijos[0].name}}</th>
+    </ng-template>
+    <ng-template #padre>
+      <tr>
+        <th colspan="4">
+          {{item.name}}
+        </th>
+      </tr>
+    </ng-template>
+  </tbody>
+  <!--<tbody>
+
+    <ng-container *ngFor="let item of Matriz.Actores; let i = index">
+        <ng-container *ngIf = "item.hijos?.length; else padre">
+          <tr>
+            <th [attr.rowspan]="maxcolspan(item)">{{item.name}} {{maxcolspan(item)}}</th>
+            <th> {{item.hijos[0].name}}</th>
+          </tr>
+          <ng-container *ngFor = "let subhijo of item.hijos">
+            <ng-container *ngIf = "subhijo.hijos?.length; else subhijo">
+
+            </ng-container>
+          </ng-container>
+          <ng-template #subhijo>
+            <tr>
+              <th [attr.rowspan]="maxcolspan(item)">{{item.name}} {{maxcolspan(item)}}</th>
+              <th> {{item.hijos[0].name}}</th>
+            </tr>
+            <ng-container *ngFor="let hijo of item.hijos| slice:1">
+              <tr>
+                <th>{{hijo.name}}</th>
+              </tr>  
+            </ng-container>
+          </ng-template>
+        </ng-container>
+        <ng-template #padre>
+          <tr>
+            <th colspan="4">{{item.name}}</th>
+          </tr>
+        </ng-template>
+    </ng-container>
+  </tbody>-->
+</table>
+
+<h1>TEST 2</h1>
+<table class="fl-table">
+  <thead>
+    <tr>
+      <th rowspan="4" colspan="4">
+        <div class="center">
+          Actores/Temas
+        </div>
+      </th>
+      <th colspan="2">Tema 1</th>
+      <th colspan="2">Tema 2</th>
+      <th colspan="2">Tema 3</th>
+      <th rowspan="4">Tema 4</th>
+    </tr>
+    <tr>
+      <th rowspan="3"> Sub Tema 1_1</th>
+      <th rowspan="3"> Sub Tema 1_2</th>
+      <th colspan="2"> Sub Tema 2_1</th>
+      <th colspan="2"> Sub Tema 3_1</th>
+   </tr>
+   <tr>
+    <th colspan="2">SubT Tema 2_1_1</th>
+    <th rowspan="2">SubT Tema 3_1_1</th>
+    <th rowspan="3">SubT Tema 3_1_2</th>
+   </tr>
+   <tr>
+     <th>Sub Tema 2_1_1_1</th>
+     <th>Sub Tema 2_1_1_2</th>
+   </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th colspan="4">Actor 2</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th colspan="4">Actor 3</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th colspan="4">Actor 4</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th rowspan="3">Actor 1</th>
+      <th>Actor 1_1</th>
+      <th>Actor 1_1_1</th>
+      <th>Actor 1_1_1_1</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th rowspan="2">Actor 1_2</th>
+      <th colspan="2">Actor 1_2_1</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th colspan="2">Actor 1_2_2</th>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
 </ng-template>
+
+
