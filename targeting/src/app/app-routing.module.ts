@@ -39,7 +39,7 @@ const routes: Routes = [
     path: 'actor', component: ActorComponent
   },
   {
-    path: 'theme', component: ThemeComponent
+    path: 'temas', component: ThemeComponent
   },
   {
     path: 'actores', component: ActoresComponent

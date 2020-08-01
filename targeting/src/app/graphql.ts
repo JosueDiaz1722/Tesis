@@ -327,10 +327,13 @@ query MatriQuery ($id:ID) {
       id
       name
        hijos{
+        id
         name
         hijos{
+          id
           name
           hijos{
+            id
             name
           }
         }
@@ -340,15 +343,19 @@ query MatriQuery ($id:ID) {
       id
       name
        hijos{
+        id
         name
         hijos{
+          id
           name
           hijos{
+            id
             name
           }
         }
       }
     }
+    
     Celdas{
       id
       prioridad

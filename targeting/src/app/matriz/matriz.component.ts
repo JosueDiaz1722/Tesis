@@ -159,11 +159,11 @@ export class MatrizComponent implements OnInit, OnDestroy {
   }
 
 
-  onPrioridadChange(value,temaid,actorid,cellid){
+  onPrioridadChange(value,cellid){
     this.updatePrioridadData(value,cellid);
   }
 
-  onTimeChange(value,actor,tema,cellid){
+  onTimeChange(value,cellid){
     this.updateTiempoData(value,cellid);
   }
 

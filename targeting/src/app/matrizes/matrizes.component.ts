@@ -4,7 +4,8 @@ import { Location } from "@angular/common";
 import {Apollo} from 'apollo-angular';
 import { Matriz, Actor, Tema, User} from '../types';
 import {Router, RouterModule, NavigationEnd} from '@angular/router';
-import { ALL_MATRIZ_QUERY, USER_MATRIZ_QUERY, ID_ACTORES, ID_TEMAS, CREAR_MATRIZ, DELETE_MATRIZ_QUERY
+import { ALL_MATRIZ_QUERY, USER_MATRIZ_QUERY, ID_ACTORES, ID_TEMAS, CREAR_MATRIZ, DELETE_MATRIZ_QUERY,
+  ALL_TEMAS_QUERY, ALL_ACTORES_QUERY
   } from '../graphql';
 import { SelectItem, ConfirmationService, Message } from 'primeng/api';
 import { PageSettingsModel, EditSettingsModel, TreeGridComponent } from '@syncfusion/ej2-angular-treegrid';
@@ -46,6 +47,8 @@ export class MatrizesComponent implements OnInit {
    Actores: Actor[] =[];
    Temas: Tema[] =[];
    Celdas: any[] =[];
+   ActoresFinal: Actor[]=[];
+   TemasFinal: Tema[]=[];
    user: User;
    sortOptions: SelectItem[];
    selectedMatriz: Matriz;
@@ -99,15 +102,17 @@ export class MatrizesComponent implements OnInit {
 };
 
 transform1(){
-  this.Actores.forEach(element => {
-    delete element.__typename;
+  this.Actores.forEach(actor=>{
+    this.Temas.forEach(tema=>{
+      delete tema.__typename;
+      delete actor.__typename;
+    });
   });
-  this.Temas
 }
 
 celdas(){
-  this.Actores.forEach(actor=>{
-    this.Temas.forEach(tema=>{
+  this.ActoresFinal.forEach(actor=>{
+    this.TemasFinal.forEach(tema=>{
       delete tema.__typename;
       delete actor.__typename;
       let celda = {
@@ -121,6 +126,32 @@ celdas(){
   });
 }
 
+maxcolspan(Items){
+  var lista = [];
+  Items.forEach(element => {
+       if(element.hijos.length){
+        element.hijos.forEach(element => {
+          if(element.hijos.length){
+            element.hijos.forEach(element => {
+              if(element.hijos.length){
+                element.hijos.forEach(element => {
+                  lista.push(element)
+                });
+              }else{
+                lista.push(element)
+              }
+            });
+          }else{
+            lista.push(element)
+          }
+        });
+       }else{
+         lista.push(element)
+       }
+  });
+  return lista  
+}
+
   nuevaMatriz(){
     this.apollo.watchQuery({
       query: ID_ACTORES
@@ -132,9 +163,22 @@ celdas(){
     }).valueChanges.subscribe((response) => {
       this.Temas = response.data["temas"];
     });
+    this.apollo.watchQuery({
+      query: ALL_TEMAS_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.TemasFinal = this.maxcolspan(response.data['temas']);
+     });
+     this.apollo.watchQuery({
+      query: ALL_ACTORES_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.ActoresFinal = this.maxcolspan(response.data['actors']);
+     });
+
     setTimeout(() => { 
-      this.celdas()
+      this.celdas();
+      this.transform1();
     }, 200);
+    
     setTimeout(() => { 
       this.apollo.mutate({
         mutation: CREAR_MATRIZ,
@@ -147,7 +191,7 @@ celdas(){
       }).subscribe((response) => {
         let data = response.data['createMatriz']
         this.router.navigateByUrl('/matriz',{state:{id: data.id, nombre: this.user.name}});
-      });
+      })
     }, 1000);
   }
 
