@@ -2,6 +2,10 @@
   background-color: yellow; 
  }
  
+.selected {
+  background-color: yellow;
+}
+
  .modeColor {
   background-color: lightblue; 
  }

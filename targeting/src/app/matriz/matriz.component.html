@@ -15,6 +15,24 @@
   <button mat-icon-button color="success" (click)="saveEstado()">
     <mat-icon>save</mat-icon>
   </button>
+  <mat-form-field appearance="fill">
+    <mat-label>Filtro por prioridad Actor</mat-label>
+    <mat-select [(value)]="selectedActor">
+      <mat-option value =0>Ninguno</mat-option>
+      <mat-option value=1>Prioridad 1</mat-option>
+      <mat-option value=2>Prioridad 2</mat-option>
+      <mat-option value=3>Prioridad 3</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Filtro por prioridad Tema</mat-label>
+    <mat-select [(value)]="selectedTema">
+      <mat-option value =0>Ninguno</mat-option>
+      <mat-option value=1>Prioridad 1</mat-option>
+      <mat-option value=2>Prioridad 2</mat-option>
+      <mat-option value=3>Prioridad 3</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
 <!--AQUI EMPIEZA LA TABLA-->
 <table class="fl-table">
@@ -90,7 +108,7 @@
             <th>{{item.hijos[0].hijos[0].hijos[0].name}}</th>
             <ng-container *ngFor="let cell of Matriz.Celdas">
               <ng-container *ngIf = "item.hijos[0].hijos[0].hijos[0].id == cell.ActorParent.id">
-                <td>
+                <td [ngClass]="{'selected' : (cell.ActorParent.prioridad == selectedActor && cell.TemaParent.prioridad == selectedTema) && selectedActor != 0 && selectedTema != 0}">
                   <mat-button-toggle-group #group="matButtonToggleGroup" value="{{cell.prioridad}}">
                     <mat-button-toggle value="0" (change)="onPrioridadChange($event.value,cell.id)" aria-label="Text align left">
                       N/A
@@ -136,7 +154,7 @@
                 <th>{{hijo.hijos[0].hijos[0].name}}</th>
                 <ng-container *ngFor="let cell of Matriz.Celdas">
                   <ng-container *ngIf = "hijo.hijos[0].hijos[0].id == cell.ActorParent.id">
-                    <td>
+                    <td [ngClass]="{'selected' : (cell.ActorParent.prioridad == selectedActor && cell.TemaParent.prioridad == selectedTema) && selectedActor != 0 && selectedTema != 0}">
                       <mat-button-toggle-group #group="matButtonToggleGroup" value="{{cell.prioridad}}">
                         <mat-button-toggle value="0" (change)="onPrioridadChange($event.value,cell.id)" aria-label="Text align left">
                           N/A
@@ -175,7 +193,7 @@
               <th colspan="2">{{hijo.hijos[0].name}}</th>
               <ng-container *ngFor="let cell of Matriz.Celdas">
                 <ng-container *ngIf = "hijo.hijos[0].id == cell.ActorParent.id">
-                  <td>
+                  <td [ngClass]="{'selected' : (cell.ActorParent.prioridad == selectedActor && cell.TemaParent.prioridad == selectedTema) && selectedActor != 0 && selectedTema != 0}">
                     <mat-button-toggle-group #group="matButtonToggleGroup" value="{{cell.prioridad}}">
                       <mat-button-toggle value="0" (change)="onPrioridadChange($event.value,cell.id)" aria-label="Text align left">
                         N/A
@@ -219,7 +237,7 @@
                   <th>{{subhijo.hijos[0].name}}</th>
                   <ng-container *ngFor="let cell of Matriz.Celdas">
                     <ng-container *ngIf = "subhijo.hijos[0].id == cell.ActorParent.id">
-                      <td>
+                      <td [ngClass]="{'selected' : (cell.ActorParent.prioridad == selectedActor && cell.TemaParent.prioridad == selectedTema) && selectedActor != 0 && selectedTema != 0}">
                         <mat-button-toggle-group #group="matButtonToggleGroup" value="{{cell.prioridad}}">
                           <mat-button-toggle value="0" (change)="onPrioridadChange($event.value,cell.id)" aria-label="Text align left">
                             N/A
@@ -259,7 +277,7 @@
                       <th>{{subhijo1.name}}</th>
                       <ng-container *ngFor="let cell of Matriz.Celdas">
                         <ng-container *ngIf = "subhijo1.id == cell.ActorParent.id">
-                          <td>
+                          <td [ngClass]="{'selected' : (cell.ActorParent.prioridad == selectedActor && cell.TemaParent.prioridad == selectedTema) && selectedActor != 0 && selectedTema != 0}">
                             <mat-button-toggle-group #group="matButtonToggleGroup" value="{{cell.prioridad}}">
                               <mat-button-toggle value="0" (change)="onPrioridadChange($event.value,cell.id)" aria-label="Text align left">
                                 N/A
@@ -302,7 +320,7 @@
               <th colspan="2">{{subhijo.name}}</th>
               <ng-container *ngFor="let cell of Matriz.Celdas">
                 <ng-container *ngIf = "subhijo.id == cell.ActorParent.id">
-                  <td>
+                  <td [ngClass]="{'selected' : (cell.ActorParent.prioridad == selectedActor && cell.TemaParent.prioridad == selectedTema) && selectedActor != 0 && selectedTema != 0}">
                     <mat-button-toggle-group #group="matButtonToggleGroup" value="{{cell.prioridad}}">
                       <mat-button-toggle value="0" (change)="onPrioridadChange($event.value,cell.id)" aria-label="Text align left">
                         N/A
@@ -344,7 +362,7 @@
                   <th>{{subhijo1.name}}</th>
                   <ng-container *ngFor="let cell of Matriz.Celdas">
                     <ng-container *ngIf = "subhijo1.id == cell.ActorParent.id">
-                      <td>
+                      <td [ngClass]="{'selected' : (cell.ActorParent.prioridad == selectedActor && cell.TemaParent.prioridad == selectedTema) && selectedActor != 0 && selectedTema != 0}">
                         <mat-button-toggle-group #group="matButtonToggleGroup" value="{{cell.prioridad}}">
                           <mat-button-toggle value="0" (change)="onPrioridadChange($event.value,cell.id)" aria-label="Text align left">
                             N/A
@@ -387,7 +405,7 @@
             <th colspan="3"> {{hijo.name}}</th>
             <ng-container *ngFor="let cell of Matriz.Celdas">
               <ng-container *ngIf = "hijo.id == cell.ActorParent.id">
-                <td>
+                <td [ngClass]="{'selected' : (cell.ActorParent.prioridad == selectedActor && cell.TemaParent.prioridad == selectedTema) && selectedActor != 0 && selectedTema != 0}">
                   <mat-button-toggle-group #group="matButtonToggleGroup" value="{{cell.prioridad}}">
                     <mat-button-toggle value="0" (change)="onPrioridadChange($event.value,cell.id)" aria-label="Text align left">
                       N/A
@@ -428,7 +446,7 @@
       <th colspan="3"> {{item.hijos[0].name}}</th>
       <ng-container *ngFor="let cell of Matriz.Celdas">
         <ng-container *ngIf = "item.hijos[0].id == cell.ActorParent.id">
-          <td>
+          <td [ngClass]="{'selected' : (cell.ActorParent.prioridad == selectedActor && cell.TemaParent.prioridad == selectedTema) && selectedActor != 0 && selectedTema != 0}">
             <mat-button-toggle-group #group="matButtonToggleGroup" value="{{cell.prioridad}}">
               <mat-button-toggle value="0" (change)="onPrioridadChange($event.value,cell.id)" aria-label="Text align left">
                 N/A
@@ -466,7 +484,7 @@
       <th colspan="2"> {{item.hijos[0].hijos[0].name}} </th>
       <ng-container *ngFor="let cell of Matriz.Celdas">
         <ng-container *ngIf = "item.hijos[0].hijos[0].id == cell.ActorParent.id">
-          <td>
+          <td [ngClass]="{'selected' : (cell.ActorParent.prioridad == selectedActor && cell.TemaParent.prioridad == selectedTema) && selectedActor != 0 && selectedTema != 0}">
             <mat-button-toggle-group #group="matButtonToggleGroup" value="{{cell.prioridad}}">
               <mat-button-toggle value="0" (change)="onPrioridadChange($event.value,cell.id)" aria-label="Text align left">
                 N/A
@@ -507,7 +525,7 @@
         </th>
         <ng-container *ngFor="let cell of Matriz.Celdas">
           <ng-container *ngIf = "item.id == cell.ActorParent.id">
-            <td>
+            <td [ngClass]="{'selected' : (cell.ActorParent.prioridad == selectedActor && cell.TemaParent.prioridad == selectedTema) && selectedActor != 0 && selectedTema != 0}">
               <mat-button-toggle-group #group="matButtonToggleGroup" value="{{cell.prioridad}}">
                 <mat-button-toggle value="0" (change)="onPrioridadChange($event.value,cell.id)" aria-label="Text align left">
                   N/A

@@ -361,8 +361,14 @@ query MatriQuery ($id:ID) {
       prioridad
       tiempo
       coment
-      ActorParent{id}
-      TemaParent{id}
+      ActorParent{
+        id,
+        prioridad
+      }
+      TemaParent{
+        id,
+        prioridad
+      }
     }
   }
 }

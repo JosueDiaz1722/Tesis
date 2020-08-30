@@ -25,6 +25,9 @@ export class MatrizComponent implements OnInit, OnDestroy {
   public params = ['par1', 'par2', 'par3', 'par4', 'par5'];
   public modes = ['mode1', 'mode2', 'mode3'];
   combinations = [];
+  filtro = 0;
+  selectedTema = 0;
+  selectedActor = 0
   isDisabled= true;
   isActivo = false;
   cabeceras = 0;
