@@ -12,9 +12,6 @@
       <mat-icon>refresh</mat-icon>
   </button>
   <p-toast position="top-center"></p-toast>
-  <button mat-icon-button color="success" (click)="saveEstado()">
-    <mat-icon>save</mat-icon>
-  </button>
   <mat-form-field appearance="fill">
     <mat-label>Filtro por prioridad Actor</mat-label>
     <mat-select [(value)]="selectedActor">
@@ -45,7 +42,7 @@
       </th>
     <ng-container *ngFor="let item of Matriz.Temas; let i = index">
       <ng-container *ngIf = "item.hijos?.length; else padre">
-        <th [attr.colspan]="maxcolspan(item)">{{item.name}} {{maxcolspan(item)}}</th>
+        <th [attr.colspan]="maxcolspan(item)">{{item.name}}</th>
       </ng-container>
       <ng-template #padre>
         <th rowspan="4">{{item.name}}</th>

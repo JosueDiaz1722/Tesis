@@ -23,7 +23,7 @@ name: String!
 prioridad: Int
 coments: String
 parent: Boolean
-hijos: [Tema] @relation(name: "HijosTema" onDelete: CASCADE)
+hijos: [Tema] @relation(name: "HijosTema", onDelete: CASCADE)
 celdas: [Celda] @relation(name: "TemaCelda", onDelete: CASCADE)
 }
 
@@ -51,7 +51,7 @@ type Matriz{
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   User: User
-  Actores: [Actor]
+  Actores: [Actor] 
   Temas: [Tema]
   Celdas: [Celda] @relation(name: "MatrizCelda", onDelete: CASCADE)
 }

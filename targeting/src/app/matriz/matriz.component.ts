@@ -60,6 +60,7 @@ export class MatrizComponent implements OnInit, OnDestroy {
       console.log("vacio")
     }else{
       this.apollo.watchQuery({
+        fetchPolicy: 'network-only',
         query: MATRIZ_QUERY,
         variables: {
           id: this.state.id
