@@ -44,7 +44,7 @@ export class ActoresComponent implements OnInit {
       this.allLinks = response.data['actors'];
       this.loading = response.loading;
      }); 
-     this.pageSettings = {pageSize: 12};
+     this.pageSettings = {pageSize: 30};
       this.editSettings =  {
         allowEditing: true,
         allowAdding: true,
@@ -175,7 +175,7 @@ export class ActoresComponent implements OnInit {
        id: parseInt(id)
       }
     }).subscribe((response) => {
-        
+      this.dataSource();
     });
   }
 }

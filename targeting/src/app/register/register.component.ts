@@ -39,6 +39,10 @@ export class RegisterComponent implements OnInit {
     );
   }
 
+  atras(){
+    this.router.navigate(['login']);
+  }
+
   onSubmit() {
     if (this.form.valid) {
       console.log(this.form.get("userName").value);

@@ -107,8 +107,8 @@ h2{
 /* Table Styles */
 
 .table-wrapper{
-  margin: 10px 30px 30px;
-  box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+  margin: 10px 2px 2px;
+  box-shadow: 0px 5px 5px rgba( 0, 0, 0, 0.2 );
 }
 
 .fl-table {
@@ -125,7 +125,13 @@ h2{
 
 .fl-table td, .fl-table th {
   text-align: center;
-  padding: 8px;
+  padding: 1px;
+}
+
+.fl-table th {
+  text-align: center;
+  padding: 1px;
+  width: 10%;
 }
 
 .fl-table td {
@@ -146,6 +152,12 @@ h2{
 
 .fl-table tr:nth-child(even) {
   background: #F8F8F8;
+}
+
+.fl-table tbody {
+  width: auto;
+  position: relative;
+  overflow-x: auto;
 }
 .fl-table tbody th {
   color: #ffffff;

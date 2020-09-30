@@ -41,6 +41,7 @@ export class MatrizComponent implements OnInit, OnDestroy {
   Matriz: Matriz;
   lista: Observable<Array<Matriz>>
   loading: boolean = true;
+  invert: boolean = true;
   public pivotData: IDataSet[];
   public dataSourceSettings: IDataOptions;
   celdaSubscription: Subscription;
@@ -92,6 +93,14 @@ export class MatrizComponent implements OnInit, OnDestroy {
       console.log(decodeURI(this._location.path()));
       this._router.navigate([decodeURI(this._location.path())],{state:{id: this.state.id,nombre: this.state.User.name}});
     });
+  }
+
+  invertir(){
+    if(this.invert){
+      this.invert = false;
+    }else{
+      this.invert = true;
+    }
   }
 
   saveMessage(){

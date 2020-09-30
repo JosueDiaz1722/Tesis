@@ -55,7 +55,7 @@ export class ThemeComponent {
       this.allLinks = response.data['temas'];
       this.loading = response.loading;
      });
-     this.pageSettings = {pageSize: 12};
+     this.pageSettings = {pageSize: 30};
       this.editSettings =  {
         allowEditing: true,
         allowAdding: true,
@@ -181,7 +181,7 @@ export class ThemeComponent {
        id: parseInt(id)
       }
     }).subscribe((response) => {
-        
+      this.dataSource()
     });
   }
 
