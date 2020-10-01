@@ -22,11 +22,11 @@ export class GraphQLModule {
   constructor(apollo: Apollo, httpLink: HttpLink) {
 
     // 4
-    const uri = 'http://localhost:4466';
+    const uri = 'https://tesis-service-39e84e918d.herokuapp.com/default/default';
     const http = httpLink.create({ uri });
 
     const ws = new WebSocketLink({
-      uri: `ws://localhost:4466`,
+      uri: `wss://tesis-service-39e84e918d.herokuapp.com/default/default`,
       options: {
         reconnect: true,
         timeout: 30000
