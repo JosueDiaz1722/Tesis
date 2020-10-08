@@ -1,6 +1,7 @@
   <div class="signin-content">
     <mat-card>
       <mat-card-content>
+        <p-messages [value]="msgs"></p-messages>
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           <p>Inicio de session</p>
           <mat-form-field class="full-width-input">

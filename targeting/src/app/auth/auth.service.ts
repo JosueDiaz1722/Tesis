@@ -21,24 +21,11 @@ export class AuthService {
     private apollo: Apollo
   ) {}
 
-  login(user: User) {
-    if (user.userName !== '' && user.password !== '' ) {
-      this.apollo.watchQuery({
-        query: GET_USER,
-        variables: {
-          name: user.userName
-        }
-      }).valueChanges.subscribe((response) => {
-        this.Users = response.data['users'];
-        if(Object.keys(this.Users).length === 0){
-          
-        }else{
-          localStorage.setItem("Usuario", JSON.stringify(this.Users[0]));
-          this.loggedIn.next(true);
-          this.router.navigate(['/']);
-        }
-       });
-    }
+  login(user: User[]) {
+      this.Users = user;
+      localStorage.setItem("Usuario", JSON.stringify(this.Users[0]));
+      this.loggedIn.next(true);
+      this.router.navigate(['/']);
   }
 
   logout() {

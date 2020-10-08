@@ -434,6 +434,30 @@ mutation crearMatriz($id:ID,$actors:[ActorWhereUniqueInput!], $temas: [TemaWhere
 }
 `;
 
+export const UPDATE_MATRIZ = gql`
+mutation actualizarMatriz($matriz:ID,$actors:[ActorWhereUniqueInput!], $temas: [TemaWhereUniqueInput!], $celdas:[CeldaCreateWithoutMatrizInput!]){
+  updateMatriz(
+  data:{
+    Actores: {connect: $actors}
+    Temas : {connect: $temas}
+    Celdas: {create: $celdas}
+  },  where: {id: $matriz}){
+    id
+     Actores{
+      id
+      parent
+    }
+    Temas{
+      id
+    }
+    Celdas{
+      id
+      matriz{id}
+    }
+  }
+}
+`;
+
 export const DELETE_ALL_MATRIZ_QUERY = gql`
   mutation DeleteMatrizQuery {
     deleteManyMatrizes(where:{id_not:null}){
@@ -516,11 +540,9 @@ export const CREATE_CELL_MUTATION = gql`
 
 export const DELETE_CELL_MUTATION = gql`
   # 2
-  mutation deleteCellMutation($id: ID){
-    deleteMatriz(
-      where: {id:$id}
-    ){
-      id
+  mutation deleteCelda($matriz:ID){
+    deleteManyCeldas(where: {matriz:{id:$matriz} }){
+      count
     }
   }
 `;

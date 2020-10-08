@@ -5,13 +5,14 @@ import {Apollo} from 'apollo-angular';
 import { Matriz, Actor, Tema, User} from '../types';
 import {Router, RouterModule, NavigationEnd} from '@angular/router';
 import { ALL_MATRIZ_QUERY, USER_MATRIZ_QUERY, ID_ACTORES, ID_TEMAS, CREAR_MATRIZ, DELETE_MATRIZ_QUERY,
-  ALL_TEMAS_QUERY, ALL_ACTORES_QUERY
+  ALL_TEMAS_QUERY, ALL_ACTORES_QUERY, UPDATE_MATRIZ,DELETE_CELL_MUTATION
   } from '../graphql';
 import { SelectItem, ConfirmationService, Message } from 'primeng/api';
 import { PageSettingsModel, EditSettingsModel, TreeGridComponent } from '@syncfusion/ej2-angular-treegrid';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { element } from 'protractor';
 @Component({
   selector: 'app-matrizes',
   templateUrl: './matrizes.component.html',
@@ -111,6 +112,7 @@ transform1(){
 }
 
 celdas(){
+  this.Celdas = [];
   this.ActoresFinal.forEach(actor=>{
     this.TemasFinal.forEach(tema=>{
       delete tema.__typename;
@@ -154,45 +156,55 @@ maxcolspan(Items){
 
   nuevaMatriz(){
     this.apollo.watchQuery({
+      fetchPolicy: 'network-only',
       query: ID_ACTORES
     }).valueChanges.subscribe((response) => {
-      this.Actores = response.data["actors"]
+      this.Actores = this.transform2(response.data["actors"])
      });
      this.apollo.watchQuery({
+      fetchPolicy: 'network-only',
       query: ID_TEMAS
     }).valueChanges.subscribe((response) => {
-      this.Temas = response.data["temas"];
+      this.Temas = this.transform2(response.data["temas"]);
     });
     this.apollo.watchQuery({
+      fetchPolicy: 'network-only',
       query: ALL_TEMAS_QUERY
     }).valueChanges.subscribe((response) => {
       this.TemasFinal = this.maxcolspan(response.data['temas']);
      });
      this.apollo.watchQuery({
+      fetchPolicy: 'network-only',
       query: ALL_ACTORES_QUERY
     }).valueChanges.subscribe((response) => {
       this.ActoresFinal = this.maxcolspan(response.data['actors']);
      });
 
-    setTimeout(() => { 
-      this.celdas();
-      this.transform1();
-    }, 200);
-    
-    setTimeout(() => { 
-      this.apollo.mutate({
-        mutation: CREAR_MATRIZ,
-        variables: {
-          id: this.user.id,
-          actors: this.Actores,
-          temas: this.Temas,
-          celdas: this.Celdas
-        }
-      }).subscribe((response) => {
-        let data = response.data['createMatriz']
-        this.router.navigateByUrl('/matriz',{state:{id: data.id, nombre: this.user.name}});
+    setTimeout(async () => { 
+      let first = new Promise((resolve, reject) => {
+        this.celdas();
+        resolve()
       })
-    }, 1000);
+      
+      let second = new Promise((resolve, reject) => {
+        this.apollo.mutate({
+          mutation: CREAR_MATRIZ,
+          variables: {
+            id: this.user.id,
+            actors: this.Actores,
+            temas: this.Temas,
+            celdas: this.Celdas
+          }
+        }).subscribe((response) => {
+          let data = response.data['createMatriz']
+          this.router.navigateByUrl('/matriz',{state:{id: data.id, nombre: this.user.name}});
+        });
+        resolve();
+      })
+      
+      await Promise.all([first, second])
+      
+    }, 500);
   }
 
   verMatriz(matriz){
@@ -285,12 +297,103 @@ confirm2(id) {
     });
   }
   
-  
+  confirm3(id) {
+    this.confirmationService.confirm({
+        key:"positionDialog",
+        acceptLabel:"Si",
+        rejectLabel: "No",
+        message: 'Seguro que quiere actualizar esta matriz? ESTO ELIMINARA LOS CAMBIOS QUE SE HAN HECHO EN LA MATRIZ',
+        header: 'Actualizar Matriz',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+            this.msgs = [{severity:'info', summary:'Confirmado', detail:'Se actualizo la matriz'}];
+            this.actualizarMatriz(id);
+            this.ngOnInit();
+        },
+        reject: () => {
+            this.msgs = [{severity:'info', summary:'Rechazado', detail:'Ha Cancelado'}];
+        }
+    });
+  }
+
   refresh(){
     this._router.navigateByUrl("/refresh1", {skipLocationChange: true}).then(()=>{
       console.log(decodeURI(this._location.path()));
       this._router.navigate([decodeURI(this._location.path())]);
     });
+  }
+
+
+  actualizarMatriz(idmatriz){
+
+    this.apollo.mutate({
+      mutation: DELETE_CELL_MUTATION,
+      variables: {
+        matriz: idmatriz
+      }
+    }).subscribe((response) => {
+        console.log(response)
+    });
+    
+    this.apollo.watchQuery({
+      fetchPolicy: 'network-only',
+      query: ID_ACTORES
+    }).valueChanges.subscribe((response) => {
+      this.Actores = this.transform2(response.data["actors"])
+     });
+     this.apollo.watchQuery({
+      fetchPolicy: 'network-only',
+      query: ID_TEMAS
+    }).valueChanges.subscribe((response) => {
+      this.Temas = this.transform2(response.data["temas"]);
+    });
+    this.apollo.watchQuery({
+      fetchPolicy: 'network-only',
+      query: ALL_TEMAS_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.TemasFinal = this.maxcolspan(response.data['temas']);
+     });
+     this.apollo.watchQuery({
+      fetchPolicy: 'network-only',
+      query: ALL_ACTORES_QUERY
+    }).valueChanges.subscribe((response) => {
+      this.ActoresFinal = this.maxcolspan(response.data['actors']);
+     });
+
+    setTimeout(async () => { 
+      let first = new Promise((resolve, reject) => {
+        this.celdas();
+        resolve()
+      })
+      
+      let second = new Promise((resolve, reject) => {
+        console.log(this.Celdas);
+        this.apollo.mutate({
+          mutation: UPDATE_MATRIZ,
+          variables: {
+            matriz: idmatriz,
+            actors: this.Actores,
+            temas: this.Temas,
+            celdas: this.Celdas
+          }
+        }).subscribe((response) => {
+          console.log(response.data);
+          this.router.navigateByUrl('/matriz',{state:{id: idmatriz, nombre: this.user.name}});
+        });
+        resolve();
+      })
+      
+      await Promise.all([first, second])
+    }, 500);
+  }
+  
+
+
+  transform2(arreglo){
+    arreglo.forEach(element=>{
+      delete element.__typename;
+    });
+    return arreglo
   }
 
 }
