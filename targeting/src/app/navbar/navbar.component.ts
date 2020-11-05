@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import {Router} from "@angular/router";
 import { Observable } from 'rxjs';
@@ -15,6 +15,7 @@ import { AuthService } from './../auth/auth.service';
 })
 export class NavbarComponent implements OnInit{
 
+  @Output() public sidenavToggle = new EventEmitter();
   isLoggedIn$: Observable<boolean>;
 
   constructor(private confirmation: ConfirmationService,private router: Router,private authService: AuthService) { }
@@ -50,5 +51,7 @@ export class NavbarComponent implements OnInit{
     this.authService.logout();
   }
 
-
+  public onToggleSidenav = () =>{
+    this.sidenavToggle.emit();
+  }
 }

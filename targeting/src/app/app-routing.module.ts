@@ -13,6 +13,7 @@ import { AuthGuard } from './auth/auth.guard';
 import {MatrizesComponent} from './matrizes/matrizes.component';
 import { RegisterComponent } from "./register/register.component";
 
+import { MatSidenavModule } from "@angular/material/sidenav";
 
 
 const routes: Routes = [
@@ -59,6 +60,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule, MatSidenavModule]
 })
 export class AppRoutingModule { }

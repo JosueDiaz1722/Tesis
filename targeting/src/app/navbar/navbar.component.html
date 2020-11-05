@@ -1,4 +1,5 @@
-<mat-toolbar color="bar" class="mat-elevation-z6" *ngIf="isLoggedIn$ | async as isLoggedIn">
+<div *ngIf="isLoggedIn$ | async as isLoggedIn">
+<!--<mat-toolbar color="bar" class="mat-elevation-z6" >
   <span> <mat-icon>eco</mat-icon>Targeting</span>
 
   <div class="spacer"></div>
@@ -7,4 +8,61 @@
   <a mat-button routerLink="temas">Temas</a>
   <a mat-button routerLink="matrices">Matrices</a>
   <button mat-button (click)="onLogout()" *ngIf="isLoggedIn">Logout</button>
+
+  <div fxShow="true" fxHide.gt-sm="true">
+    <button mat-icon-button (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
 </mat-toolbar>
+<mat-sidenav-container fxFlexFill class="example-container">
+
+  <mat-sidenav #sidenav fxLayout="column">
+
+    <div fxLayout="column">
+
+      <a (click)="sidenav.toggle()" href="#" mat-button>Close</a>
+
+      <a mat-button routerLink="">Incio</a>
+      <a mat-button routerLink="actores">Actores</a>
+      <a mat-button routerLink="temas">Temas</a>
+      <a mat-button routerLink="matrices">Matrices</a>
+      <button mat-button (click)="onLogout()" *ngIf="isLoggedIn$">Logout</button>
+
+    </div>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content fxFlexFill>Main content</mat-sidenav-content>
+
+</mat-sidenav-container>-->
+  <mat-toolbar color="primary">
+    <div fxHide.gt-xs>
+      <button mat-icon-button (click)="onToggleSidenav()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+    <div>
+      <span> <mat-icon>eco</mat-icon>Targeting</span>
+    </div>
+    <div fxFlex fxLayout fxLayoutAlign = "end" fxHide.xs>
+      <ul fxLayout fxLayoutGap ="15px" class="navigation-items">
+        <li>
+          <a mat-button routerLink="">Incio</a>
+        </li>
+        <li>
+          <a mat-button routerLink="actores">Actores</a>
+        </li>
+        <li>
+          <a mat-button routerLink="temas">Temas</a>
+        </li>
+        <li>
+          <a mat-button routerLink="matrices">Matrices</a>
+        </li>
+      </ul>
+      
+    </div>
+    <button mat-button (click)="onLogout()" *ngIf="isLoggedIn">Logout</button>
+  </mat-toolbar>
+    
+</div>
