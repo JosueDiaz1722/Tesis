@@ -15,15 +15,15 @@ idMapping ="id"  childMapping= "hijos"
 [allowPaging]="true" 
 [pageSettings]="pageSettings" [allowSorting]="true" 
 [allowFiltering]="true" 
-
-
+width = '100%'
+height = '100%'
 >
     <e-columns>
         <e-column
         field="name"
         headerText="Actor"
         textAlign="Left"
-        width= "160"
+        width= "200"
         >
         <ng-template #template let-data>
             <span *ngIf="data.parent == false" class="material-icons">
@@ -37,7 +37,7 @@ idMapping ="id"  childMapping= "hijos"
         headerText="Prioridad"
         type= "number"
         textAlign="Left"
-        width= "60"
+        width= "100"
         editType = "numericedit"
         [edit]="numericParams"
         >
@@ -49,7 +49,8 @@ idMapping ="id"  childMapping= "hijos"
         field="coments"
         headerText="Comentario"
         textAlign="Left"
-        width= "90"
+        width= "100"
+        hideAtMedia='(min-width: 700px)'
         ></e-column>
         <e-column width="150"> 
             <ng-template #template let-data> 

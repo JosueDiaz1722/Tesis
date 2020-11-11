@@ -76,7 +76,7 @@ export class ThemeComponent {
   openDialog(action,obj, data: any) {
     obj.action = action;
     const dialogRef = this.dialog.open(DialogBoxComponent, {
-      width: '25%',
+      width: '50%',
       data:obj
     });
  
