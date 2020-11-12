@@ -1,29 +1,8 @@
-.container {
-  display: grid;
-  grid-template-columns: 50% auto;
-}
-
-.col{
-  padding: .4em 1.3em;
-}
-
-.color-dark {
-  background: #2885C4;
-}
-.color-light{
-  background: #57b3f1;
-}
-
-input.txt {
-  border: 0;
-  padding: 1em;
-  width: 80%;
-  margin-bottom: 2em;
-}
 
 button{
   border: 0;
-  display: block;
+  display:inline-block;
+  width: 200px;
   padding: 1em 3em;
   background: rgb(191, 221, 237);
   color: #003a61;
@@ -31,30 +10,14 @@ button{
   cursor: pointer;
 }
 
-.life-container {
-  background: #3fa0e1;
-  padding: .5em;
-  font-weight: bold;
-  cursor: pointer;
+.container {
+  text-align:center;
 }
 
-.ui-confirmdialog.ui-dialog {
-  width: 34em;
-  background-color: white;
-}
-.ui-dialog-titlebar {
-      padding: .5em 0.667em;
-      font-family: xxx;
-      font-size: 1.3125rem;
-      font-weight: bold;
-      color: orange;
-  }
 
-.ui-dialog-content {
-      padding: 1em;
-  }
-
-  #footer {
-    display: flex;
-    justify-content: center;
-  }
+  @media screen and (max-width:576px) {
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+  
+    }  }
