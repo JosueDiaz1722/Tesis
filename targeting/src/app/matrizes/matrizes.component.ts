@@ -86,7 +86,12 @@ export class MatrizesComponent implements OnInit {
       this.Matrices = response.data['matrizes'];
      });
      if(this.user.name === "Admin"){
-        this.MatricesUsuario = this.Matrices 
+        this.apollo.watchQuery({
+          fetchPolicy: 'network-only',
+          query: ALL_MATRIZ_QUERY
+        }).valueChanges.subscribe((response) => {
+          this.MatricesUsuario = response.data['matrizes'];
+        });
      } else{
       this.apollo.watchQuery({
         fetchPolicy: 'network-only',
