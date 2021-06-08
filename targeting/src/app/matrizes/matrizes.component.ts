@@ -85,16 +85,19 @@ export class MatrizesComponent implements OnInit {
     }).valueChanges.subscribe((response) => {
       this.Matrices = response.data['matrizes'];
      });
-     this.apollo.watchQuery({
-      fetchPolicy: 'network-only',
-      query: USER_MATRIZ_QUERY,
-      variables: {
-        id: this.user.id
-       }
-    }).valueChanges.subscribe((response) => {
-      this.MatricesUsuario = response.data['matrizes'];
-    
-     });
+     if(this.user.name === "Admin"){
+        this.MatricesUsuario = this.Matrices 
+     } else{
+      this.apollo.watchQuery({
+        fetchPolicy: 'network-only',
+        query: USER_MATRIZ_QUERY,
+        variables: {
+          id: this.user.id
+         }
+      }).valueChanges.subscribe((response) => {
+        this.MatricesUsuario = response.data['matrizes'];
+       });  
+     }
   }
 
   formatDate = function(date){
@@ -181,12 +184,12 @@ maxcolspan(Items){
      });
 
     setTimeout(async () => { 
-      let first = new Promise((resolve, reject) => {
+      let first = new Promise<void>((resolve, reject) => {
         this.celdas();
         resolve()
       })
       
-      let second = new Promise((resolve, reject) => {
+      let second = new Promise<void>((resolve, reject) => {
         this.apollo.mutate({
           mutation: CREAR_MATRIZ,
           variables: {
@@ -361,12 +364,12 @@ confirm2(id) {
      });
 
     setTimeout(async () => { 
-      let first = new Promise((resolve, reject) => {
+      let first = new Promise<void>((resolve, reject) => {
         this.celdas();
         resolve()
       })
       
-      let second = new Promise((resolve, reject) => {
+      let second = new Promise<void>((resolve, reject) => {
         console.log(this.Celdas);
         this.apollo.mutate({
           mutation: UPDATE_MATRIZ,
